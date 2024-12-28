@@ -35,23 +35,23 @@ const pagesList = [
 const demoList = [
   {
     title: 'Vertical Layout',
-    to: 'https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-1/dashboards/analytics',
+    to: '',
   },
   {
     title: 'Horizontal Layout',
-    to: 'https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-5/dashboards/analytics',
+    to: '',
   },
   {
     title: 'Bordered Layout',
-    to: 'https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-2/dashboards/analytics',
+    to: '',
   },
   {
     title: 'Semi Dark Layout',
-    to: 'https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-3/dashboards/analytics',
+    to: '',
   },
   {
     title: 'Dark Layout',
-    to: 'https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-4/dashboards/analytics',
+    to: '',
   },
 ]
 </script>
