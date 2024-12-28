@@ -1,13 +1,10 @@
 <script setup>
 import AnalyticsAverageDailySales from '@/views/dashboards/analytics/AnalyticsAverageDailySales.vue'
 import AnalyticsEarningReportsWeeklyOverview from '@/views/dashboards/analytics/AnalyticsEarningReportsWeeklyOverview.vue'
-import AnalyticsMonthlyCampaignState from '@/views/dashboards/analytics/AnalyticsMonthlyCampaignState.vue'
 import AnalyticsProjectTable from '@/views/dashboards/analytics/AnalyticsProjectTable.vue'
 import AnalyticsSalesByCountries from '@/views/dashboards/analytics/AnalyticsSalesByCountries.vue'
 import AnalyticsSalesOverview from '@/views/dashboards/analytics/AnalyticsSalesOverview.vue'
-import AnalyticsSourceVisits from '@/views/dashboards/analytics/AnalyticsSourceVisits.vue'
 import AnalyticsSupportTracker from '@/views/dashboards/analytics/AnalyticsSupportTracker.vue'
-import AnalyticsTotalEarning from '@/views/dashboards/analytics/AnalyticsTotalEarning.vue'
 import AnalyticsWebsiteAnalytics from '@/views/dashboards/analytics/AnalyticsWebsiteAnalytics.vue'
 </script>
 
@@ -62,33 +59,6 @@ import AnalyticsWebsiteAnalytics from '@/views/dashboards/analytics/AnalyticsWeb
       lg="4"
     >
       <AnalyticsSalesByCountries />
-    </VCol>
-
-    <!-- 👉 Total Earning -->
-    <VCol
-      cols="12"
-      sm="6"
-      lg="4"
-    >
-      <AnalyticsTotalEarning />
-    </VCol>
-
-    <!-- 👉 Monthly Campaign State -->
-    <VCol
-      cols="12"
-      sm="6"
-      lg="4"
-    >
-      <AnalyticsMonthlyCampaignState />
-    </VCol>
-
-    <!-- 👉 Source Visits -->
-    <VCol
-      cols="12"
-      sm="6"
-      lg="4"
-    >
-      <AnalyticsSourceVisits />
     </VCol>
 
     <!-- 👉 Project Table -->

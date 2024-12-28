@@ -17,10 +17,10 @@ export const db = {
   users: [
     {
       id: 1,
-      fullName: 'John Doe',
+      fullName: 'Electro Shop',
       username: 'johndoe',
       password: 'admin',
-      avatar: `${import.meta.env.BASE_URL ?? '/'}images/avatars/avatar-1.png`,
+      avatar: `${import.meta.env.BASE_URL ?? '/'}images/avatars/avatar-16.png`,
       email: 'admin@demo.com',
       role: 'admin',
       abilityRules: [

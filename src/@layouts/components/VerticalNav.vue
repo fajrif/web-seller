@@ -2,11 +2,8 @@
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { VNodeRenderer } from './VNodeRenderer'
 import { layoutConfig } from '@layouts'
-import {
-  VerticalNavGroup,
-  VerticalNavLink,
-  VerticalNavSectionTitle,
-} from '@layouts/components'
+import { themeConfig } from '@themeConfig'
+import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle, } from '@layouts/components'
 import { useLayoutConfigStore } from '@layouts/stores/config'
 import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
 
@@ -83,18 +80,11 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <RouterLink
-          to="/"
-          class="app-logo app-title-wrapper"
-        >
-          <VNodeRenderer :nodes="layoutConfig.app.logo" />
-
+        <RouterLink to="/" class="app-logo app-title-wrapper" >
+          <VNodeRenderer :nodes="layoutConfig.app.logo" class="w-25" />
           <Transition name="vertical-nav-app-title">
-            <h1
-              v-show="!hideTitleAndIcon"
-              class="app-logo-title"
-            >
-              {{ layoutConfig.app.title }}
+            <h1 v-show="!hideTitleAndIcon" class="app-logo-title">
+              {{ themeConfig.app.app_title }}
             </h1>
           </Transition>
         </RouterLink>
@@ -126,9 +116,6 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
         </div>
       </slot>
     </div>
-    <slot name="before-nav-items">
-      <div class="vertical-nav-items-shadow" />
-    </slot>
     <slot
       name="nav-items"
       :update-is-vertical-nav-scrolled="updateIsVerticalNavScrolled"
@@ -159,9 +146,10 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
   column-gap: 0.75rem;
 
   .app-logo-title {
-    font-size: 1.375rem;
+		margin-top: 10px;
+    font-size: 1.275rem;
     font-weight: 700;
-    letter-spacing: 0.25px;
+    letter-spacing: 0px;
     line-height: 1.5rem;
     text-transform: capitalize;
   }

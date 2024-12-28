@@ -73,8 +73,8 @@ const onSubmit = () => {
     <div class="position-relative my-sm-16">
       <!-- 👉 Auth Card -->
       <VCard
-        class="auth-card"
-        max-width="560"
+        class="auth-card rounded-lg"
+        max-width="500"
         :class="$vuetify.display.smAndUp ? 'pa-6' : 'pa-0'"
       >
         <VCardItem class="justify-center">
