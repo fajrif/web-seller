@@ -42,7 +42,7 @@ const verticalNavAttrs = computed(() => {
     ...additionalVerticalNavAttrs
   } = vNavAttrs.value
 
-  
+
   return {
     verticalNavWrapper,
     verticalNavWrapperProps,
