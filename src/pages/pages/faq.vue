@@ -1,213 +1,185 @@
 <script setup>
-import sittingGirlWithLaptop from '@images/illustrations/sitting-girl-with-laptop.png'
+import img1 from '@/assets/images/banner/support-banner.png'
+import icon1 from '@/assets/images/icons/ic-info.png'
+import icon2 from '@/assets/images/icons/ic-phone.png'
 
-const faqSearchQuery = ref('')
-const faqs = ref([])
-
-const fetchFaqs = async () => {
-  const data = await $api('/pages/faq', { query: { q: faqSearchQuery.value } }).catch(err => console.log(err))
-
-  faqs.value = data
-}
-
-const activeTab = ref('Payment')
+const currentTab = ref('tab-1')
 const activeQuestion = ref(0)
 
-watch(activeTab, () => activeQuestion.value = 0)
-watch(faqSearchQuery, fetchFaqs, { immediate: true })
+const faqs = [
+	{
+		id: 1,
+		question: 'Kapan pembayaran pesanan saya diambil?',
+		answer: 'Pembayaran diambil selama proses checkout ketika Anda membayar pesanan Anda. Nomor pesanan yang muncul pada layar konfirmasi menandakan pembayaran telah berhasil diproses.',
+	},
+	{
+		id: 2,
+		question: 'Bagaimana cara saya membayar pesanan saya?',
+		answer: 'Kami menerima Visa®, MasterCard®, American Express®, dan PayPal®. Server kami mengenkripsi semua informasi yang dikirimkan kepada mereka, sehingga Anda dapat yakin bahwa informasi kartu kredit Anda akan tetap aman dan terlindungi.',
+	},
+	{
+		id: 3,
+		question: 'Apa yang harus saya lakukan jika saya kesulitan melakukan pemesanan?',
+		answer: 'Untuk kesulitan teknis apa pun yang Anda alami dengan situs web kami, silakan hubungi kami di portal dukungan kami, atau Anda dapat menghubungi kami melalui WhatsApp di 0811-8230-433, atau email kami di support.marketplace@iconpln.co.id',
+	},
+	{
+		id: 4,
+		question: 'Lisensi manakah yang saya perlukan agar dapat mengakses PLN Seller Marketplace?',
+		answer: 'Anda tidak memerlukan lisensi khusus jika ingin menjadi seller pada aplikasi PLN Mobile Marketplace, cukup mendaftarkan diri sebagai pengguna dan mengaktifkan fitur sebagai Seller',
+	},
+]
 
 const contactUs = [
   {
-    icon: 'tabler-phone',
-    via: '+ (810) 2548 2568',
-    tagLine: 'We are always happy to help!',
+    icon: 'tabler-mail',
+    via: 'support.marketplace@iconpln.co.id',
+    tagLine: 'Email Support',
   },
   {
-    icon: 'tabler-mail',
-    via: 'hello@help.com',
-    tagLine: 'Best way to get answer faster!',
+    icon: 'tabler-phone',
+    via: '0811-8230-433',
+    tagLine: 'Nomor WhatsApp',
   },
 ]
 </script>
 
 <template>
-  <section>
-    <!-- 👉 Search -->
-    <AppSearchHeader
-      title="Hello, how can we help?"
-      subtitle="or choose a category to quickly find the help you need"
-      custom-class="mb-6"
-      placeholder="Search Articles..."
-      density="comfortable"
-      is-reverse
-    />
+  <VRow>
+    <VCol cols="12">
+			<VCard>
+				<VCardText class="pa-0">
+					<VRow>
+						<VCol cols="12">
+							<VImg :src="img1" />
+						</VCol>
+					</VRow>
+				</VCardText>
+			</VCard>
+    </VCol>
 
-    <!-- 👉 Faq sections and questions -->
-    <VRow>
-      <VCol
-        v-show="faqs.length"
-        cols="12"
-        sm="4"
-        lg="3"
-        class="position-relative"
-      >
-        <!-- 👉 Tabs -->
-        <VTabs
-          v-model="activeTab"
-          direction="vertical"
-          class="v-tabs-pill"
-          grow
-        >
-          <VTab
-            v-for="faq in faqs"
-            :key="faq.faqTitle"
-            :value="faq.faqTitle"
-          >
-            <VIcon
-              :icon="faq.faqIcon"
-              :size="20"
-              start
-            />
-            {{ faq.faqTitle }}
-          </VTab>
-        </VTabs>
-        <VImg
-          :width="245"
-          :src="sittingGirlWithLaptop"
-          class="d-none d-sm-block mt-4 mx-auto"
-        />
-      </VCol>
+    <VCol cols="12">
+			<VCard>
+				<VCardText>
+					<VRow>
+						<VCol cols="12">
+							<VTabs
+								v-model="currentTab"
+								grow
+								stacked
+							>
+								<VTab>
+									<div class="d-flex align-start">
+										<VAvatar class="me-4 mt-2">
+											<VImg :src="icon1" />
+										</VAvatar>
+										<div class="d-flex flex-column text-start">
+											<h3 class="mb-1">FAQ</h3>
+											<p class="text-body-2 mb-0 me-3">
+												Pertanyaan yang umum ditanyakan oleh pengguna terkait Marketplace PLN Mobile.
+											</p>
+										</div>
+									</div>
+								</VTab>
 
-      <VCol
-        cols="12"
-        sm="8"
-        lg="9"
-      >
-        <!-- 👉 Windows -->
-        <VWindow
-          v-model="activeTab"
-          class="faq-v-window disable-tab-transition"
-        >
-          <VWindowItem
-            v-for="faq in faqs"
-            :key="faq.faqTitle"
-            :value="faq.faqTitle"
-          >
-            <div class="d-flex align-center mb-4">
-              <VAvatar
-                rounded
-                color="primary"
-                variant="tonal"
-                class="me-4"
-                size="50"
-              >
-                <VIcon
-                  :size="30"
-                  :icon="faq.faqIcon"
-                />
-              </VAvatar>
+								<VTab>
+									<div class="d-flex align-start">
+										<VAvatar class="me-4 mt-2">
+											<VImg :src="icon2" />
+										</VAvatar>
+										<div class="d-flex flex-column text-start">
+											<h3 class="mb-1">Hubungi Kami</h3>
+											<p class="text-body-2 mb-0 me-3">
+												Sampaikan masalah atau saran kamu melalui channel - channel komunikasi kami.
+											</p>
+										</div>
+									</div>
+								</VTab>
+							</VTabs>
 
-              <div>
-                <h5 class="text-h5">
-                  {{ faq.faqTitle }}
-                </h5>
-                <div class="text-body-1">
-                  {{ faq.faqSubtitle }}
-                </div>
-              </div>
-            </div>
-
-            <VExpansionPanels
-              v-model="activeQuestion"
-              multiple
-            >
-              <VExpansionPanel
-                v-for="item in faq.faqs"
-                :key="item.question"
-                :title="item.question"
-                :text="item.answer"
-              />
-            </VExpansionPanels>
-          </VWindowItem>
-        </VWindow>
-      </VCol>
-
-      <VCol
-        v-show="!faqs.length"
-        cols="12"
-        :class="!faqs.length ? 'd-flex justify-center align-center' : ''"
-      >
-        <VIcon
-          icon="tabler-help"
-          start
-          size="20"
-        />
-        <span class="text-base font-weight-medium">
-          No Results Found!!
-        </span>
-      </VCol>
-    </VRow>
-
-    <!-- 👉 You still have a question? -->
-    <div class="text-center pt-16">
-      <VChip
-        label
-        color="primary"
-        size="small"
-        class="mb-2"
-      >
-        Question
-      </VChip>
-
-      <h4 class="text-h4 mb-2">
-        You still have a question?
-      </h4>
-      <p class="text-body-1 mb-6">
-        If you can't find question in our FAQ, you can contact us. We'll answer you shortly!
-      </p>
-
-      <!-- contacts -->
-      <VRow class="mt-9">
-        <VCol
-          v-for="contact in contactUs"
-          :key="contact.icon"
-          sm="6"
-          cols="12"
-        >
-          <VCard
-            flat
-            style="background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));"
-          >
-            <VCardText class="pb-4">
-              <VAvatar
-                rounded
-                color="primary"
-                variant="tonal"
-                size="46"
-              >
-                <VIcon
-                  :icon="contact.icon"
-                  size="26"
-                />
-              </VAvatar>
-            </VCardText>
-            <VCardText>
-              <h5 class="text-h5 mb-1">
-                {{ contact.via }}
-              </h5>
-              <div>{{ contact.tagLine }}</div>
-            </VCardText>
-          </VCard>
-        </VCol>
-      </VRow>
-    </div>
-  </section>
+							<VCardText class="px-2">
+								<VWindow v-model="currentTab">
+									<VWindowItem value="tab-1" class="bg-white">
+										<VExpansionPanels
+											v-model="activeQuestion"
+										>
+											<VExpansionPanel
+												v-for="item in faqs"
+												:key="item.id"
+												:title="item.question"
+												:text="item.answer"
+											/>
+										</VExpansionPanels>
+									</VWindowItem>
+									<VWindowItem value="tab-2">
+										<!-- contacts -->
+										<VRow class="mt-0">
+											<VCol
+												v-for="contact in contactUs"
+												:key="contact.icon"
+												sm="6"
+												cols="12"
+											>
+												<VCard
+													flat
+													style="background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));"
+												>
+													<VCardText class="pb-4">
+														<VAvatar
+															rounded
+															color="primary"
+															variant="tonal"
+															size="46"
+														>
+															<VIcon
+																:icon="contact.icon"
+																size="26"
+															/>
+														</VAvatar>
+													</VCardText>
+													<VCardText>
+														<h5 class="text-h5 mb-1">
+															{{ contact.via }}
+														</h5>
+														<div>{{ contact.tagLine }}</div>
+													</VCardText>
+												</VCard>
+											</VCol>
+										</VRow>
+									</VWindowItem>
+								</VWindow>
+							</VCardText>
+						</VCol>
+					</VRow>
+				</VCardText>
+			</VCard>
+    </VCol>
+  </VRow>
 </template>
 
-<style lang="scss">
-.faq-v-window {
-  .v-window__container {
-    z-index: 0;
-  }
+<style scope>
+.v-tabs--density-comfortable.v-tabs--stacked {
+	--v-tabs-height: 100px !important;
+}
+.v-btn--stacked {
+	display: flex !important;
+	justify-content: start !important;
+	width: 200px !important;
+	margin: 0 10px !important;
+	padding: 20px !important;
+	border: 2px solid #eee !important;
+	border-radius: 8px !important;
+}
+.v-tabs.v-tabs--horizontal:not(.v-tabs-pill) {
+	border-block-end: none;
+}
+.v-btn.v-tab-item--selected.v-tab--selected {
+	border-color: var(--v-theme-primary) !important;
+	background-color: #d3eef2;
+}
+.v-tab__slider {
+	display: none;
+}
+.v-expansion-panel {
+  border: 1px solid #eee;
 }
 </style>
