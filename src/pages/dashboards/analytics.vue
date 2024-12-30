@@ -1,76 +1,61 @@
 <script setup>
-import AnalyticsAverageDailySales from '@/views/dashboards/analytics/AnalyticsAverageDailySales.vue'
-import AnalyticsEarningReportsWeeklyOverview from '@/views/dashboards/analytics/AnalyticsEarningReportsWeeklyOverview.vue'
-import AnalyticsProjectTable from '@/views/dashboards/analytics/AnalyticsProjectTable.vue'
-import AnalyticsSalesByCountries from '@/views/dashboards/analytics/AnalyticsSalesByCountries.vue'
-import AnalyticsSalesOverview from '@/views/dashboards/analytics/AnalyticsSalesOverview.vue'
-import AnalyticsSupportTracker from '@/views/dashboards/analytics/AnalyticsSupportTracker.vue'
-import AnalyticsWebsiteAnalytics from '@/views/dashboards/analytics/AnalyticsWebsiteAnalytics.vue'
+import DashboardBanner from '@/views/dashboards/analytics/DashboardBanner.vue'
+import ShippingOptions from '@/views/dashboards/analytics/ShippingOptions.vue'
+import CurrentBalance from '@/views/dashboards/analytics/CurrentBalance.vue'
+import OrderActivity from '@/views/dashboards/analytics/OrderActivity.vue'
+import StockStatus from '@/views/dashboards/analytics/StockStatus.vue'
+import PopularProducts from '@/views/dashboards/analytics/PopularProducts.vue'
 </script>
 
 <template>
   <VRow class="match-height">
-    <!-- 👉 Website analytics -->
+    <!-- 👉 Dashboard Banner -->
     <VCol
       cols="12"
-      md="6"
+      md="8"
     >
-      <AnalyticsWebsiteAnalytics />
+			<VRow>
+				<VCol cols="12">
+					<DashboardBanner />
+				</VCol>
+				<VCol cols="12">
+					<CurrentBalance />
+				</VCol>
+			</VRow>
     </VCol>
 
-    <!-- 👉 Average Daily Sales -->
+    <!-- 👉 Shipping Options -->
     <VCol
       cols="12"
-      md="3"
-      sm="6"
+      md="4"
     >
-      <AnalyticsAverageDailySales />
+      <ShippingOptions />
+    </VCol>
+  </VRow>
+  <VRow>
+    <!-- 👉 Order Activity -->
+    <VCol
+      cols="12"
+      md="8"
+    >
+			<OrderActivity />
     </VCol>
 
-    <!-- 👉 Sales Overview -->
+    <!-- 👉 Stock Status -->
     <VCol
       cols="12"
-      md="3"
-      sm="6"
+      md="4"
     >
-      <AnalyticsSalesOverview />
-    </VCol>
-
-    <!-- 👉 Earning Reports Weekly Overview -->
-    <VCol
-      cols="12"
-      md="6"
-    >
-      <AnalyticsEarningReportsWeeklyOverview />
-    </VCol>
-
-    <!-- 👉 Support Tracker -->
-    <VCol
-      cols="12"
-      md="6"
-    >
-      <AnalyticsSupportTracker />
-    </VCol>
-
-    <!-- 👉 Sales by Countries -->
-    <VCol
-      cols="12"
-      sm="6"
-      lg="4"
-    >
-      <AnalyticsSalesByCountries />
-    </VCol>
-
-    <!-- 👉 Project Table -->
-    <VCol
-      cols="12"
-      lg="8"
-    >
-      <AnalyticsProjectTable />
+			<VRow>
+				<VCol cols="12">
+					<StockStatus />
+				</VCol>
+			</VRow>
+			<VRow>
+				<VCol cols="12">
+					<PopularProducts />
+				</VCol>
+			</VRow>
     </VCol>
   </VRow>
 </template>
-
-<style lang="scss">
-@use "@core/scss/template/libs/apex-chart.scss";
-</style>
