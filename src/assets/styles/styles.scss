@@ -1,1 +1,8 @@
 // Write your overrides
+.login-background {
+	background-image: url('bg-login.png') !important;
+  position: relative !important;
+  background-size: cover !important;
+  overflow: hidden !important;
+  background-repeat: no-repeat !important;
+}

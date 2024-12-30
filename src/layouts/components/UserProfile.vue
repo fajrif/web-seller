@@ -27,9 +27,6 @@ const logout = async () => {
   ability.update([])
 }
 
-const userProfileList = [
-  { type: 'divider' }
-]
 </script>
 
 <template>
@@ -51,7 +48,7 @@ const userProfileList = [
 					icon="tabler-user"
 					/>
 			</VAvatar>
-			<h6 class="text-h6 font-weight-medium">
+			<h6 v-if="userData" class="text-h6 font-weight-medium">
 				{{ userData.fullName || userData.username }}
 			</h6>
 		</div>
@@ -82,7 +79,7 @@ const userProfileList = [
 						</VListItemAction>
 
 						<div>
-							<h6 class="text-h6 font-weight-medium">
+							<h6 v-if="userData" class="text-h6 font-weight-medium">
 								{{ userData.fullName || userData.username }}
 							</h6>
 							<VListItemSubtitle class="text-capitalize text-disabled">

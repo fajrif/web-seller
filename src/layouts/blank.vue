@@ -24,7 +24,7 @@ watch([
   <AppLoadingIndicator ref="refLoadingIndicator" />
 
   <div
-    class="layout-wrapper layout-blank"
+    class="layout-wrapper layout-blank login-background"
     data-allow-mismatch
   >
     <RouterView #="{Component}">

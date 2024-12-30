@@ -29,6 +29,11 @@ export const redirects = [
     name: 'pages-account-settings',
     redirect: () => ({ name: 'pages-account-settings-tab', params: { tab: 'account' } }),
   },
+  {
+    path: '/produk/semua',
+    name: 'produk-semua',
+    redirect: () => ({ name: 'produk-tab', params: { tab: 'semua' } }),
+  },
 ]
 export const routes = [
   // Email filter
