@@ -1,9 +1,5 @@
 <script setup>
-import ProdukSemua from '@/views/pages/produk/ProdukSemua.vue'
-import ProdukDijual from '@/views/pages/produk/ProdukDijual.vue'
-import ProdukArsip from '@/views/pages/produk/ProdukArsip.vue'
-import ProdukNonAktif from '@/views/pages/produk/ProdukNonAktif.vue'
-import ProdukDitolak from '@/views/pages/produk/ProdukDitolak.vue'
+import AllProducts from '@/views/pages/produk/AllProducts.vue'
 
 const route = useRoute('produk-tab')
 
@@ -15,24 +11,34 @@ const activeTab = computed({
 // tabs
 const tabs = [
   {
+		id: 1,
     title: 'Semua',
     tab: 'semua',
+		status: null,
   },
   {
+		id: 2,
     title: 'Dijual',
     tab: 'dijual',
+		status: 1,
   },
   {
+		id: 3,
     title: 'Diarsipkan',
     tab: 'arsip',
+		status: 0,
   },
   {
+		id: 4,
     title: 'Tidak Aktif',
     tab: 'non-aktif',
+		status: 2,
   },
   {
+		id: 5,
     title: 'Ditolak',
     tab: 'ditolak',
+		status: 3,
   },
 ]
 
@@ -42,11 +48,14 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
 <template>
   <div>
 
-    <VRow >
-      <VCol cols="6">
-				<h3>Kelola Produk</h3>
-      </VCol>
-      <VCol cols="6" class="text-end">
+    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
+      <div class="d-flex flex-column justify-center">
+        <h4 class="text-h4 font-weight-medium">
+          Kelola Produk
+        </h4>
+      </div>
+
+      <div class="d-flex gap-4 align-center flex-wrap">
 				<VBtn
 					color="primary"
 					prepend-icon="tabler-plus"
@@ -54,8 +63,8 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
 					>
 					Tambah Produk
 				</VBtn>
-      </VCol>
-    </VRow>
+      </div>
+    </div>
 
     <VTabs
       v-model="activeTab"
@@ -63,7 +72,7 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
     >
       <VTab
         v-for="item in tabs"
-        :key="item.icon"
+        :key="item.id"
         :value="item.tab"
         :to="{ name: 'produk-tab', params: { tab: item.tab } }"
       >
@@ -77,29 +86,13 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
       :touch="false"
     >
       <!-- Semua -->
-      <VWindowItem value="semua">
-        <ProdukSemua />
+			<VWindowItem
+        v-for="item in tabs"
+        :key="item.id"
+        :value="item.tab">
+        <AllProducts :selectedStatus="item.status" />
       </VWindowItem>
 
-      <!-- Dijual -->
-      <VWindowItem value="dijual">
-        <ProdukDijual />
-      </VWindowItem>
-
-      <!-- Diarsipkan -->
-      <VWindowItem value="arsip">
-        <ProdukArsip />
-      </VWindowItem>
-
-      <!-- Tidak Aktif -->
-      <VWindowItem value="non-aktif">
-        <ProdukNonAktif />
-      </VWindowItem>
-
-      <!-- Ditolak -->
-      <VWindowItem value="ditolak">
-        <ProdukDitolak />
-      </VWindowItem>
     </VWindow>
   </div>
 </template>

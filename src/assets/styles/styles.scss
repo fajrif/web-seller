@@ -6,11 +6,20 @@
   overflow: hidden !important;
   background-repeat: no-repeat !important;
 }
+.fw-500 {
+  font-weight: 500;
+}
 .fw-700 {
   font-weight: 700;
 }
 .line-height-normal {
   line-height: normal;
+}
+.w-40 {
+  width: 40%;
+}
+.border-radius-8 {
+  border-radius: 8px;
 }
 .bg-white {
   background-color: #fff !important;
@@ -26,4 +35,7 @@
 }
 .v-theme--light .bg-lightblue {
   background-color: #d3eef2 !important;
+}
+.v-text-field__prefix, .v-text-field__suffix {
+  opacity: 1 !important;
 }

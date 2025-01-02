@@ -131,7 +131,7 @@ declare module 'vue-router/auto-routes' {
     'pages-typography': RouteRecordInfo<'pages-typography', '/pages/typography', Record<never, never>, Record<never, never>>,
     'pages-user-profile-tab': RouteRecordInfo<'pages-user-profile-tab', '/pages/user-profile/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'produk-tab': RouteRecordInfo<'produk-tab', '/produk/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
-    'produk-tambah': RouteRecordInfo<'produk-tambah', '/produk/tambah', Record<never, never>, Record<never, never>>,
+    'produk-tambah-tab': RouteRecordInfo<'produk-tambah-tab', '/produk/tambah/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'register': RouteRecordInfo<'register', '/register', Record<never, never>, Record<never, never>>,
     'tables-data-table': RouteRecordInfo<'tables-data-table', '/tables/data-table', Record<never, never>, Record<never, never>>,
     'tables-simple-table': RouteRecordInfo<'tables-simple-table', '/tables/simple-table', Record<never, never>, Record<never, never>>,

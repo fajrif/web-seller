@@ -34,6 +34,11 @@ export const redirects = [
     name: 'produk-semua',
     redirect: () => ({ name: 'produk-tab', params: { tab: 'semua' } }),
   },
+  {
+    path: '/produk/tambah',
+    name: 'produk-tambah',
+    redirect: () => ({ name: 'produk-tambah-tab', params: { tab: 'tambah-produk' } }),
+  },
 ]
 export const routes = [
   // Email filter

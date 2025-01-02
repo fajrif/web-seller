@@ -1,4 +1,12 @@
 <script setup>
+import notFoundImg from '@/assets/images/icons/ic-search.png'
+
+const props = defineProps({
+  selectedStatus: {
+    type: String
+	},
+})
+
 const headers = [
   {
     title: 'Gambar',
@@ -71,7 +79,7 @@ const {
 } = await useApiRails(createUrl('/merchant/products', {
   query: {
     q: searchQuery,
-    status: 0,
+    status: props.selectedStatus,
     page,
     per_page: itemsPerPage,
     sort: sortBy,
@@ -92,9 +100,8 @@ const deleteProduct = async id => {
 
 <template>
   <div>
-
     <!-- 👉 products -->
-    <VCard>
+		<VCard>
       <div class="d-flex flex-wrap gap-4 ma-6">
         <div class="d-flex align-center">
           <!-- 👉 Search  -->
@@ -119,6 +126,7 @@ const deleteProduct = async id => {
 
       <!-- 👉 Datatable  -->
       <VDataTableServer
+				v-if="products && totalProduct > 0"
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
         :headers="headers"
@@ -205,6 +213,34 @@ const deleteProduct = async id => {
           />
         </template>
       </VDataTableServer>
+
+			<!-- 👉 Empty products -->
+			<div v-else class="d-flex justify-center align-center pa-10 ma-10">
+				<div class="d-flex align-center">
+					<VAvatar
+						size="100"
+						class="me-6"
+					>
+						<VImg
+							:src="notFoundImg"
+							class="mb-2"
+						/>
+					</VAvatar>
+					<div class="d-flex flex-column">
+						<p class="text-body-2" style="width:350px;">
+							Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
+						</p>
+						<VBtn
+							color="primary"
+							style="width:fit-content"
+							prepend-icon="tabler-plus"
+							@click="$router.push('/produk/tambah')"
+							>
+							Tambah Produk
+						</VBtn>
+					</div>
+				</div>
+			</div>
     </VCard>
   </div>
 </template>
