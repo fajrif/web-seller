@@ -7,6 +7,8 @@ const ability = useAbility()
 // TODO: Get type from backend
 const userData = useCookie('userData')
 
+const statusUser = ref(true)
+
 const logout = async () => {
 
   // Remove "accessToken" from cookie
@@ -18,7 +20,7 @@ const logout = async () => {
   // Redirect to login page
   await router.push('/login')
 
-  // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
+  // ℹ️  We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
 
   // Remove "userAbilities" from cookie
   useCookie('userAbilityRules').value = null
@@ -26,7 +28,6 @@ const logout = async () => {
   // Reset ability to initial ability
   ability.update([])
 }
-
 </script>
 
 <template>
@@ -61,34 +62,40 @@ const logout = async () => {
 		>
 			<VList>
 				<VListItem>
-					<div class="d-flex gap-2 align-center">
-						<VListItemAction>
-							<VAvatar
-								:color="!(userData && userData.avatar) ? 'primary' : undefined"
-								:variant="!(userData && userData.avatar) ? 'tonal' : undefined"
-							>
-								<VImg
-									v-if="userData && userData.avatar"
-									:src="userData.avatar"
-								/>
-								<VIcon
-									v-else
-									icon="tabler-user"
-								/>
-							</VAvatar>
-						</VListItemAction>
+					<div class="d-flex justify-space-between gap-2 align-center">
+						<div class="d-flex">
+							<VListItemAction>
+								<VAvatar class="me-2"
+									:color="!(userData && userData.avatar) ? 'primary' : undefined"
+									:variant="!(userData && userData.avatar) ? 'tonal' : undefined"
+									>
+									<VImg
+										v-if="userData && userData.avatar"
+										:src="userData.avatar"
+										/>
+									<VIcon
+										v-else
+										icon="tabler-user"
+										/>
+								</VAvatar>
+							</VListItemAction>
 
+							<div>
+								<h6 v-if="userData" class="text-h6 font-weight-medium">
+									{{ userData.fullName || userData.username }}
+								</h6>
+								<VListItemSubtitle class="d-flex justify-between text-capitalize text-disabled">
+									{{ statusUser ? 'Aktif' : 'Non-Aktif' }}
+								</VListItemSubtitle>
+							</div>
+						</div>
 						<div>
-							<h6 v-if="userData" class="text-h6 font-weight-medium">
-								{{ userData.fullName || userData.username }}
-							</h6>
-							<VListItemSubtitle class="text-capitalize text-disabled">
-								Seller
-							</VListItemSubtitle>
+							<VSwitch
+								v-model="statusUser"
+								/>
 						</div>
 					</div>
 				</VListItem>
-
 				<PerfectScrollbar :options="{ wheelPropagation: false }">
 					<div class="px-4 py-2">
 						<VBtn

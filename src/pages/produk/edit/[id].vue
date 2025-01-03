@@ -4,6 +4,7 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 const router = useRouter()
+const route = useRoute('produk-edit-id')
 
 const isFormValid = ref(false)
 const refForm = ref()
@@ -22,6 +23,25 @@ const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
 const	productStatus = ref(0)
+
+const { data: productDetails } = await useApiRails(`/merchant/products/${ route.params.id }`)
+if (productDetails.value) {
+  productName.value = productDetails.value.name
+  productDescription.value = productDetails.value.name
+  productCategory.value = productDetails.value.category_id
+  productShowcase.value = productDetails.value.showcase_id
+  productCondition.value = productDetails.value.condition
+  productPrice.value = productDetails.value.price
+  productFakePrice.value = productDetails.value.fake_price
+  productStock.value = productDetails.value.stock
+  productMinPurchase.value = productDetails.value.min_purchase
+  productWeight.value = productDetails.value.weight
+  productHeight.value = productDetails.value.height
+  productWidth.value = productDetails.value.width
+  productLength.value = productDetails.value.length
+  productFeatured.value = productDetails.value.featured == 1
+  productStatus.value = productDetails.value.status
+}
 
 const statusProduct = [
 	{
@@ -61,15 +81,15 @@ const showcases = computed(() => showcasesData.value)
 
 const saveProduct = async productdata => {
 	try {
-		await $apiRails('/merchant/products', {
-			method: 'POST',
+		await $apiRails(`/merchant/products/${ route.params.id }`, {
+			method: 'PUT',
 			body: { product: productdata },
 		});
 
 		router.push('/produk/semua');
-		messageStore.setMessage('success', 'Data produk berhasil disimpan')
+		messageStore.setMessage('success', 'Data produk berhasil diubah')
 	} catch (error) {
-			messageStore.setMessage('error', 'Gagal menyimpan data produk')
+			messageStore.setMessage('error', 'Gagal mengubah data produk')
 			console.error("Error on posting product data:", error);
 	}
 }
@@ -102,6 +122,13 @@ const onSubmit = () => {
 
 <template>
   <div>
+    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
+      <div class="d-flex flex-column justify-center">
+        <h4 class="text-h4 font-weight-medium">
+          Edit Produk
+        </h4>
+      </div>
+    </div>
 		<!-- 👉 Form -->
 		<VForm
 			ref="refForm"

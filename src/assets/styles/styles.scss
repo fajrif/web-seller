@@ -39,3 +39,6 @@
 .v-text-field__prefix, .v-text-field__suffix {
   opacity: 1 !important;
 }
+.v-list-item.v-list-item--link a {
+	color: inherit;
+}

@@ -24,7 +24,7 @@ export const useConfigStore = defineStore('config', () => {
 
   // ℹ️ We need to use `storeToRefs` to forward the state
   const { isLessThanOverlayNavBreakpoint, appContentWidth, navbarType, isNavbarBlurEnabled, appContentLayoutNav, isVerticalNavCollapsed, footerType, isAppRTL } = storeToRefs(useLayoutConfigStore())
-  
+
   return {
     theme,
     isVerticalNavSemiDark,
@@ -41,6 +41,7 @@ export const useConfigStore = defineStore('config', () => {
     isAppRTL,
   }
 })
+
 // !SECTION
 // SECTION Init
 export const initConfigStore = () => {
@@ -60,4 +61,32 @@ export const initConfigStore = () => {
       vuetifyTheme.global.name.value = userPreferredColorScheme.value
   })
 }
+
 // !SECTION
+// SnackBar
+export const useMessageStore = defineStore('snackbar', () => {
+	const visible = ref(false)
+	const title = ref('')
+	const text = ref('')
+	const color = ref()
+	const icon = ref('tabler-info-circle')
+	const mode = ref()
+	const position = ref('top')
+	const timeout = ref(45000)
+
+  function setMessage(col, msg) {
+    color.value = col
+    text.value = msg
+    title.value = col.charAt(0).toUpperCase() + col.substring(1)
+    visible.value = true
+  }
+
+  function close() {
+    color.value = ''
+    visible.value = false
+    title.value = ''
+    text.value = ''
+  }
+
+  return { visible, title, text, color, icon, mode, position, timeout, setMessage, close }
+})

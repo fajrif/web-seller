@@ -131,7 +131,6 @@ const toggleReadUnread = (isSeen, Id) => {
                 <div class="d-flex align-start gap-3">
                   <VAvatar
                     :color="notification.color && !notification.img ? notification.color : undefined"
-                    :variant="notification.img ? undefined : 'tonal' "
                   >
                     <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
                     <VImg
@@ -204,8 +203,9 @@ const toggleReadUnread = (isSeen, Id) => {
           <VBtn
             block
             size="small"
+						@click="$router.push('/notifications')"
           >
-            View All Notifications
+            List Notifikasi
           </VBtn>
         </VCardText>
       </VCard>

@@ -14,31 +14,31 @@ const tabs = [
 		id: 1,
     title: 'Semua',
     tab: 'semua',
-		status: null,
+		status: "",
   },
   {
 		id: 2,
     title: 'Dijual',
     tab: 'dijual',
-		status: 1,
+		status: "1",
   },
   {
 		id: 3,
     title: 'Diarsipkan',
     tab: 'arsip',
-		status: 0,
+		status: "0",
   },
   {
 		id: 4,
     title: 'Tidak Aktif',
     tab: 'non-aktif',
-		status: 2,
+		status: "2",
   },
   {
 		id: 5,
     title: 'Ditolak',
     tab: 'ditolak',
-		status: 3,
+		status: "3",
   },
 ]
 

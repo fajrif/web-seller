@@ -24,8 +24,33 @@ const onReset = () => {
 }
 
 const onSubmit = () => {
-  emit('update:isDialogVisible', false)
-  emit('update:permissionName', currentPermissionName.value)
+  refForm.value?.validate().then(({ valid }) => {
+    if (valid) {
+			// this one
+			emit('update:permissionName', currentPermissionName.value)
+
+			// or this one
+      emit('userData', {
+        id: 0,
+        fullName: fullName.value,
+        company: company.value,
+        role: role.value,
+        country: country.value,
+        contact: contact.value,
+        email: email.value,
+        currentPlan: plan.value,
+        status: status.value,
+        avatar: '',
+        billing: 'Auto Debit',
+      })
+
+			emit('update:isDialogVisible', false)
+      nextTick(() => {
+        refForm.value?.reset()
+        refForm.value?.resetValidation()
+      })
+    }
+  })
 }
 
 watch(() => props, () => {

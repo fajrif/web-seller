@@ -2,7 +2,7 @@ import { AppContentLayoutNav, NavbarType } from '@layouts/enums'
 import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
 import { _setDirAttr } from '@layouts/utils'
 
-// ℹ️ We should not import themeConfig here but in urgency we are doing it for now
+// ℹ️  We should not import themeConfig here but in urgency we are doing it for now
 import { layoutConfig } from '@themeConfig'
 
 export const namespaceConfig = str => `${layoutConfig.app.title}-${str}`
@@ -68,7 +68,7 @@ export const useLayoutConfigStore = defineStore('layoutConfig', () => {
   // 👉 Layout Classes
   const _layoutClasses = computed(() => {
     const { y: windowScrollY } = useWindowScroll()
-    
+
     return [
       `layout-nav-type-${appContentLayoutNav.value}`,
       `layout-navbar-${navbarType.value}`,
@@ -102,14 +102,14 @@ export const useLayoutConfigStore = defineStore('layoutConfig', () => {
         - Collapsed
         - Isn't hovered by mouse
         - nav is not less than overlay breakpoint (hence, isn't overlay menu)
-  
-      ℹ️ We are getting `isVerticalNavHovered` as param instead of via `inject` because
+
+      ℹ️  We are getting `isVerticalNavHovered` as param instead of via `inject` because
           we are using this in `VerticalNav.vue` component which provide it and I guess because
           same component is providing & injecting we are getting undefined error
     */
   const isVerticalNavMini = (isVerticalNavHovered = null) => {
     const isVerticalNavHoveredLocal = isVerticalNavHovered || inject(injectionKeyIsVerticalNavHovered) || ref(false)
-    
+
     return computed(() => isVerticalNavCollapsed.value && !isVerticalNavHoveredLocal.value && !isLessThanOverlayNavBreakpoint.value)
   }
 

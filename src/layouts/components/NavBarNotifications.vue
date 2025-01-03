@@ -1,49 +1,49 @@
 <script setup>
-import avatar3 from '@images/avatars/avatar-3.png'
-import avatar4 from '@images/avatars/avatar-4.png'
-import avatar5 from '@images/avatars/avatar-5.png'
-import paypal from '@images/cards/paypal-rounded.png'
 
 const notifications = ref([
   {
     id: 1,
-    img: avatar4,
-    title: 'Congratulation Flora! 🎉',
-    subtitle: 'Won the monthly best seller badge',
-    time: 'Today',
+    icon: 'tabler-wallet',
+    title: 'Pesanan baru diterima 🎉',
+    subtitle: 'Order #01290 dipesan oleh Kartika Sari',
+    time: 'Hari ini',
+    color: 'primary',
     isSeen: true,
   },
   {
     id: 2,
-    text: 'Tom Holland',
-    title: 'New user registered.',
-    subtitle: '5 hours ago',
-    time: 'Yesterday',
+    icon: 'tabler-wallet',
+    title: 'Pesanan baru diterima 🎉',
+    subtitle: 'Order #01290 dipesan oleh Chow Lin',
+    time: 'Kemarin',
+    color: 'primary',
     isSeen: false,
   },
   {
     id: 3,
-    img: avatar5,
-    title: 'New message received 👋🏻',
-    subtitle: 'You have 10 unread messages',
+    icon: 'tabler-cash-banknote',
+    title: 'Penarikan dana telah selesai 👋🏻',
+    subtitle: 'Anda telah menarik dana sebesar Rp.500rb',
     time: '11 Aug',
+    color: 'success',
     isSeen: true,
   },
   {
     id: 4,
-    img: paypal,
-    title: 'PayPal',
-    subtitle: 'Received Payment',
+    icon: 'tabler-cash-banknote-off',
+    title: 'Penarikan dana Gagal',
+    subtitle: 'Maaf untuk sementara penarikan dana di tutup',
     time: '25 May',
     isSeen: false,
     color: 'error',
   },
   {
     id: 5,
-    img: avatar3,
-    title: 'Received Order 📦',
-    subtitle: 'New order received from john',
+    icon: 'tabler-package',
+    title: 'Pesanan telah sampai 📦',
+    subtitle: 'Pesanan order #5453 telah di terima',
     time: '19 Mar',
+    color: 'success',
     isSeen: true,
   },
 ])
