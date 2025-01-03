@@ -21,7 +21,6 @@ const form = ref({ email: '' })
         max-width="500"
         :class="$vuetify.display.smAndUp ? 'pa-6' : 'pa-0'"
       >
-
         <VCardText>
           <h4 class="text-h4 mb-1">
             Lupa Kata Sandi? 🔒

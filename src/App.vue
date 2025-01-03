@@ -25,6 +25,7 @@ const snackbar = useMessageStore()
 			<v-snackbar
 				v-model="snackbar.visible"
 				auto-height
+				variant="tonal"
 				:color="snackbar.color"
 				:multi-line="snackbar.mode === 'multi-line'"
 				:timeout="snackbar.timeout"
@@ -36,9 +37,9 @@ const snackbar = useMessageStore()
 							:icon="snackbar.icon"
 							class="me-2 mt-1"
 						/>
-						<div class="d-flex flex-column">
-							<strong>{{ snackbar.title }}</strong>
-							<p class="text-body-2 text-white fw-500 mb-0">
+						<div class="d-flex flex-column text-black">
+							<strong class="text-black">{{ snackbar.title }}</strong>
+							<p class="text-body-2 fw-500 mb-0">
 								{{ snackbar.text }}
 							</p>
 						</div>
@@ -46,11 +47,11 @@ const snackbar = useMessageStore()
 				</v-layout>
 				<template #actions>
 					<VBtn
+						icon="tabler-x"
+						variant="text"
 						color="secondary"
 						@click="snackbar.visible = false"
-					>
-						Close
-					</VBtn>
+					/>
 				</template>
 			</v-snackbar>
 
