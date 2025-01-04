@@ -131,6 +131,7 @@ declare module 'vue-router/auto-routes' {
     'pages-terms': RouteRecordInfo<'pages-terms', '/pages/terms', Record<never, never>, Record<never, never>>,
     'pages-typography': RouteRecordInfo<'pages-typography', '/pages/typography', Record<never, never>, Record<never, never>>,
     'pages-user-profile-tab': RouteRecordInfo<'pages-user-profile-tab', '/pages/user-profile/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
+    'produk-id': RouteRecordInfo<'produk-id', '/produk/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'produk-tab': RouteRecordInfo<'produk-tab', '/produk/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'produk-edit-id': RouteRecordInfo<'produk-edit-id', '/produk/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'produk-tambah-tab': RouteRecordInfo<'produk-tambah-tab', '/produk/tambah/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,

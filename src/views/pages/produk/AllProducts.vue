@@ -241,7 +241,9 @@ const deleteItem = (id, name) => {
 
         <!-- Judul -->
         <template #item.name="{ item }">
-          <span class="text-body-1 text-high-emphasis">{{ item.name }}</span>
+					<RouterLink :to="{ name: 'produk-id', params: { id: item.id } }">
+						{{ item.name }}
+					</RouterLink>
         </template>
 
         <!-- Harga -->
@@ -284,7 +286,9 @@ const deleteItem = (id, name) => {
 									</RouterLink>
                 </VListItem>
                 <VListItem value="view">
-                  Lihat Produk
+									<RouterLink style="color:inherit" :to="{ name: 'produk-id', params: { id: item.id } }">
+										Lihat Produk
+									</RouterLink>
                 </VListItem>
                 <VListItem value="edit_price" @click="editPrice(item.id, item.name, item.price)">
 									Ubah Harga
