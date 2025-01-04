@@ -24,10 +24,10 @@ export default defineConfig({
           .replace(/([a-z\d])([A-Z])/g, '$1-$2')
           .toLowerCase()
       },
-      beforeWriteFiles: root => {
-        root.insert('/apps/email/:filter', '/src/pages/apps/email/index.vue')
-        root.insert('/apps/email/:label', '/src/pages/apps/email/index.vue')
-      },
+			// beforeWriteFiles: root => {
+      //   root.insert('/apps/email/:filter', '/src/pages/apps/email/index.vue')
+      //   root.insert('/apps/email/:label', '/src/pages/apps/email/index.vue')
+      // },
     }),
     vue({
       template: {
@@ -53,7 +53,7 @@ export default defineConfig({
 
     // Docs: https://github.com/antfu/unplugin-vue-components#unplugin-vue-components
     Components({
-      dirs: ['src/@core/components', 'src/views/demos', 'src/components'],
+      dirs: ['src/@core/components', 'src/components'],
       dts: true,
       resolvers: [
         componentName => {
