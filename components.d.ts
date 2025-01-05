@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddProductSelectionDialog: typeof import('./src/components/dialogs/AddProductSelectionDialog.vue')['default']
     AppAutocomplete: typeof import('./src/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppBarSearch: typeof import('./src/@core/components/AppBarSearch.vue')['default']
     AppCardActions: typeof import('./src/@core/components/cards/AppCardActions.vue')['default']
