@@ -1,4 +1,5 @@
 <script setup>
+import bgImg from '@images/banner/bg-login.png'
 const { injectSkinClasses } = useSkins()
 
 // ℹ️ This will inject classes in body tag for accurate styling
@@ -25,6 +26,7 @@ watch([
 
   <div
     class="layout-wrapper layout-blank login-background"
+		v-bind:style="{ backgroundImage: 'url(' + bgImg + ')' }"
     data-allow-mismatch
   >
     <RouterView #="{Component}">
@@ -39,8 +41,14 @@ watch([
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .layout-wrapper.layout-blank {
   flex-direction: column;
+}
+.login-background {
+  position: relative !important;
+  background-size: cover !important;
+  overflow: hidden !important;
+  background-repeat: no-repeat !important;
 }
 </style>

@@ -1,9 +1,6 @@
 <script setup>
 import { VForm } from 'vuetify/components/VForm'
 import logoImg from '@images/logo.png'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw'
-import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 
