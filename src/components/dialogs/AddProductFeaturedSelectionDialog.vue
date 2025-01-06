@@ -6,16 +6,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  eventId: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  eventName: {
-    type: String,
-    required: true,
-    default: "Event dan Promo",
-  },
 })
 
 const emit = defineEmits([
@@ -97,7 +87,7 @@ const products = computed(() => productsData.value.products)
 const totalProduct = computed(() => productsData.value.total)
 
 const onSubmit = () => {
-	emit('formSubmitted', props.eventId, selected.value)
+	emit('formSubmitted', selected.value)
   emit('update:isDialogVisible', false)
   selected.value = []
 }

@@ -18,6 +18,11 @@ export const redirects = [
     },
   },
   {
+    path: '/merchant/info',
+    name: 'merchant-info',
+    redirect: () => ({ name: 'merchant-tab', params: { tab: 'info-toko' } }),
+  },
+  {
     path: '/produk/semua',
     name: 'produk-semua',
     redirect: () => ({ name: 'produk-tab', params: { tab: 'semua' } }),

@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddEditEtalaseDialog: typeof import('./src/components/dialogs/AddEditEtalaseDialog.vue')['default']
+    AddProductFeaturedSelectionDialog: typeof import('./src/components/dialogs/AddProductFeaturedSelectionDialog.vue')['default']
     AddProductSelectionDialog: typeof import('./src/components/dialogs/AddProductSelectionDialog.vue')['default']
     AppAutocomplete: typeof import('./src/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppBarSearch: typeof import('./src/@core/components/AppBarSearch.vue')['default']
@@ -33,6 +35,7 @@ declare module 'vue' {
     CustomRadios: typeof import('./src/@core/components/app-form-elements/CustomRadios.vue')['default']
     CustomRadiosWithIcon: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithIcon.vue')['default']
     CustomRadiosWithImage: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithImage.vue')['default']
+    DeleteEtalaseDialog: typeof import('./src/components/dialogs/DeleteEtalaseDialog.vue')['default']
     DeleteProductDialog: typeof import('./src/components/dialogs/DeleteProductDialog.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     DropZone: typeof import('./src/@core/components/DropZone.vue')['default']
