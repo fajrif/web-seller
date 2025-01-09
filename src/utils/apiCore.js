@@ -1,7 +1,7 @@
 import { ofetch } from 'ofetch'
 
-export const $apiRails = ofetch.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+export const $apiCore = ofetch.create({
+  baseURL: import.meta.env.VITE_API_CORE_URL,
   async onRequest({ options }) {
     const accessToken = useCookie('accessToken').value
     if (accessToken)

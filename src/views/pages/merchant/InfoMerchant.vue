@@ -7,49 +7,58 @@ const messageStore = useMessageStore()
 const isFormValid = ref(false)
 const refForm = ref()
 const refInputEl = ref()
-const	merchantLogo = ref('')
-const	merchantLogoTmp = ref('')
+const	merchantPhoto = ref('')
+const	merchantPhotoTmp = ref('')
 const	merchantName = ref('')
 const	merchantDescription = ref('')
-const	merchantCaption = ref('')
+const	merchantSlogan = ref('')
 const	merchantRequestNPWP = ref(false)
 
-const { data: merchantDetails } = await useApiRails("/merchant")
-if (merchantDetails.value) {
-  merchantLogo.value = merchantDetails.value.logo == "" ? avatar1 : merchantDetails.value.logo
-  merchantLogoTmp.value = merchantLogo.value
-  merchantName.value = merchantDetails.value.name
-  merchantDescription.value = merchantDetails.value.description
-  merchantCaption.value = merchantDetails.value.caption
-  merchantRequestNPWP.value = merchantDetails.value.request_npwp == 1
+const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
+if (merchantDetails.value.success) {
+  let merchant = merchantDetails.value.data.merchant
+  merchantPhoto.value = merchant.photo_url == "" ? avatar1 : merchant.photo_url
+  merchantPhotoTmp.value = merchantPhoto.value
+  merchantName.value = merchant.name
+  merchantDescription.value = merchant.description
+  merchantSlogan.value = merchant.slogan
+  merchantRequestNPWP.value = merchant.is_npwp_required
 }
 
-const saveMerchant = async merchantdata => {
-	try {
-		await $apiRails("/merchant", {
-			method: 'PUT',
-			body: { merchant: merchantdata },
-		});
+const saveMerchant = async merchantData => {
+  try {
+    console.log(merchantData)
 
-		messageStore.setMessage('success', 'Data merchant berhasil disimpan')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal simpan data merhant')
-			console.error("Error on update merchant data:", error);
-	}
+    const res = await $apiCore("/seller/command/merchant/atur-toko", {
+      method: 'POST',
+      body: merchantData,
+      onResponseError({ response }) {
+        console.log(response)
+      },
+    })
+
+    let msg = res.message
+    messageStore.setMessage('success', msg)
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal simpan informasi toko')
+    console.error("Error on update merchant data:", error)
+  }
 }
 
+/* eslint-disable camelcase */
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       saveMerchant({
-				name: merchantName.value,
-				description: merchantDescription.value,
-				caption: merchantCaption.value,
-				request_npwp: merchantRequestNPWP.value == true ? 1 : 0,
-      });
+        name: merchantName.value,
+        description: merchantDescription.value,
+        slogan: merchantSlogan.value,
+        is_npwp_required: merchantRequestNPWP.value,
+      })
     }
   })
 }
+/* eslint-enable */
 
 const changeAvatar = file => {
   const fileReader = new FileReader()
@@ -58,16 +67,15 @@ const changeAvatar = file => {
     fileReader.readAsDataURL(files[0])
     fileReader.onload = () => {
       if (typeof fileReader.result === 'string')
-        merchantLogo.value = fileReader.result
+        merchantPhoto.value = fileReader.result
     }
   }
 }
 
 // reset avatar image
 const resetAvatar = () => {
-	merchantLogo.value = merchantLogoTmp.value
+  merchantPhoto.value = merchantPhotoTmp.value
 }
-
 </script>
 
 <template>
@@ -80,7 +88,7 @@ const resetAvatar = () => {
             rounded
             size="100"
             class="me-6"
-            :image="merchantLogo"
+            :image="merchantPhoto"
           />
 
           <!-- 👉 Upload Photo -->
@@ -123,79 +131,85 @@ const resetAvatar = () => {
             </div>
 
             <p class="text-body-1 mb-0">
-							Ukuran optimal 300 x 300 piksel dengan Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG
+              Ukuran optimal 300 x 300 piksel dengan Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG
             </p>
           </form>
         </VCardText>
 
         <VCardText class="pt-2">
           <!-- 👉 Form -->
-					<VForm
-						ref="refForm"
-						v-model="isFormValid"
-						@submit.prevent="onSubmit"
-						class="mt-3">
+          <VForm
+            ref="refForm"
+            v-model="isFormValid"
+            class="mt-3"
+            @submit.prevent="onSubmit"
+          >
             <VRow>
-							<VCol cols="12">
-								<VRow>
-									<VCol
-										md="6"
-										cols="12"
-										>
-										<VRow>
-											<VCol cols="12">
-												<AppTextField
-													v-model="merchantName"
-													:rules="[requiredValidator]"
-													placeholder="Nama toko anda"
-													label="Nama Toko"
-													/>
-											</VCol>
-											<VCol cols="12">
-												<AppTextField
-													v-model="merchantCaption"
-													placeholder="Slogan toko anda"
-													label="Slogan Toko"
-													/>
-											</VCol>
-										</VRow>
-									</VCol>
+              <VCol cols="12">
+                <VRow>
+                  <VCol
+                    md="6"
+                    cols="12"
+                  >
+                    <VRow>
+                      <VCol cols="12">
+                        <AppTextField
+                          v-model="merchantName"
+                          :rules="[requiredValidator]"
+                          placeholder="Nama toko anda"
+                          label="Nama Toko"
+                        />
+                      </VCol>
+                      <VCol cols="12">
+                        <AppTextField
+                          v-model="merchantSlogan"
+                          placeholder="Slogan toko anda"
+                          label="Slogan Toko"
+                        />
+                      </VCol>
+                    </VRow>
+                  </VCol>
 
-									<VCol
-										md="6"
-										cols="12"
-										>
-										<AppTextarea
-											v-model="merchantDescription"
-											placeholder="Deskripsi dan Informasi toko"
-											label="Deskripsi Toko"
-											/>
-									</VCol>
-								</VRow>
-							</VCol>
+                  <VCol
+                    md="6"
+                    cols="12"
+                  >
+                    <AppTextarea
+                      v-model="merchantDescription"
+                      placeholder="Deskripsi dan Informasi toko"
+                      label="Deskripsi Toko"
+                    />
+                  </VCol>
+                </VRow>
+              </VCol>
 
               <!-- 👉 Status Toko -->
-              <VCol cols="12" class="d-flex flex-wrap justify-start align-center">
-								<h4 class="fw-700">Request NPWP</h4>
-								<VTooltip location="top">
-									<template #activator="{ props }">
-										<VIcon
-											v-bind="props"
-											size="20"
-											icon="tabler-info-circle"
-										/>
-									</template>
-									<span>
-										Request NPWP merupakan pengaturan permintaan nomor NPWP kepada Pembeli.<br/>
-										Jika Anda mengaktifkan Request NPWP, maka akan muncul form input NPWP ketika Pembeli<br/>
-										melakukan checkout
-									</span>
-								</VTooltip>
-								<VSwitch
-									v-model="merchantRequestNPWP"
-									:label="merchantRequestNPWP == true ? 'Aktif' : 'Non-Aktif'"
-									class="ms-2"
-								/>
+              <VCol
+                cols="12"
+                class="d-flex flex-wrap justify-start align-center"
+              >
+                <h4 class="fw-700">
+                  Request NPWP
+                </h4>
+                <VTooltip location="top">
+                  <template #activator="{ props }">
+                    <VIcon
+                      v-bind="props"
+                      size="20"
+                      icon="tabler-info-circle"
+                    />
+                  </template>
+                  <span>
+                    Request NPWP merupakan pengaturan permintaan nomor NPWP kepada Pembeli.<br>
+                    Jika Anda mengaktifkan Request NPWP, maka akan muncul form input NPWP ketika Pembeli<br>
+                    melakukan checkout
+                  </span>
+                </VTooltip>
+                <VSwitch
+                  v-model="merchantRequestNPWP"
+                  :label="merchantRequestNPWP == true ? 'Aktif' : 'Non-Aktif'"
+                  class="ms-2"
+                />
               </VCol>
 
               <!-- 👉 Form Actions -->
@@ -203,7 +217,9 @@ const resetAvatar = () => {
                 cols="12"
                 class="d-flex flex-wrap justify-end gap-4"
               >
-                <VBtn type="submit">Simpan Informasi</VBtn>
+                <VBtn type="submit">
+                  Simpan Informasi
+                </VBtn>
               </VCol>
             </VRow>
           </VForm>
@@ -214,9 +230,9 @@ const resetAvatar = () => {
     <VCol cols="12">
       <!-- 👉 Banner Toko -->
       <VCard title="Banner Toko">
-				<VCardText>
-					<DropZone />
-				</VCardText>
+        <VCardText>
+          <DropZone />
+        </VCardText>
       </VCard>
     </VCol>
   </VRow>

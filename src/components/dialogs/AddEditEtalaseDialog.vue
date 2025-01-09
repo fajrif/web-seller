@@ -36,10 +36,10 @@ const onReset = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-			// save showcase
-			emit('formSubmitted', props.etalaseId, newEtalaseName.value)
+      // save showcase
+      emit('formSubmitted', props.etalaseId, newEtalaseName.value)
 
-			emit('update:isDialogVisible', false)
+      emit('update:isDialogVisible', false)
       nextTick(() => {
         refForm.value?.reset()
         refForm.value?.resetValidation()
@@ -60,44 +60,53 @@ const onSubmit = () => {
 
     <!-- Dialog Content -->
     <VCard>
-			<VForm
-				ref="refForm"
-				v-model="isFormValid"
-				@submit.prevent="onSubmit"
-				>
-				<!-- 👉 Title -->
-				<VCardItem class="pb-2">
-					<VCardTitle>
-						<h4 class="text-h4 mb-4">
-							{{ props.etalaseId > 0 ? 'Edit Etalase' : 'Tambah Etalase' }}
-						</h4>
-					</VCardTitle>
-					<p v-if="props.etalaseId == 0" class="text-body-1 mb-0">
-						Etalase membantumu dalam merapikan produk-produk tokomu
-					</p>
-					<p v-else class="text-body-1 mb-0">
-						Ubah nama etalase <strong>{{ props.etalaseName }}</strong>
-					</p>
-				</VCardItem>
-				<VCardText>
-					<VRow>
-						<VCol cols="12">
-							<AppTextField
-								v-model="newEtalaseName"
-								label="Nama etalase"
-								:rules="[requiredValidator]"
-								placeholder="Masukan nama etalase"
-								/>
-						</VCol>
-					</VRow>
-				</VCardText>
+      <VForm
+        ref="refForm"
+        v-model="isFormValid"
+        @submit.prevent="onSubmit"
+      >
+        <!-- 👉 Title -->
+        <VCardItem class="pb-2">
+          <VCardTitle>
+            <h4 class="text-h4 mb-4">
+              {{ props.etalaseId > 0 ? 'Edit Etalase' : 'Tambah Etalase' }}
+            </h4>
+          </VCardTitle>
+          <p
+            v-if="props.etalaseId == 0"
+            class="text-body-1 mb-0"
+          >
+            Etalase membantumu dalam merapikan produk-produk tokomu
+          </p>
+          <p
+            v-else
+            class="text-body-1 mb-0"
+          >
+            Ubah nama etalase <strong>{{ props.etalaseName }}</strong>
+          </p>
+        </VCardItem>
+        <VCardText>
+          <VRow>
+            <VCol cols="12">
+              <AppTextField
+                v-model="newEtalaseName"
+                label="Nama etalase"
+                :rules="[requiredValidator]"
+                placeholder="Masukan nama etalase"
+              />
+            </VCol>
+          </VRow>
+        </VCardText>
 
-				<VCardText>
-					<VBtn type="submit" class="w-100">
-						Simpan Etalase
-					</VBtn>
-				</VCardText>
-			</VForm>
+        <VCardText>
+          <VBtn
+            type="submit"
+            class="w-100"
+          >
+            Simpan Etalase
+          </VBtn>
+        </VCardText>
+      </VForm>
     </VCard>
   </VDialog>
 </template>

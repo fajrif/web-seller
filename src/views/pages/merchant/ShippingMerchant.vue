@@ -66,8 +66,10 @@ const kurirBiaya = ref([
         <!-- 👉 Shipping Provider -->
         <VCard flat>
           <VCardText>
-						<h3 class="mb-2 fw-500">Kurir Tanpa Biaya</h3>
-						<p>Kurir tanpa biaya adalah kurir pengiriman barang / paket dengan metode Request Pick-Up atau DropPoint</p>
+            <h3 class="mb-2 fw-500">
+              Kurir Tanpa Biaya
+            </h3>
+            <p>Kurir tanpa biaya adalah kurir pengiriman barang / paket dengan metode Request Pick-Up atau DropPoint</p>
             <VList class="card-list">
               <VListItem
                 v-for="item in kurirTanpaBiaya"
@@ -111,8 +113,10 @@ const kurirBiaya = ref([
         <!-- 👉 Social Accounts -->
         <VCard flat>
           <VCardText>
-						<h3 class="mb-2 fw-500">Kurir dengan Biaya</h3>
-						<p>Kurir adalah jasa pengiriman barang atau paket melalui Seller pribadi atau pengiriman yang di tanggung oleh Pembeli</p>
+            <h3 class="mb-2 fw-500">
+              Kurir dengan Biaya
+            </h3>
+            <p>Kurir adalah jasa pengiriman barang atau paket melalui Seller pribadi atau pengiriman yang di tanggung oleh Pembeli</p>
             <VList class="card-list">
               <VListItem
                 v-for="item in kurirBiaya"

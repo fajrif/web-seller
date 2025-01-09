@@ -16,32 +16,32 @@ const activeTab = computed({
 // tabs
 const tabs = [
   {
-		id: 1,
+    id: 1,
     title: 'Informasi Toko',
     tab: 'info-toko',
   },
   {
-		id: 2,
+    id: 2,
     title: 'Etalase',
     tab: 'etalase-toko',
   },
   {
-		id: 3,
+    id: 3,
     title: 'Alamat Toko',
     tab: 'alamat-toko',
   },
   {
-		id: 4,
+    id: 4,
     title: 'Jadwal Toko',
     tab: 'jadwal-toko',
   },
   {
-		id: 5,
+    id: 5,
     title: 'Pengiriman',
     tab: 'shipping-toko',
   },
   {
-		id: 5,
+    id: 5,
     title: 'Produk Unggulan',
     tab: 'featured-products',
   },
@@ -52,7 +52,6 @@ definePage({ meta: { navActiveLink: 'merchant-tab' } })
 
 <template>
   <div>
-
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
@@ -81,35 +80,34 @@ definePage({ meta: { navActiveLink: 'merchant-tab' } })
       :touch="false"
     >
       <!-- Informasi Toko -->
-			<VWindowItem value="info-toko">
+      <VWindowItem value="info-toko">
         <InfoMerchant />
       </VWindowItem>
 
       <!-- Etalase -->
-			<VWindowItem value="etalase-toko">
+      <VWindowItem value="etalase-toko">
         <EtalaseMerchant />
       </VWindowItem>
 
       <!-- Address -->
-			<VWindowItem value="alamat-toko">
+      <VWindowItem value="alamat-toko">
         <AddressMerchant />
       </VWindowItem>
 
       <!-- Jadwal Toko -->
-			<VWindowItem value="jadwal-toko">
+      <VWindowItem value="jadwal-toko">
         <JadwalMerchant />
       </VWindowItem>
 
       <!-- Shipping -->
-			<VWindowItem value="shipping-toko">
+      <VWindowItem value="shipping-toko">
         <ShippingMerchant />
       </VWindowItem>
 
       <!-- Produk Unggulan -->
-			<VWindowItem value="featured-products">
+      <VWindowItem value="featured-products">
         <FeaturedMerchant />
       </VWindowItem>
-
     </VWindow>
   </div>
 </template>

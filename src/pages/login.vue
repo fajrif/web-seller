@@ -2,7 +2,6 @@
 import { VForm } from 'vuetify/components/VForm'
 import logoImg from '@images/logo.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
 
 definePage({
   meta: {
@@ -28,27 +27,65 @@ const credentials = ref({
   password: '',
 })
 
-const rememberMe = ref(false)
-
 const login = async () => {
   try {
-    const res = await $api('/auth/login', {
+    errors.value = { email: undefined, password: undefined }
+
+    const res = await $apiAuth('/login?type=seller', {
       method: 'POST',
       body: {
         email: credentials.value.email,
         password: credentials.value.password,
       },
       onResponseError({ response }) {
-        errors.value = response._data.errors
+        let msg = response._data.message
+        if(msg.toUpperCase().indexOf("EMAIL") === -1) {
+          errors.value.password = msg
+        } else {
+          errors.value.email = msg
+        }
       },
     })
 
-    const { accessToken, userData, userAbilityRules } = res
+    const accessToken = res.token
+    const userAbilityRules = [{ action: 'manage', subject: 'all' }]
 
     useCookie('userAbilityRules').value = userAbilityRules
     ability.update(userAbilityRules)
-    useCookie('userData').value = userData
     useCookie('accessToken').value = accessToken
+
+    await nextTick(() => {
+      getUserData()
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const getUserData = async () => {
+  try {
+    // GET Data Merchant
+    const resCore = await $apiCore('/seller/query/merchant/profile-toko', {
+      method: 'GET',
+      onResponseError({ response }) {
+        useCookie('accessToken').value = null
+        throw new Error("Unable to get seller data")
+      },
+    })
+
+    const merchant = resCore.data.merchant
+
+    /* eslint-disable camelcase */
+    const userData = {
+      id: merchant.id,
+      name: merchant.name,
+      photo_url: merchant.photo_url,
+      status: merchant.status,
+    }
+    /* eslint-enable */
+
+    useCookie('userData').value = userData
+
     await nextTick(() => {
       router.replace(route.query.to ? String(route.query.to) : '/')
     })
@@ -78,7 +115,10 @@ const onSubmit = () => {
           <VCardTitle>
             <RouterLink to="/">
               <div class="app-logo">
-								<img :src="logoImg" alt="PLN Web Seller" />
+                <img
+                  :src="logoImg"
+                  alt="PLN Web Seller"
+                >
               </div>
             </RouterLink>
           </VCardTitle>
@@ -86,7 +126,7 @@ const onSubmit = () => {
 
         <VCardText>
           <p class="mb-0 text-center">
-						Selamat datang di Marketplace Seller, silakan masukkan email dan password yang sudah terdaftar untuk toko Anda
+            Selamat datang di Marketplace Seller, silakan masukkan email dan password yang sudah terdaftar untuk toko Anda
           </p>
         </VCardText>
 
@@ -132,11 +172,13 @@ const onSubmit = () => {
                   </RouterLink>
                 </div>
 
-                <VBtn block type="submit">
+                <VBtn
+                  block
+                  type="submit"
+                >
                   Masuk
                 </VBtn>
               </VCol>
-
             </VRow>
           </VForm>
         </VCardText>

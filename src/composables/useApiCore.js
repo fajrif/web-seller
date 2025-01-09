@@ -1,8 +1,8 @@
 import { createFetch } from '@vueuse/core'
 import { destr } from 'destr'
 
-export const useApiRails = createFetch({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
+export const useApiCore = createFetch({
+  baseUrl: import.meta.env.VITE_API_CORE_URL,
   fetchOptions: {
     headers: {
       Accept: 'application/json',

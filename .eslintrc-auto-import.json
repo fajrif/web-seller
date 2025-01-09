@@ -362,6 +362,14 @@
     "watchWithFilter": true,
     "whenever": true,
     "$apiRails": true,
-    "useApiRails": true
+    "useApiRails": true,
+    "$apiAuth": true,
+    "$apiCore": true,
+    "useApiCore": true,
+    "useApiAuth": true,
+    "PAGINATION_PER_PAGE": true,
+    "resolveStatus": true,
+    "toCurrency": true,
+    "productHeaders": true
   }
 }

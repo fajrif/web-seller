@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
@@ -24,331 +24,335 @@ const	productFeatured = ref(false)
 const	productStatus = ref(0)
 
 const statusProduct = [
-	{
-			id: 0,
-			name: "Arsip"
-	},
-	{
-			id: 1,
-			name: "Dijual"
-	},
-	{
-			id: 2,
-			name: "Non-Aktif"
-	},
-	{
-			id: 3,
-			name: "Ditolak"
-	},
+  {
+    id: 0,
+    name: "Arsip",
+  },
+  {
+    id: 1,
+    name: "Dijual",
+  },
+  {
+    id: 2,
+    name: "Non-Aktif",
+  },
+  {
+    id: 3,
+    name: "Ditolak",
+  },
 ]
 
 const conditionProduct = [
-	{
-			id: 1,
-			name: "Baru"
-	},
-	{
-			id: 0,
-			name: "Bekas / Lama"
-	},
+  {
+    id: 1,
+    name: "Baru",
+  },
+  {
+    id: 0,
+    name: "Bekas / Lama",
+  },
 ]
 
-const { data: categoriesData, execute: fetchCategories } = await useApiRails(createUrl('/categories'))
-const { data: showcasesData, execute: fetchShowcases } = await useApiRails(createUrl('/merchant/showcases'))
+const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/categories'))
+const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/merchant/showcases'))
 
 const categories = computed(() => categoriesData.value)
 const showcases = computed(() => showcasesData.value)
 
 const saveProduct = async productdata => {
-	try {
-		await $apiRails('/merchant/products', {
-			method: 'POST',
-			body: { product: productdata },
-		});
+  try {
+    await $apiCore('/merchant/products', {
+      method: 'POST',
+      body: { product: productdata },
+    })
 
-		router.push('/produk/semua');
-		messageStore.setMessage('success', 'Data produk berhasil disimpan')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal menyimpan data produk')
-			console.error("Error on posting product data:", error);
-	}
+    router.push('/produk/semua')
+    messageStore.setMessage('success', 'Data produk berhasil disimpan')
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal menyimpan data produk')
+    console.error("Error on posting product data:", error)
+  }
 }
 
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
+      let isFeatured = 0
+      if(productFeatured.value) {
+        isFeatured = 1
+      }
+      /* eslint-disable camelcase */
       saveProduct({
-				name: productName.value,
-				description: productDescription.value,
-				category_id: productCategory.value,
-				showcase_id: productShowcase.value,
-				condition: productCondition.value,
-				price: productPrice.value,
-				fake_price: productFakePrice.value,
-				stock: productStock.value,
-				min_purchase: productMinPurchase.value,
-				weight: productWeight.value,
-				height: productHeight.value,
-				width: productWidth.value,
-				length: productLength.value,
-				featured: productFeatured.value == true ? 1 : 0,
-				status: productStatus.value,
-      });
+        name: productName.value,
+        description: productDescription.value,
+        category_id: productCategory.value,
+        showcase_id: productShowcase.value,
+        condition: productCondition.value,
+        price: productPrice.value,
+        fake_price: productFakePrice.value,
+        stock: productStock.value,
+        min_purchase: productMinPurchase.value,
+        weight: productWeight.value,
+        height: productHeight.value,
+        width: productWidth.value,
+        length: productLength.value,
+        featured: isFeatured,
+        status: productStatus.value,
+      })
+      /* eslint-enable */
     }
   })
 }
-
 </script>
 
 <template>
   <div>
-		<!-- 👉 Form -->
-		<VForm
-			ref="refForm"
-			v-model="isFormValid"
-			@submit.prevent="onSubmit"
-		>
-			<VRow>
-				<VCol md="8">
-					<!-- 👉 Product Information -->
-					<VCard
-						class="mb-6"
-						title="Informasi Produk"
-					>
-						<VCardText>
-							<VRow>
-								<VCol cols="12">
-									<AppTextField
-										v-model="productName"
-										:rules="[requiredValidator]"
-										label="Nama Produk"
-										placeholder="Masukan nama barang anda"
-									/>
-								</VCol>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppSelect
-										v-model="productCategory"
-										:rules="[requiredValidator]"
-										placeholder="Pilih Kategori"
-										label="Kategori"
-										:items="categories"
-										item-title="name"
-										item-value="id"
-									/>
-								</VCol>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppSelect
-										v-model="productShowcase"
-										:rules="[requiredValidator]"
-										placeholder="Pilih Etalase"
-										label="Etalase"
-										:items="showcases"
-										item-title="name"
-										item-value="id"
-									/>
-								</VCol>
+    <!-- 👉 Form -->
+    <VForm
+      ref="refForm"
+      v-model="isFormValid"
+      @submit.prevent="onSubmit"
+    >
+      <VRow>
+        <VCol md="8">
+          <!-- 👉 Product Information -->
+          <VCard
+            class="mb-6"
+            title="Informasi Produk"
+          >
+            <VCardText>
+              <VRow>
+                <VCol cols="12">
+                  <AppTextField
+                    v-model="productName"
+                    :rules="[requiredValidator]"
+                    label="Nama Produk"
+                    placeholder="Masukan nama barang anda"
+                  />
+                </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppSelect
+                    v-model="productCategory"
+                    :rules="[requiredValidator]"
+                    placeholder="Pilih Kategori"
+                    label="Kategori"
+                    :items="categories"
+                    item-title="name"
+                    item-value="id"
+                  />
+                </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppSelect
+                    v-model="productShowcase"
+                    :rules="[requiredValidator]"
+                    placeholder="Pilih Etalase"
+                    label="Etalase"
+                    :items="showcases"
+                    item-title="name"
+                    item-value="id"
+                  />
+                </VCol>
 
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppSelect
-										v-model="productStatus"
-										placeholder="Pilih Status"
-										label="Status"
-										:items="statusProduct"
-										item-title="name"
-										item-value="id"
-										/>
-								</VCol>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppSelect
-										v-model="productCondition"
-										placeholder="Pilih Kondisi"
-										label="Kondisi"
-										:items="conditionProduct"
-										item-title="name"
-										item-value="id"
-										/>
-								</VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppSelect
+                    v-model="productStatus"
+                    placeholder="Pilih Status"
+                    label="Status"
+                    :items="statusProduct"
+                    item-title="name"
+                    item-value="id"
+                  />
+                </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppSelect
+                    v-model="productCondition"
+                    placeholder="Pilih Kondisi"
+                    label="Kondisi"
+                    :items="conditionProduct"
+                    item-title="name"
+                    item-value="id"
+                  />
+                </VCol>
 
-								<VCol>
-									<span class="mb-1">Deskripsi Produk</span>
-									<ProductDescriptionEditor
-										v-model="productDescription"
-										placeholder="Masukan informasi dan detil deskripsi produk anda"
-										class="border rounded"
-									/>
-								</VCol>
-							</VRow>
-						</VCardText>
-					</VCard>
+                <VCol>
+                  <span class="mb-1">Deskripsi Produk</span>
+                  <ProductDescriptionEditor
+                    v-model="productDescription"
+                    placeholder="Masukan informasi dan detil deskripsi produk anda"
+                    class="border rounded"
+                  />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
 
-					<!-- 👉 Ukuran Paket -->
-					<VCard
-						class="mb-6"
-						title="Ukuran Paket"
-					>
-						<VCardText>
-							<VRow>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppTextField
-										v-model="productWeight"
-										:rules="[requiredValidator]"
-										label="Berat"
-										suffix="gr"
-										type="number"
-										placeholder="0"
-									/>
-								</VCol>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppTextField
-										v-model="productWidth"
-										label="Lebar"
-										suffix="cm"
-										type="number"
-										placeholder="0"
-									/>
-								</VCol>
+          <!-- 👉 Ukuran Paket -->
+          <VCard
+            class="mb-6"
+            title="Ukuran Paket"
+          >
+            <VCardText>
+              <VRow>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppTextField
+                    v-model="productWeight"
+                    :rules="[requiredValidator]"
+                    label="Berat"
+                    suffix="gr"
+                    type="number"
+                    placeholder="0"
+                  />
+                </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppTextField
+                    v-model="productWidth"
+                    label="Lebar"
+                    suffix="cm"
+                    type="number"
+                    placeholder="0"
+                  />
+                </VCol>
 
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppTextField
-										v-model="productLength"
-										label="Panjang"
-										suffix="cm"
-										type="number"
-										placeholder="0"
-									/>
-								</VCol>
-								<VCol
-									cols="12"
-									md="6"
-								>
-									<AppTextField
-										v-model="productHeight"
-										label="Tinggi"
-										suffix="cm"
-										type="number"
-										placeholder="0"
-									/>
-								</VCol>
-							</VRow>
-						</VCardText>
-					</VCard>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppTextField
+                    v-model="productLength"
+                    label="Panjang"
+                    suffix="cm"
+                    type="number"
+                    placeholder="0"
+                  />
+                </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <AppTextField
+                    v-model="productHeight"
+                    label="Tinggi"
+                    suffix="cm"
+                    type="number"
+                    placeholder="0"
+                  />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
 
-					<!-- 👉 Media -->
-					<VCard class="mb-6">
-						<VCardItem>
-							<template #title>
-								Gambar Produk
-							</template>
-						</VCardItem>
+          <!-- 👉 Media -->
+          <VCard class="mb-6">
+            <VCardItem>
+              <template #title>
+                Gambar Produk
+              </template>
+            </VCardItem>
 
-						<VCardText>
-							<DropZone />
-						</VCardText>
-					</VCard>
-				</VCol>
+            <VCardText>
+              <DropZone />
+            </VCardText>
+          </VCard>
+        </VCol>
 
-				<VCol
-					md="4"
-					cols="12"
-				>
-					<!-- 👉 Pricing -->
-					<VCard
-						title="Harga"
-						class="mb-6"
-					>
-						<VCardText>
-							<AppTextField
-								v-model="productPrice"
-								label="Harga Satuan"
-								prefix="Rp"
-								type="number"
-								:rules="[requiredValidator]"
-								placeholder="Masukan harga jual"
-								class="mb-6"
-							/>
-							<AppTextField
-								v-model="productFakePrice"
-								label="Harga Coret"
-								prefix="Rp"
-								type="number"
-								placeholder="Masukan harga coret"
-								class="mb-6"
-							/>
+        <VCol
+          md="4"
+          cols="12"
+        >
+          <!-- 👉 Pricing -->
+          <VCard
+            title="Harga"
+            class="mb-6"
+          >
+            <VCardText>
+              <AppTextField
+                v-model="productPrice"
+                label="Harga Satuan"
+                prefix="Rp"
+                type="number"
+                :rules="[requiredValidator]"
+                placeholder="Masukan harga jual"
+                class="mb-6"
+              />
+              <AppTextField
+                v-model="productFakePrice"
+                label="Harga Coret"
+                prefix="Rp"
+                type="number"
+                placeholder="Masukan harga coret"
+                class="mb-6"
+              />
 
-							<VDivider class="my-2" />
+              <VDivider class="my-2" />
 
-							<div class="d-flex flex-raw align-center justify-space-between">
-								<span class="fw-700">Produk Unggulan</span>
-								<VSwitch
-									v-model="productFeatured"
-									density="compact"
-									/>
-							</div>
-						</VCardText>
-					</VCard>
+              <div class="d-flex flex-raw align-center justify-space-between">
+                <span class="fw-700">Produk Unggulan</span>
+                <VSwitch
+                  v-model="productFeatured"
+                  density="compact"
+                />
+              </div>
+            </VCardText>
+          </VCard>
 
-					<!-- 👉 Stock -->
-					<VCard
-						title="Stock"
-						class="mb-6"
-					>
-						<VCardText>
-							<AppTextField
-								v-model="productStock"
-								label="Stock"
-								suffix="Buah"
-								type="number"
-								placeholder="Tentukan jumlah stock"
-								class="mb-6"
-							/>
-							<AppTextField
-								v-model="productMinPurchase"
-								label="Pembelian Minimum"
-								suffix="Buah"
-								type="number"
-								placeholder="Tentukan pembelian minimum"
-								class="mb-6"
-							/>
-						</VCardText>
-					</VCard>
+          <!-- 👉 Stock -->
+          <VCard
+            title="Stock"
+            class="mb-6"
+          >
+            <VCardText>
+              <AppTextField
+                v-model="productStock"
+                label="Stock"
+                suffix="Buah"
+                type="number"
+                placeholder="Tentukan jumlah stock"
+                class="mb-6"
+              />
+              <AppTextField
+                v-model="productMinPurchase"
+                label="Pembelian Minimum"
+                suffix="Buah"
+                type="number"
+                placeholder="Tentukan pembelian minimum"
+                class="mb-6"
+              />
+            </VCardText>
+          </VCard>
 
-					<div class="d-flex flex-wrap gap-4 justify-end">
-						<VBtn
-							type="reset"
-							variant="tonal"
-							color="secondary"
-						>
-							Reset
-						</VBtn>
-						<VBtn type="submit">
-							Simpan
-						</VBtn>
-					</div>
-
-				</VCol>
-			</VRow>
-		</VForm>
+          <div class="d-flex flex-wrap gap-4 justify-end">
+            <VBtn
+              type="reset"
+              variant="tonal"
+              color="secondary"
+            >
+              Reset
+            </VBtn>
+            <VBtn type="submit">
+              Simpan
+            </VBtn>
+          </div>
+        </VCol>
+      </VRow>
+    </VForm>
   </div>
 </template>
 

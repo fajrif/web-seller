@@ -11,34 +11,34 @@ const activeTab = computed({
 // tabs
 const tabs = [
   {
-		id: 1,
+    id: 1,
     title: 'Semua',
     tab: 'semua',
-		status: "",
+    status: "",
   },
   {
-		id: 2,
+    id: 2,
     title: 'Dijual',
     tab: 'dijual',
-		status: "1",
+    status: "available",
   },
   {
-		id: 3,
+    id: 3,
     title: 'Diarsipkan',
     tab: 'arsip',
-		status: "0",
+    status: "archived",
   },
   {
-		id: 4,
+    id: 4,
     title: 'Tidak Aktif',
     tab: 'non-aktif',
-		status: "2",
+    status: "wait_approval",
   },
   {
-		id: 5,
+    id: 5,
     title: 'Ditolak',
     tab: 'ditolak',
-		status: "3",
+    status: "declined",
   },
 ]
 
@@ -47,7 +47,6 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
 
 <template>
   <div>
-
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
@@ -56,13 +55,13 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
       </div>
 
       <div class="d-flex gap-4 align-center flex-wrap">
-				<VBtn
-					color="primary"
-					prepend-icon="tabler-plus"
-					@click="$router.push('/produk/tambah')"
-					>
-					Tambah Produk
-				</VBtn>
+        <VBtn
+          color="primary"
+          prepend-icon="tabler-plus"
+          @click="$router.push('/produk/tambah')"
+        >
+          Tambah Produk
+        </VBtn>
       </div>
     </div>
 
@@ -86,13 +85,13 @@ definePage({ meta: { navActiveLink: 'produk-tab' } })
       :touch="false"
     >
       <!-- Semua -->
-			<VWindowItem
+      <VWindowItem
         v-for="item in tabs"
         :key="item.id"
-        :value="item.tab">
-        <AllProducts :selectedStatus="item.status" />
+        :value="item.tab"
+      >
+        <AllProducts :selected-status="item.status" />
       </VWindowItem>
-
     </VWindow>
   </div>
 </template>

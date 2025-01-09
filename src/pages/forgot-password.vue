@@ -1,15 +1,52 @@
 <script setup>
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
 
 definePage({
   meta: {
     layout: 'blank',
-    public: true,
+    unauthenticatedOnly: true,
   },
 })
 
-const form = ref({ email: '' })
+const router = useRouter()
+
+const errors = ref({
+  email: undefined,
+})
+
+const refVForm = ref()
+const email = ref('')
+
+const sendResetPassword = async () => {
+  try {
+    errors.value = { email: undefined }
+
+    const res = await $apiAuth('/password/email', {
+      method: 'POST',
+      body: {
+        email: email.value,
+      },
+      onResponseError({ response }) {
+        let msg = response._data.message
+        errors.value.email = msg
+      },
+    })
+
+    await nextTick(() => {
+      router.push(`/verification?email=${email.value}`)
+    })
+  } catch (err) {
+    errors.value.email = "Error: kirim email verifikasi tidak dapat diproses"
+    console.error(err)
+  }
+}
+
+const onSubmit = () => {
+  refVForm.value?.validate().then(({ valid: isValid }) => {
+    if (isValid)
+      sendResetPassword()
+  })
+}
 </script>
 
 <template>
@@ -26,21 +63,26 @@ const form = ref({ email: '' })
             Lupa Kata Sandi? 🔒
           </h4>
           <p class="mb-0">
-						Kami akan mengirimkan kode verifikasi untuk memperbarui kata sandi yang baru, mohon cek kembali Pesan Masuk di email Anda.
+            Kami akan mengirimkan kode verifikasi untuk memperbarui kata sandi yang baru, mohon cek kembali Pesan Masuk di email Anda.
           </p>
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm
+            ref="refVForm"
+            @submit.prevent="onSubmit"
+          >
             <VRow>
               <!-- email -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.email"
-                  autofocus
+                  v-model="email"
                   label="Email"
-                  type="email"
                   placeholder="Alamat Email"
+                  type="email"
+                  autofocus
+                  :rules="[requiredValidator, emailValidator]"
+                  :error-messages="errors.email"
                 />
               </VCol>
 

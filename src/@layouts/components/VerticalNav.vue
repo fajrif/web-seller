@@ -3,7 +3,7 @@ import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { VNodeRenderer } from './VNodeRenderer'
 import { layoutConfig } from '@layouts'
 import { themeConfig } from '@themeConfig'
-import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle, } from '@layouts/components'
+import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle } from '@layouts/components'
 import { useLayoutConfigStore } from '@layouts/stores/config'
 import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
 
@@ -80,11 +80,20 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <RouterLink to="/" class="app-logo app-title-wrapper" >
-          <VNodeRenderer :nodes="layoutConfig.app.logo" class="w-25" />
+        <RouterLink
+          to="/"
+          class="app-logo app-title-wrapper"
+        >
+          <VNodeRenderer
+            :nodes="layoutConfig.app.logo"
+            class="w-25"
+          />
           <Transition name="vertical-nav-app-title">
-            <h1 v-show="!hideTitleAndIcon" class="app-logo-title">
-              {{ themeConfig.app.app_title }}
+            <h1
+              v-show="!hideTitleAndIcon"
+              class="app-logo-title"
+            >
+              {{ themeConfig.app.appTitle }}
             </h1>
           </Transition>
         </RouterLink>

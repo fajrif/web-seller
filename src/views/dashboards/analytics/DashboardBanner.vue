@@ -1,22 +1,20 @@
 <script setup>
 import { VIcon } from 'vuetify/components/VIcon'
 import sliderBar1 from '@images/banner/sample-banner.png'
-import sliderBar2 from '@images/banner/sample-banner.png'
-import sliderBar3 from '@images/banner/sample-banner.png'
 
 const banners = [
   {
-		id: 1,
+    id: 1,
     name: 'Gelegar PLN Mobile 2022',
     slideImg: sliderBar1,
   },
   {
-		id: 2,
+    id: 2,
     name: 'Gelegar PLN Mobile 2023',
     slideImg: sliderBar1,
   },
   {
-		id: 3,
+    id: 3,
     name: 'Gelegar PLN Mobile 2024',
     slideImg: sliderBar1,
   },
@@ -29,7 +27,7 @@ const banners = [
     height="280"
   >
     <VCarousel
-			cycle
+      cycle
       :continuous="false"
       :show-arrows="false"
       hide-delimiter-background
@@ -41,17 +39,17 @@ const banners = [
         v-for="item in banners"
         :key="item.id"
       >
-          <VRow>
-            <VCol
-              cols="12"
-              class="align-center"
+        <VRow>
+          <VCol
+            cols="12"
+            class="align-center"
+          >
+            <img
+              :src="item.slideImg"
+              class="card-website-analytics-img"
             >
-              <img
-                :src="item.slideImg"
-                class="card-website-analytics-img"
-              >
-            </VCol>
-          </VRow>
+          </VCol>
+        </VRow>
       </VCarouselItem>
     </VCarousel>
   </VCard>

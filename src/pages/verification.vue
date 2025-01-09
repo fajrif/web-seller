@@ -1,23 +1,93 @@
 <script setup>
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
 
 definePage({
   meta: {
     layout: 'blank',
-    public: true,
+    unauthenticatedOnly: true,
   },
 })
 
 const router = useRouter()
+const route = useRoute('verification')
 const otp = ref('')
 const isOtpInserted = ref(false)
+const isOtpError = ref(false)
+
+const email = ref()
+if(route.query.email){
+  email.value = route.query.email
+}
+
+const message = ref({
+  text: '',
+  color: 'text-success',
+})
+
+const replaceEmailSent = () => {
+  if(email.value != undefined && email.value != '') {
+    return '*****' + email.value.substring(5)
+  }
+  else {
+    return '*****'
+  }
+}
+
+const sendResetPassword = async () => {
+  try {
+    const res = await $apiAuth('/password/email', {
+      method: 'POST',
+      body: {
+        email: email.value,
+      },
+      onResponseError({ response }) {
+        let msg = response._data.message
+        message.value.text = msg
+        message.value.color = 'text-error'
+      },
+    })
+
+    message.value.text = res.message
+    message.value.color = 'text-success'
+
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const sendVerificationCode = async () => {
+  try {
+    const res = await $apiAuth('/password/verify-token', {
+      method: 'POST',
+      body: {
+        email: email.value,
+        token: otp.value,
+      },
+      onResponseError({ response }) {
+        let msg = response._data.message
+        isOtpError.value = true
+        message.value.text = msg
+        message.value.color = 'text-error'
+      },
+    })
+
+    isOtpError.value = false
+    message.value.text = res.message
+    message.value.color = 'text-success'
+
+    await nextTick(() => {
+      router.push({ name: 'reset-password', query: { email: email.value, token: otp.value } })
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const onFinish = () => {
   isOtpInserted.value = true
   setTimeout(() => {
     isOtpInserted.value = false
-    router.push('/')
+    sendVerificationCode()
   }, 2000)
 }
 </script>
@@ -32,18 +102,43 @@ const onFinish = () => {
         :class="$vuetify.display.smAndUp ? 'pa-6' : 'pa-0'"
       >
         <VCardText>
-          <h4 class="text-h4 mb-1">
-            Verifikasi Login
-          </h4>
-          <p class="mb-1">
-						Kami telah mengirimkan kode verifikasi untuk login anda, mohon cek kembali Pesan Masuk di email Anda.
-          </p>
-          <h6 class="text-h6">
-            ******@gmail.com
-          </h6>
+          <div v-if="email">
+            <h4 class="text-h4 mb-1">
+              Verifikasi Email
+            </h4>
+            <p class="mb-1">
+              Kami telah mengirimkan kode verifikasi untuk login anda, mohon cek kembali Pesan Masuk di email Anda. <strong>{{ replaceEmailSent() }}</strong>
+            </p>
+            <p
+              v-if="message.text"
+              class="mb-1"
+              :class="message.color"
+            >
+              {{ message.text }}
+            </p>
+          </div>
+          <div v-else>
+            <h4 class="text-h4 line-height-normal mb-2">
+              Verifikasi Email Tidak Ditemukan
+            </h4>
+            <p class="mb-4">
+              Email atau kode verifikasi tidak ditemukan, silahkan kembali ke halaman Lupa Kata Sandi.
+            </p>
+            <RouterLink
+              class="d-flex align-center justify-center"
+              :to="{ name: 'forgot-password' }"
+            >
+              <VIcon
+                icon="tabler-chevron-left"
+                size="20"
+                class="me-1 flip-in-rtl"
+              />
+              <span>Kembali ke Halaman Lupa Password</span>
+            </RouterLink>
+          </div>
         </VCardText>
 
-        <VCardText>
+        <VCardText v-if="email">
           <VForm @submit.prevent="() => {}">
             <VRow>
               <!-- email -->
@@ -54,8 +149,9 @@ const onFinish = () => {
                 <VOtpInput
                   v-model="otp"
                   :disabled="isOtpInserted"
+                  :error="isOtpError"
                   type="number"
-                  length=4
+                  length="4"
                   class="pa-0"
                   @finish="onFinish"
                 />
@@ -77,7 +173,12 @@ const onFinish = () => {
               <VCol cols="12">
                 <div class="d-flex justify-center align-center flex-wrap">
                   <span class="me-1">Tidak mendapatkan kode verifikasi?</span>
-                  <a href="#">Kirim Ulang</a>
+                  <VBtn
+                    variant="plain"
+                    @click="sendResetPassword"
+                  >
+                    Kirim Ulang
+                  </VBtn>
                 </div>
               </VCol>
             </VRow>

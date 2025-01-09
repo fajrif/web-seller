@@ -37,42 +37,43 @@ const shippingOptions = [
 </script>
 
 <template>
-	<VCard>
-		<VCardItem class="py-3">
-			<VCardTitle>Jasa Logistik</VCardTitle>
-			<template #append>
-				<div>
-					<a href="#">Lihat Semua</a>
-				</div>
-			</template>
-		</VCardItem>
-		<VCardText>
-			<VRow class="match-height">
-				<VCol
-					v-for="item in shippingOptions"
-					:key="item.id"
-					cols="12"
-					sm="6"
-					md="6"
-					>
-					<VCard>
-						<VCardText
-							:class="`pa-2 bg-${item.color}`"
-							>
-							<VAvatar rounded size="80">
-								<img :src="item.image">
-							</VAvatar>
+  <VCard>
+    <VCardItem class="py-3">
+      <VCardTitle>Jasa Logistik</VCardTitle>
+      <template #append>
+        <div>
+          <a href="#">Lihat Semua</a>
+        </div>
+      </template>
+    </VCardItem>
+    <VCardText>
+      <VRow class="match-height">
+        <VCol
+          v-for="item in shippingOptions"
+          :key="item.id"
+          cols="12"
+          sm="6"
+          md="6"
+        >
+          <VCard>
+            <VCardText :class="`pa-2 bg-${item.color}`">
+              <VAvatar
+                rounded
+                size="80"
+              >
+                <img :src="item.image">
+              </VAvatar>
 
-							<p class="my-1">
-								{{ item.name }}
-							</p>
-							<h5 class="text-h5 fw-700">
-								{{ item.total }}
-							</h5>
-						</VCardText>
-					</VCard>
-				</VCol>
-			</VRow>
-		</VCardText>
-	</VCard>
+              <p class="my-1">
+                {{ item.name }}
+              </p>
+              <h5 class="text-h5 fw-700">
+                {{ item.total }}
+              </h5>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
+    </VCardText>
+  </VCard>
 </template>

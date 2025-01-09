@@ -1,5 +1,4 @@
 <script setup>
-
 const orderActivities = [
   {
     id: 1,
@@ -53,39 +52,39 @@ const orderActivities = [
 </script>
 
 <template>
-	<VRow>
-		<VCol cols="12">
-			<div class="pe-3">
-				<h5 class="text-h5 mb-2">
-					Aktifitas Pesanan
-				</h5>
-				<VRow class="match-height">
-					<VCol
-						v-for="item in orderActivities"
-						:key="item.id"
-						cols="12"
-						md="4"
-						>
-						<VCard>
-							<VCardText>
-								<VAvatar
-									rounded
-									color="primary"
-									:icon="item.icon"
-									size="32"
-									class="mb-4"
-									/>
-								<p class="my-1">
-									{{ item.title }}
-								</p>
-								<h5 class="text-h5 fw-700 line-height-normal">
-									{{ item.total }}
-								</h5>
-							</VCardText>
-						</VCard>
-					</VCol>
-				</VRow>
-			</div>
-		</VCol>
-	</VRow>
+  <VRow>
+    <VCol cols="12">
+      <div class="pe-3">
+        <h5 class="text-h5 mb-2">
+          Aktifitas Pesanan
+        </h5>
+        <VRow class="match-height">
+          <VCol
+            v-for="item in orderActivities"
+            :key="item.id"
+            cols="12"
+            md="4"
+          >
+            <VCard>
+              <VCardText>
+                <VAvatar
+                  rounded
+                  color="primary"
+                  :icon="item.icon"
+                  size="32"
+                  class="mb-4"
+                />
+                <p class="my-1">
+                  {{ item.title }}
+                </p>
+                <h5 class="text-h5 fw-700 line-height-normal">
+                  {{ item.total }}
+                </h5>
+              </VCardText>
+            </VCard>
+          </VCol>
+        </VRow>
+      </div>
+    </VCol>
+  </VRow>
 </template>

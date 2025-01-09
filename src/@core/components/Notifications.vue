@@ -129,9 +129,7 @@ const toggleReadUnread = (isSeen, Id) => {
                 <!-- Slot: Prepend -->
                 <!-- Handles Avatar: Image, Icon, Text -->
                 <div class="d-flex align-start gap-3">
-                  <VAvatar
-                    :color="notification.color && !notification.img ? notification.color : undefined"
-                  >
+                  <VAvatar :color="notification.color && !notification.img ? notification.color : undefined">
                     <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
                     <VImg
                       v-if="notification.img"
@@ -203,7 +201,7 @@ const toggleReadUnread = (isSeen, Id) => {
           <VBtn
             block
             size="small"
-						@click="$router.push('/notifications')"
+            @click="$router.push('/notifications')"
           >
             List Notifikasi
           </VBtn>

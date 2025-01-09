@@ -9,7 +9,7 @@ import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layo
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
     title: 'pln-web-seller',
-    app_title: 'PLN Web Seller',
+    appTitle: 'PLN Web Seller',
     logo: h('img', { src: logo }),
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
@@ -22,7 +22,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
           label: 'English',
           i18nLang: 'en',
           isRTL: false,
-        }
+        },
       ],
     },
     theme: 'system',

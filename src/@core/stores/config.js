@@ -65,22 +65,22 @@ export const initConfigStore = () => {
 // !SECTION
 // SnackBar
 export const useMessageStore = defineStore('snackbar', () => {
-	const visible = ref(false)
-	const title = ref('')
-	const text = ref('')
-	const color = ref()
-	const icon = ref('tabler-check')
-	const mode = ref()
-	const position = ref('top')
-	const timeout = ref(45000)
+  const visible = ref(false)
+  const title = ref('')
+  const text = ref('')
+  const color = ref()
+  const icon = ref('tabler-check')
+  const mode = ref()
+  const position = ref('top')
+  const timeout = ref(45000)
 
   function setMessage(col, msg) {
     color.value = col
-		if(col == 'error') {
-			icon.value = 'tabler-xbox-x'
-		} else {
-			icon.value = 'tabler-circle-check'
-		}
+    if(col == 'error') {
+      icon.value = 'tabler-xbox-x'
+    } else {
+      icon.value = 'tabler-circle-check'
+    }
     text.value = msg
     title.value = col.charAt(0).toUpperCase() + col.substring(1)
     visible.value = true
@@ -88,7 +88,7 @@ export const useMessageStore = defineStore('snackbar', () => {
 
   function close() {
     color.value = ''
-		icon.value = 'tabler-check'
+    icon.value = 'tabler-check'
     visible.value = false
     title.value = ''
     text.value = ''

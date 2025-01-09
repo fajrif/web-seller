@@ -9,8 +9,7 @@
     "preview": "vite preview --port 5050",
     "lint": "eslint . -c .eslintrc.cjs --fix --ext .ts,.js,.cjs,.vue,.tsx,.jsx",
     "build:icons": "tsx src/plugins/iconify/build-icons.js",
-    "msw:init": "msw init public/ --save",
-    "postinstall": "npm run build:icons && npm run msw:init"
+    "postinstall": "npm run build:icons"
   },
   "dependencies": {
     "@casl/ability": "6.7.2",
@@ -89,7 +88,6 @@
     "eslint-plugin-sonarjs": "0.24.0",
     "eslint-plugin-unicorn": "51.0.1",
     "eslint-plugin-vue": "9.32.0",
-    "msw": "2.3.4",
     "postcss-html": "1.7.0",
     "postcss-scss": "4.0.9",
     "sass": "1.76.0",
@@ -119,8 +117,5 @@
     "postcss": "^8",
     "@tiptap/core": "^2",
     "@types/video.js": "^7"
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }

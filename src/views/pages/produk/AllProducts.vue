@@ -1,44 +1,14 @@
 <script setup>
-import notFoundImg from '@/assets/images/icons/ic-search.png'
+import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
-
-const messageStore = useMessageStore()
 
 const props = defineProps({
   selectedStatus: {
-    type: String
-	},
+    type: String,
+  },
 })
 
-const headers = [
-  {
-    title: 'Gambar',
-    key: 'image',
-    sortable: false,
-  },
-  {
-    title: 'Judul',
-    key: 'name',
-  },
-  {
-    title: 'Harga',
-    key: 'price',
-  },
-  {
-    title: 'Stock',
-    key: 'stock',
-  },
-  {
-    title: 'Status',
-    key: 'status',
-    sortable: false,
-  },
-  {
-    title: '',
-    key: 'actions',
-    sortable: false,
-  },
-]
+const messageStore = useMessageStore()
 
 const searchQuery = ref('')
 const isUpdateHargaDialogVisible = ref(false)
@@ -49,117 +19,113 @@ const productId = ref(0)
 const productName = ref('')
 const productPrice = ref(0)
 const productStock = ref(0)
-const productStatus = ref(0)
+const productStatus = ref()
 
 // Data table options
-const itemsPerPage = ref(10)
+const itemsPerPage = ref(PAGINATION_PER_PAGE)
 const page = ref(1)
-const sortBy = ref()
-const orderBy = ref()
+const sortBy = ref('')
 
-const updateOptions = options => {
-  sortBy.value = options.sortBy[0]?.key
-  orderBy.value = options.sortBy[0]?.order
-}
+const sortOptions = [
+  {
+    title: 'Urutkan',
+    value: '',
+  },
+  {
+    title: 'Paling Laris',
+    value: 'sold',
+  },
+  {
+    title: 'Paling Baru',
+    value: 'newest',
+  },
+  {
+    title: 'Rating',
+    value: 'rating',
+  },
+  {
+    title: 'Harga Terendah',
+    value: 'lower_price',
+  },
+  {
+    title: 'Harga Tertingi',
+    value: 'higher_price',
+  },
+]
 
-const resolveStatus = statusId => {
-  if (statusId === 0)
-    return {
-      text: 'Arsip',
-      color: 'warning',
-    }
-  if (statusId === 1)
-    return {
-      text: 'Dijual',
-      color: 'success',
-    }
-  if (statusId === 2)
-    return {
-      text: 'Non-Aktif',
-      color: 'secondary',
-    }
-  if (statusId === 3)
-    return {
-      text: 'Ditolak',
-      color: 'error',
-    }
-}
+// filter[status] = available,archived,wait_approval,declined
 
 const {
   data: productsData,
-  execute: fetchProducts,
-} = await useApiRails(createUrl('/merchant/products', {
+  execute: fetchProducts, isFinished: loading,
+} = await useApiCore(createUrl('/seller/query/product/merchant', {
   query: {
-    q: searchQuery,
-    status: props.selectedStatus,
+    keyword: searchQuery,
+    "filter[status]": props.selectedStatus,
     page,
-    per_page: itemsPerPage,
-    sort: sortBy,
-    order: orderBy,
+    limit: itemsPerPage,
+    sortby: sortBy,
   },
 }))
 
-const products = computed(() => productsData.value.products)
-const totalProduct = computed(() => productsData.value.total)
+const products = computed(() => productsData.value.data.data)
+const totalProduct = computed(() => productsData.value.data.total)
 
 const updateHargaProduct = async (id, price) => {
-	try {
-		await $apiRails(`/merchant/products/${id}`, {
-			method: 'PUT',
-			body: { product: { price: price } },
-		});
-
-		// Refetch products
-		fetchProducts()
-		messageStore.setMessage('success', 'Update harga berhasil diubah')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal mengubah harga produk')
-			console.error("Error on update product data:", error);
-	}
+  // try {
+  // 	await $apiCore(`/merchant/products/${id}`, {
+  // 		method: 'PUT',
+  // 		body: { product: { price: price } },
+  // 	});
+  // 	// Refetch products
+  // 	fetchProducts()
+  // 	messageStore.setMessage('success', 'Update harga berhasil diubah')
+  // } catch (error) {
+  // 		messageStore.setMessage('error', 'Gagal mengubah harga produk')
+  // 		console.error("Error on update product data:", error);
+  // }
 }
 
 const updateStockProduct = async (id, stock) => {
-	try {
-		await $apiRails(`/merchant/products/${id}`, {
-			method: 'PUT',
-			body: { product: { stock: stock } },
-		});
-
-		// Refetch products
-		fetchProducts()
-		messageStore.setMessage('success', 'Update stock berhasil diubah')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal mengubah stock produk')
-			console.error("Error on update product data:", error);
-	}
+  // try {
+  // 	await $apiCore(`/merchant/products/${id}`, {
+  // 		method: 'PUT',
+  // 		body: { product: { stock: stock } },
+  // 	});
+  // 	// Refetch products
+  // 	fetchProducts()
+  // 	messageStore.setMessage('success', 'Update stock berhasil diubah')
+  // } catch (error) {
+  // 		messageStore.setMessage('error', 'Gagal mengubah stock produk')
+  // 		console.error("Error on update product data:", error);
+  // }
 }
 
 const updateStatusProduct = async (id, status) => {
-	try {
-		await $apiRails(`/merchant/products/${id}`, {
-			method: 'PUT',
-			body: { product: { status: status } },
-		});
-
-		// Refetch products
-		fetchProducts()
-		messageStore.setMessage('success', 'Update status berhasil diubah')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal mengubah status produk')
-			console.error("Error on update product data:", error);
-	}
+  // try {
+  // 	await $apiCore(`/merchant/products/${id}`, {
+  // 		method: 'PUT',
+  // 		body: { product: { status: status } },
+  // 	});
+  // 	// Refetch products
+  // 	fetchProducts()
+  // 	messageStore.setMessage('success', 'Update status berhasil diubah')
+  // } catch (error) {
+  // 		messageStore.setMessage('error', 'Gagal mengubah status produk')
+  // 		console.error("Error on update product data:", error);
+  // }
 }
-const deleteProduct = async id => {
-	try {
-		await $apiRails(`/merchant/products/${id}`, { method: 'DELETE' });
 
-		// Refetch products
-		fetchProducts()
-		messageStore.setMessage('success', 'Produk berhasil dihapus')
-	} catch (error) {
-			messageStore.setMessage('error', 'Gagal menghapus produk')
-			console.error("Error on delete product data:", error);
-	}
+const deleteProduct = async id => {
+  // try {
+  // 	await $apiCore(`/merchant/products/${id}`, { method: 'DELETE' });
+  // 	// Refetch products
+  // 	fetchProducts()
+  // 	messageStore.setMessage('success', 'Produk berhasil dihapus')
+  // } catch (error) {
+  // 		messageStore.setMessage('error', 'Gagal menghapus produk')
+  // 		console.error("Error on delete product data:", error);
+  // }
 }
 
 const editPrice = (id, name, price) => {
@@ -193,7 +159,7 @@ const deleteItem = (id, name) => {
 <template>
   <div>
     <!-- 👉 products -->
-		<VCard>
+    <VCard>
       <div class="d-flex flex-wrap gap-4 ma-6">
         <div class="d-flex align-center">
           <!-- 👉 Search  -->
@@ -211,6 +177,12 @@ const deleteItem = (id, name) => {
             v-model="itemsPerPage"
             :items="[5, 10, 20, 25, 50]"
           />
+          <AppSelect
+            v-model="sortBy"
+            :items="sortOptions"
+            item-title="title"
+            item-value="value"
+          />
         </div>
       </div>
 
@@ -218,37 +190,37 @@ const deleteItem = (id, name) => {
 
       <!-- 👉 Datatable  -->
       <VDataTableServer
-				v-if="products && totalProduct > 0"
+        v-if="products && totalProduct > 0"
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
-        :headers="headers"
+        :headers="productHeaders"
         :items="products"
         :items-length="totalProduct"
+        :loading="!loading"
         class="text-no-wrap"
-        @update:options="updateOptions"
       >
         <!-- Gambar  -->
         <template #item.image="{ item }">
-					<VAvatar
-						v-if="item.image"
-						size="50"
-						variant="tonal"
-						class="my-2"
-						rounded
-						:image="item.image"
-					/>
+          <VAvatar
+            v-if="item.product_photo[0]"
+            size="50"
+            variant="tonal"
+            class="my-2"
+            rounded
+            :image="item.product_photo[0].url"
+          />
         </template>
 
         <!-- Judul -->
         <template #item.name="{ item }">
-					<RouterLink :to="{ name: 'produk-id', params: { id: item.id } }">
-						{{ item.name }}
-					</RouterLink>
+          <RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }">
+            {{ item.name }}
+          </RouterLink>
         </template>
 
         <!-- Harga -->
         <template #item.price="{ item }">
-          <span class="text-body-1 text-high-emphasis">{{ item.price_label }}</span>
+          <span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
         </template>
 
         <!-- Stock -->
@@ -268,52 +240,79 @@ const deleteItem = (id, name) => {
 
         <!-- Actions -->
         <template #item.actions="{ item }">
-					<VBtn
-						size="small"
-						variant="outlined"
-						color="secondary"
-					>
-						Atur
-						<VIcon
-							end
-							icon="tabler-chevron-down"
-						/>
+          <VBtn
+            size="small"
+            variant="outlined"
+            color="secondary"
+          >
+            Atur
+            <VIcon
+              end
+              icon="tabler-chevron-down"
+            />
             <VMenu activator="parent">
               <VList>
                 <VListItem value="edit">
-									<RouterLink style="color:inherit" :to="{ name: 'produk-edit-id', params: { id: item.id } }">
-										Edit Produk
-									</RouterLink>
+                  <RouterLink
+                    style="color:inherit"
+                    :to="{ name: 'produk-edit-id', params: { id: item.id } }"
+                  >
+                    Edit Produk
+                  </RouterLink>
                 </VListItem>
                 <VListItem value="view">
-									<RouterLink style="color:inherit" :to="{ name: 'produk-id', params: { id: item.id } }">
-										Lihat Produk
-									</RouterLink>
+                  <RouterLink
+                    style="color:inherit"
+                    :to="{ name: 'produk-view-id', params: { id: item.id } }"
+                  >
+                    Lihat Produk
+                  </RouterLink>
                 </VListItem>
-                <VListItem value="edit_price" @click="editPrice(item.id, item.name, item.price)">
-									Ubah Harga
+                <VListItem
+                  value="edit_price"
+                  @click="editPrice(item.id, item.name, item.price)"
+                >
+                  Ubah Harga
                 </VListItem>
-                <VListItem value="edit_stock" @click="editStock(item.id, item.name, item.stock)">
+                <VListItem
+                  value="edit_stock"
+                  @click="editStock(item.id, item.name, item.stock)"
+                >
                   Ubah Stock
                 </VListItem>
-                <VListItem value="deactivate" @click="editStatus(item.id, item.name, 1)">
-									Jual Produk
+                <VListItem
+                  value="available"
+                  @click="editStatus(item.id, item.name, 1)"
+                >
+                  Jual Produk
                 </VListItem>
-                <VListItem value="deactivate" @click="editStatus(item.id, item.name, 2)">
-									Non-Aktifkan Produk
+                <VListItem
+                  value="deactivate"
+                  @click="editStatus(item.id, item.name, 2)"
+                >
+                  Non-Aktifkan Produk
                 </VListItem>
-                <VListItem value="archive" @click="editStatus(item.id, item.name, 0)">
-									Arsipkan Produk
+                <VListItem
+                  value="archive"
+                  @click="editStatus(item.id, item.name, 0)"
+                >
+                  Arsipkan Produk
                 </VListItem>
-                <VListItem value="deactivate" @click="editStatus(item.id, item.name, 3)">
-									Tolak Produk
+                <VListItem
+                  value="decline"
+                  @click="editStatus(item.id, item.name, 3)"
+                >
+                  Tolak Produk
                 </VListItem>
-                <VListItem value="delete" @click="deleteItem(item.id, item.name)">
+                <VListItem
+                  value="delete"
+                  @click="deleteItem(item.id, item.name)"
+                >
                   Hapus Produk
                 </VListItem>
               </VList>
             </VMenu>
-					</VBtn>
+          </VBtn>
         </template>
 
         <!-- pagination -->
@@ -326,60 +325,66 @@ const deleteItem = (id, name) => {
         </template>
       </VDataTableServer>
 
-			<!-- 👉 Empty products -->
-			<div v-else class="d-flex justify-center align-center pa-10 ma-10">
-				<div class="d-flex align-center">
-					<VAvatar
-						size="100"
-						class="me-6"
-					>
-						<VImg
-							:src="notFoundImg"
-							class="mb-2"
-						/>
-					</VAvatar>
-					<div class="d-flex flex-column">
-						<p class="text-body-2" style="width:350px">
-							Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
-						</p>
-						<VBtn
-							color="primary"
-							style="width:fit-content"
-							prepend-icon="tabler-plus"
-							@click="$router.push('/produk/tambah')"
-							>
-							Tambah Produk
-						</VBtn>
-					</div>
-				</div>
-			</div>
+      <!-- 👉 Empty products -->
+      <div
+        v-else
+        class="d-flex justify-center align-center pa-10 ma-10"
+      >
+        <div class="d-flex align-center">
+          <VAvatar
+            size="100"
+            class="me-6"
+          >
+            <VImg
+              :src="notFoundImg"
+              class="mb-2"
+            />
+          </VAvatar>
+          <div class="d-flex flex-column">
+            <p
+              class="text-body-2"
+              style="width:350px"
+            >
+              Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
+            </p>
+            <VBtn
+              color="primary"
+              style="width:fit-content"
+              prepend-icon="tabler-plus"
+              @click="$router.push('/produk/tambah')"
+            >
+              Tambah Produk
+            </VBtn>
+          </div>
+        </div>
+      </div>
     </VCard>
-		<UpdateHargaDialog
-			v-model:is-dialog-visible="isUpdateHargaDialogVisible"
-			v-model:product-id="productId"
-			v-model:product-name="productName"
-			v-model:product-price="productPrice"
+    <UpdateHargaDialog
+      v-model:is-dialog-visible="isUpdateHargaDialogVisible"
+      v-model:product-id="productId"
+      v-model:product-name="productName"
+      v-model:product-price="productPrice"
       @form-submitted="updateHargaProduct"
-		/>
-		<UpdateStockDialog
-			v-model:is-dialog-visible="isUpdateStockDialogVisible"
-			v-model:product-id="productId"
-			v-model:product-name="productName"
-			v-model:product-stock="productStock"
+    />
+    <UpdateStockDialog
+      v-model:is-dialog-visible="isUpdateStockDialogVisible"
+      v-model:product-id="productId"
+      v-model:product-name="productName"
+      v-model:product-stock="productStock"
       @form-submitted="updateStockProduct"
-		/>
-		<UpdateStatusDialog
-			v-model:is-dialog-visible="isUpdateStatusDialogVisible"
-			v-model:product-id="productId"
-			v-model:product-name="productName"
-			v-model:product-status="productStatus"
+    />
+    <UpdateStatusDialog
+      v-model:is-dialog-visible="isUpdateStatusDialogVisible"
+      v-model:product-id="productId"
+      v-model:product-name="productName"
+      v-model:product-status="productStatus"
       @form-submitted="updateStatusProduct"
-		/>
-		<DeleteProductDialog
-			v-model:is-dialog-visible="isDeleteProductDialogVisible"
-			v-model:product-id="productId"
-			v-model:product-name="productName"
+    />
+    <DeleteProductDialog
+      v-model:is-dialog-visible="isDeleteProductDialogVisible"
+      v-model:product-id="productId"
+      v-model:product-name="productName"
       @form-submitted="deleteProduct"
-		/>
+    />
   </div>
 </template>

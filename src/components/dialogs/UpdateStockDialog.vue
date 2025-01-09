@@ -41,10 +41,10 @@ const onReset = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-			// or this one
+      // or this one
       emit('formSubmitted', props.productId, newStockPrice.value)
 
-			emit('update:isDialogVisible', false)
+      emit('update:isDialogVisible', false)
       nextTick(() => {
         refForm.value?.reset()
         refForm.value?.resetValidation()
@@ -65,43 +65,46 @@ const onSubmit = () => {
 
     <!-- Dialog Content -->
     <VCard>
-			<VForm
-				ref="refForm"
-				v-model="isFormValid"
-				@submit.prevent="onSubmit"
-				>
-				<!-- 👉 Title -->
-				<VCardItem>
-					<VCardTitle>
-						<h4 class="text-h4 mb-4">
-							Stock
-						</h4>
-					</VCardTitle>
-					<p class="text-body-1 mb-0">
-						Ubah stock yang tersedia untuk produk ini<br/>
-						Stock produk <strong>{{ props.productName }}</strong> sekarang adalah: <strong>{{ props.productStock }}</strong>
-					</p>
-				</VCardItem>
-				<VCardText>
-					<VRow>
-						<VCol cols="12">
-							<AppTextField
-								v-model="newStockPrice"
-								suffix="Buah"
-								type="number"
-								:rules="[requiredValidator]"
-								placeholder="Masukan stock"
-								/>
-						</VCol>
-					</VRow>
-				</VCardText>
+      <VForm
+        ref="refForm"
+        v-model="isFormValid"
+        @submit.prevent="onSubmit"
+      >
+        <!-- 👉 Title -->
+        <VCardItem>
+          <VCardTitle>
+            <h4 class="text-h4 mb-4">
+              Stock
+            </h4>
+          </VCardTitle>
+          <p class="text-body-1 mb-0">
+            Ubah stock yang tersedia untuk produk ini<br>
+            Stock produk <strong>{{ props.productName }}</strong> sekarang adalah: <strong>{{ props.productStock }}</strong>
+          </p>
+        </VCardItem>
+        <VCardText>
+          <VRow>
+            <VCol cols="12">
+              <AppTextField
+                v-model="newStockPrice"
+                suffix="Buah"
+                type="number"
+                :rules="[requiredValidator]"
+                placeholder="Masukan stock"
+              />
+            </VCol>
+          </VRow>
+        </VCardText>
 
-				<VCardText>
-					<VBtn type="submit" class="w-100">
-						Simpan
-					</VBtn>
-				</VCardText>
-			</VForm>
+        <VCardText>
+          <VBtn
+            type="submit"
+            class="w-100"
+          >
+            Simpan
+          </VBtn>
+        </VCardText>
+      </VForm>
     </VCard>
   </VDialog>
 </template>

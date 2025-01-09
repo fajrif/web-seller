@@ -8,40 +8,39 @@ const popularProducts = [
     avatarImg: appleWatch,
     title: 'Apple Watch Series 7',
     subtitle: 'SKU: #FXZ-2345',
-		stock: 'Sisa 3',
-		color: 'warning',
+    stock: 'Sisa 3',
+    color: 'warning',
     price: 'Rp.4.500.000',
   },
   {
     avatarImg: amazonEchoDot,
     title: 'Amazon Echo Dot',
     subtitle: 'SKU: #FXZ-8959',
-		stock: 'Sisa 2',
-		color: 'warning',
+    stock: 'Sisa 2',
+    color: 'warning',
     price: 'Rp.3.000.000',
   },
   {
     avatarImg: sonyDualsense,
     title: 'Play Station Console',
     subtitle: 'SKU: #FXZ-7892',
-		stock: 'Habis',
-		color: 'error',
+    stock: 'Habis',
+    color: 'error',
     price: 'Rp.1.000.000',
   },
 ]
-
 </script>
 
 <template>
   <VCard>
-		<VCardItem class="py-3">
-			<VCardTitle>Stock Menipis</VCardTitle>
-			<template #append>
-				<div>
-					<a href="#">Lihat Semua</a>
-				</div>
-			</template>
-		</VCardItem>
+    <VCardItem class="py-3">
+      <VCardTitle>Stock Menipis</VCardTitle>
+      <template #append>
+        <div>
+          <a href="#">Lihat Semua</a>
+        </div>
+      </template>
+    </VCardItem>
     <VCardText>
       <VList class="card-list">
         <VListItem
@@ -66,9 +65,9 @@ const popularProducts = [
 
           <template #append>
             <div class="d-flex align-center">
-							<VChip :color="product.color">
-								{{ product.stock }}
-							</VChip>
+              <VChip :color="product.color">
+                {{ product.stock }}
+              </VChip>
             </div>
           </template>
         </VListItem>

@@ -8,40 +8,39 @@ const popularProducts = [
     avatarImg: iphone,
     title: 'Apple iPhone 13',
     subtitle: '540 kali terjual',
-		stock: 'Sisa 3',
-		color: 'warning',
+    stock: 'Sisa 3',
+    color: 'warning',
     price: 'Rp.12.000.000',
   },
   {
     avatarImg: nike,
     title: 'Nike Air Jordan',
     subtitle: '310 kali terjual',
-		stock: 'Sisa 2',
-		color: 'warning',
+    stock: 'Sisa 2',
+    color: 'warning',
     price: 'Rp.1.500.000',
   },
   {
     avatarImg: headphone,
     title: 'Beats Studio 2',
     subtitle: '200 kali terjual',
-		stock: 'Habis',
-		color: 'error',
+    stock: 'Habis',
+    color: 'error',
     price: 'Rp.2.500.000',
   },
 ]
-
 </script>
 
 <template>
   <VCard>
-		<VCardItem class="py-3">
-			<VCardTitle>Produk Terlaris</VCardTitle>
-			<template #append>
-				<div>
-					<a href="#">Lihat Semua</a>
-				</div>
-			</template>
-		</VCardItem>
+    <VCardItem class="py-3">
+      <VCardTitle>Produk Terlaris</VCardTitle>
+      <template #append>
+        <div>
+          <a href="#">Lihat Semua</a>
+        </div>
+      </template>
+    </VCardItem>
     <VCardText>
       <VList class="card-list">
         <VListItem

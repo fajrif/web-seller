@@ -58,67 +58,63 @@ const notifications = ref([
     </VCardItem>
 
     <VCardText class="px-0">
-			<VList class="notification-list rounded-0 py-0">
-				<template
-					v-for="(notification, index) in notifications"
-					:key="notification.title"
-				>
-					<VDivider v-if="index > 0" />
-					<VListItem
-						link
-						lines="one"
-						min-height="66px"
-						class="list-item-hover-class"
-						@click="$emit('click:notification', notification)"
-					>
-						<!-- Slot: Prepend -->
-						<!-- Handles Avatar: Image, Icon, Text -->
-						<div class="d-flex align-start gap-4">
-							<VAvatar
-								:color="notification.color && !notification.img ? notification.color : undefined"
-							>
-								<span v-if="notification.text">{{ avatarText(notification.text) }}</span>
-								<VImg
-									v-if="notification.img"
-									:src="notification.img"
-								/>
-								<VIcon
-									v-if="notification.icon"
-									:icon="notification.icon"
-								/>
-							</VAvatar>
+      <VList class="notification-list rounded-0 py-0">
+        <template
+          v-for="(notification, index) in notifications"
+          :key="notification.title"
+        >
+          <VDivider v-if="index > 0" />
+          <VListItem
+            link
+            lines="one"
+            min-height="66px"
+            class="list-item-hover-class"
+          >
+            <!-- Slot: Prepend -->
+            <!-- Handles Avatar: Image, Icon, Text -->
+            <div class="d-flex align-start gap-4">
+              <VAvatar :color="notification.color && !notification.img ? notification.color : undefined">
+                <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
+                <VImg
+                  v-if="notification.img"
+                  :src="notification.img"
+                />
+                <VIcon
+                  v-if="notification.icon"
+                  :icon="notification.icon"
+                />
+              </VAvatar>
 
-							<div>
-								<p class="text-sm font-weight-medium mb-1">
-									{{ notification.title }}
-								</p>
-								<p
-									class="text-body-2 mb-2"
-									style=" letter-spacing: 0.4px !important; line-height: 18px;"
-								>
-									{{ notification.subtitle }}
-								</p>
-								<p
-									class="text-sm text-disabled mb-0"
-									style=" letter-spacing: 0.4px !important; line-height: 18px;"
-								>
-									{{ notification.time }}
-								</p>
-							</div>
-							<VSpacer />
+              <div>
+                <p class="text-sm font-weight-medium mb-1">
+                  {{ notification.title }}
+                </p>
+                <p
+                  class="text-body-2 mb-2"
+                  style=" letter-spacing: 0.4px !important; line-height: 18px;"
+                >
+                  {{ notification.subtitle }}
+                </p>
+                <p
+                  class="text-sm text-disabled mb-0"
+                  style=" letter-spacing: 0.4px !important; line-height: 18px;"
+                >
+                  {{ notification.time }}
+                </p>
+              </div>
+              <VSpacer />
+            </div>
+          </VListItem>
+        </template>
 
-						</div>
-					</VListItem>
-				</template>
-
-				<VListItem
-					v-show="!notifications.length"
-					class="text-center text-medium-emphasis"
-					style="block-size: 56px;"
-				>
-					<VListItemTitle>No Notification Found!</VListItemTitle>
-				</VListItem>
-			</VList>
+        <VListItem
+          v-show="!notifications.length"
+          class="text-center text-medium-emphasis"
+          style="block-size: 56px;"
+        >
+          <VListItemTitle>No Notification Found!</VListItemTitle>
+        </VListItem>
+      </VList>
     </VCardText>
   </VCard>
 </template>

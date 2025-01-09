@@ -6,7 +6,7 @@ export default [
       {
         title: 'Analytics',
         to: 'dashboards-analytics',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ]
