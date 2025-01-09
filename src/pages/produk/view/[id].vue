@@ -5,9 +5,9 @@ import notFoundImg from '@images/icons/ic-search.png'
 const route = useRoute('produk-view-id')
 const productData = ref()
 
-const { data } = await useApiCore(`/merchant/products/${ route.params.id }`)
-if (data.value) {
-  productData.value = data.value
+const { data: productDetails } = await useApiCore(`/seller/query/product/detail/${ route.params.id }`)
+if (productDetails.value.success) {
+	productData.value = productDetails.value.data
 }
 
 register()
@@ -59,11 +59,11 @@ register()
               events-prefix="swiper-"
             >
               <swiper-slide
-                v-for="swiperImg in productData.images"
+                v-for="swiperImg in productData.product_photo"
                 :key="swiperImg.id"
               >
                 <VImg
-                  :src="swiperImg.image"
+                  :src="swiperImg.url"
                   cover
                 />
               </swiper-slide>
@@ -77,11 +77,11 @@ register()
               slides-per-view="4"
             >
               <swiper-slide
-                v-for="swiperImg in productData.images"
+                v-for="swiperImg in productData.product_photo"
                 :key="swiperImg.id"
               >
                 <VImg
-                  :src="swiperImg.image"
+                  :src="swiperImg.url"
                   cover
                 />
               </swiper-slide>
@@ -100,11 +100,11 @@ register()
               {{ productData.name }}
             </h4>
             <h3 class="text-h3 mb-1 fw-700 text-primary">
-              {{ productData.price_label }}
+              {{ toCurrency(productData.price) }}
             </h3>
             <div class="d-flex gap-2 flex-wrap align-center">
-              <p class="text-body-1 text-medium-emphasis mb-0">
-                Rp.1.000.000
+              <p class="text-body-1 text-medium-emphasis mb-0" style="text-decoration:line-through;">
+								{{ toCurrency(productData.strike_price) }}
               </p>
 
               <VChip color="error">
@@ -134,19 +134,19 @@ register()
               <div>
                 <VList class="card-list text-medium-emphasis">
                   <VListItem>
-                    <VListItemTitle>Kategori: <strong>{{ productData?.category_name }}</strong></VListItemTitle>
+                    <VListItemTitle>Kategori: <strong>{{ productData?.category_id }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
-                    <VListItemTitle>Kondisi: <strong>{{ productData?.condition_label }}</strong></VListItemTitle>
+                    <VListItemTitle>Kondisi: <strong>{{ productData?.condition }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
                     <VListItemTitle>Berat: <strong>{{ productData?.weight }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
-                    <VListItemTitle>Stock: <strong>{{ productData?.stock }}</strong></VListItemTitle>
+                    <VListItemTitle>Stock: <strong>{{ productData?.product_stock[0].amount }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
-                    <VListItemTitle>Pembelian Minimum: <strong>{{ productData?.min_purchase }}</strong></VListItemTitle>
+                    <VListItemTitle>Pembelian Minimum: <strong>{{ productData?.minimum_purchase }}</strong></VListItemTitle>
                   </VListItem>
                 </VList>
               </div>

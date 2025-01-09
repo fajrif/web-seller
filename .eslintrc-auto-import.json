@@ -370,6 +370,8 @@
     "PAGINATION_PER_PAGE": true,
     "resolveStatus": true,
     "toCurrency": true,
-    "productHeaders": true
+    "productHeaders": true,
+    "statusProduct": true,
+    "conditionProduct": true
   }
 }

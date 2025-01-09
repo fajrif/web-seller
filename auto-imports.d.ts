@@ -23,6 +23,7 @@ declare global {
   const computedEager: typeof import('@vueuse/core')['computedEager']
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
+  const conditionProduct: typeof import('./src/utils/productHelper.js')['conditionProduct']
   const confirmedValidator: typeof import('./src/@core/utils/validators.js')['confirmedValidator']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
@@ -138,6 +139,7 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
+  const statusProduct: typeof import('./src/utils/productHelper.js')['statusProduct']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
@@ -389,6 +391,7 @@ declare module 'vue' {
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
+    readonly conditionProduct: UnwrapRef<typeof import('./src/utils/productHelper.js')['conditionProduct']>
     readonly confirmedValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['confirmedValidator']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
@@ -504,6 +507,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
+    readonly statusProduct: UnwrapRef<typeof import('./src/utils/productHelper.js')['statusProduct']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>

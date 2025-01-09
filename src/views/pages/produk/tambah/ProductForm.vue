@@ -2,6 +2,7 @@
 import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
 
+const userData = useCookie('userData')
 const messageStore = useMessageStore()
 const router = useRouter()
 
@@ -10,10 +11,10 @@ const refForm = ref()
 const	productName = ref('')
 const	productDescription = ref('')
 const	productCategory = ref()
-const	productShowcase = ref()
-const	productCondition = ref(1)
+const	productEtalase = ref()
+const	productCondition = ref('')
 const	productPrice = ref()
-const	productFakePrice = ref()
+const	productStrikePrice = ref()
 const	productStock = ref()
 const	productMinPurchase = ref(1)
 const	productWeight = ref()
@@ -21,49 +22,23 @@ const	productHeight = ref()
 const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
-const	productStatus = ref(0)
+const	productStatus = ref(9)
+const	productPhotoUrl = ref([])
 
-const statusProduct = [
-  {
-    id: 0,
-    name: "Arsip",
-  },
-  {
-    id: 1,
-    name: "Dijual",
-  },
-  {
-    id: 2,
-    name: "Non-Aktif",
-  },
-  {
-    id: 3,
-    name: "Ditolak",
-  },
-]
+const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
+const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/seller/query/etalase'))
 
-const conditionProduct = [
-  {
-    id: 1,
-    name: "Baru",
-  },
-  {
-    id: 0,
-    name: "Bekas / Lama",
-  },
-]
+const categories = computed(() => categoriesData.value.data)
+const showcases = computed(() => showcasesData.value.etalase)
 
-const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/categories'))
-const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/merchant/showcases'))
-
-const categories = computed(() => categoriesData.value)
-const showcases = computed(() => showcasesData.value)
-
-const saveProduct = async productdata => {
+const saveProduct = async productData => {
   try {
-    await $apiCore('/merchant/products', {
+    const res = await $apiCore('/seller/command/product/create', {
       method: 'POST',
-      body: { product: productdata },
+      body: productData,
+      onResponseError({ response }) {
+				messageStore.setMessage('error', response._data.message)
+      },
     })
 
     router.push('/produk/semua')
@@ -77,27 +52,25 @@ const saveProduct = async productdata => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      let isFeatured = 0
-      if(productFeatured.value) {
-        isFeatured = 1
-      }
       /* eslint-disable camelcase */
       saveProduct({
+        merchant_id: userData.id,
         name: productName.value,
         description: productDescription.value,
         category_id: productCategory.value,
-        showcase_id: productShowcase.value,
+        etalase_id: productEtalase.value,
         condition: productCondition.value,
-        price: productPrice.value,
-        fake_price: productFakePrice.value,
-        stock: productStock.value,
-        min_purchase: productMinPurchase.value,
+        price: parseInt(productPrice.value),
+        strike_price: parseInt(productStrikePrice.value),
+        amount: parseInt(productStock.value),
+        minimum_purchase: productMinPurchase.value,
         weight: productWeight.value,
         height: productHeight.value,
         width: productWidth.value,
         length: productLength.value,
-        featured: isFeatured,
+        is_featured_product: productFeatured.value,
         status: productStatus.value,
+				url: productPhotoUrl.value,
       })
       /* eslint-enable */
     }
@@ -140,7 +113,7 @@ const onSubmit = () => {
                     placeholder="Pilih Kategori"
                     label="Kategori"
                     :items="categories"
-                    item-title="name"
+                    item-title="value"
                     item-value="id"
                   />
                 </VCol>
@@ -149,7 +122,7 @@ const onSubmit = () => {
                   md="6"
                 >
                   <AppSelect
-                    v-model="productShowcase"
+                    v-model="productEtalase"
                     :rules="[requiredValidator]"
                     placeholder="Pilih Etalase"
                     label="Etalase"
@@ -182,7 +155,7 @@ const onSubmit = () => {
                     label="Kondisi"
                     :items="conditionProduct"
                     item-title="name"
-                    item-value="id"
+                    item-value="name"
                   />
                 </VCol>
 
@@ -224,6 +197,7 @@ const onSubmit = () => {
                 >
                   <AppTextField
                     v-model="productWidth"
+                    :rules="[requiredValidator]"
                     label="Lebar"
                     suffix="cm"
                     type="number"
@@ -237,6 +211,7 @@ const onSubmit = () => {
                 >
                   <AppTextField
                     v-model="productLength"
+                    :rules="[requiredValidator]"
                     label="Panjang"
                     suffix="cm"
                     type="number"
@@ -249,6 +224,7 @@ const onSubmit = () => {
                 >
                   <AppTextField
                     v-model="productHeight"
+                    :rules="[requiredValidator]"
                     label="Tinggi"
                     suffix="cm"
                     type="number"
@@ -293,10 +269,11 @@ const onSubmit = () => {
                 class="mb-6"
               />
               <AppTextField
-                v-model="productFakePrice"
+                v-model="productStrikePrice"
                 label="Harga Coret"
                 prefix="Rp"
                 type="number"
+								:rules="[requiredValidator]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -321,6 +298,7 @@ const onSubmit = () => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
+								:rules="[requiredValidator]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
@@ -332,6 +310,7 @@ const onSubmit = () => {
                 label="Pembelian Minimum"
                 suffix="Buah"
                 type="number"
+								:rules="[requiredValidator]"
                 placeholder="Tentukan pembelian minimum"
                 class="mb-6"
               />

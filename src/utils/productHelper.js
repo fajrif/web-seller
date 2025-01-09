@@ -37,6 +37,36 @@ export const productHeaders = [
   },
 ]
 
+export const statusProduct = [
+  {
+    id: 9,
+    name: "Arsip",
+  },
+  {
+    id: 1,
+    name: "Dijual",
+  },
+  {
+    id: 2,
+    name: "Non-Aktif",
+  },
+  {
+    id: 3,
+    name: "Ditolak",
+  },
+]
+
+export const conditionProduct = [
+  {
+    id: 1,
+    name: "Baru",
+  },
+  {
+    id: 0,
+    name: "Bekas",
+  },
+]
+
 export const resolveStatus = statusId => {
   if (statusId === 9)
     return {

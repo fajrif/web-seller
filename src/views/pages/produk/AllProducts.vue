@@ -72,60 +72,63 @@ const products = computed(() => productsData.value.data.data)
 const totalProduct = computed(() => productsData.value.data.total)
 
 const updateHargaProduct = async (id, price) => {
-  // try {
-  // 	await $apiCore(`/merchant/products/${id}`, {
-  // 		method: 'PUT',
-  // 		body: { product: { price: price } },
-  // 	});
-  // 	// Refetch products
-  // 	fetchProducts()
-  // 	messageStore.setMessage('success', 'Update harga berhasil diubah')
-  // } catch (error) {
-  // 		messageStore.setMessage('error', 'Gagal mengubah harga produk')
-  // 		console.error("Error on update product data:", error);
-  // }
+  try {
+  	const res = await $apiCore(`/seller/command/product/price/edit/${id}`, {
+  		method: 'POST',
+  		body: { price: price },
+      onResponseError({ response }) {
+        throw response.message
+      },
+  	});
+  	// Refetch products
+  	fetchProducts()
+    messageStore.setMessage('success', 'Harga berhasil diubah')
+  } catch (error) {
+  		messageStore.setMessage('error', 'Gagal mengubah harga produk')
+  		console.error("Error on update product data:", error);
+  }
 }
 
 const updateStockProduct = async (id, stock) => {
-  // try {
-  // 	await $apiCore(`/merchant/products/${id}`, {
-  // 		method: 'PUT',
-  // 		body: { product: { stock: stock } },
-  // 	});
-  // 	// Refetch products
-  // 	fetchProducts()
-  // 	messageStore.setMessage('success', 'Update stock berhasil diubah')
-  // } catch (error) {
-  // 		messageStore.setMessage('error', 'Gagal mengubah stock produk')
-  // 		console.error("Error on update product data:", error);
-  // }
+  try {
+  	const res = await $apiCore(`/seller/command/product/stock/edit/${id}`, {
+  		method: 'POST',
+  		body: { amount: parseInt(stock) },
+      onResponseError({ response }) {
+        throw response.message
+      },
+  	});
+  	// Refetch products
+  	fetchProducts()
+    messageStore.setMessage('success', 'Stock berhasil diubah')
+  } catch (error) {
+  		messageStore.setMessage('error', 'Gagal mengubah stock produk')
+  		console.error("Error on update product data:", error);
+  }
 }
 
 const updateStatusProduct = async (id, status) => {
-  // try {
-  // 	await $apiCore(`/merchant/products/${id}`, {
-  // 		method: 'PUT',
-  // 		body: { product: { status: status } },
-  // 	});
-  // 	// Refetch products
-  // 	fetchProducts()
-  // 	messageStore.setMessage('success', 'Update status berhasil diubah')
-  // } catch (error) {
-  // 		messageStore.setMessage('error', 'Gagal mengubah status produk')
-  // 		console.error("Error on update product data:", error);
-  // }
+  try {
+  	const res = await $apiCore(`/seller/command/product/archived/${id}`, { method: 'POST' });
+  	// Refetch products
+  	fetchProducts()
+    messageStore.setMessage('success', 'Berhasil arsipkan produk')
+  } catch (error) {
+  		messageStore.setMessage('error', 'Gagal arsipkan produk')
+  		console.error("Error on update product data:", error);
+  }
 }
 
 const deleteProduct = async id => {
-  // try {
-  // 	await $apiCore(`/merchant/products/${id}`, { method: 'DELETE' });
-  // 	// Refetch products
-  // 	fetchProducts()
-  // 	messageStore.setMessage('success', 'Produk berhasil dihapus')
-  // } catch (error) {
-  // 		messageStore.setMessage('error', 'Gagal menghapus produk')
-  // 		console.error("Error on delete product data:", error);
-  // }
+  try {
+  	const res = await $apiCore(`/seller/command/product/delete/${id}?accept=true`, { method: 'DELETE' });
+  	// Refetch products
+  	fetchProducts()
+  	messageStore.setMessage('success', res.message)
+  } catch (error) {
+  		messageStore.setMessage('error', 'Gagal menghapus produk')
+  		console.error("Error on delete product data:", error);
+  }
 }
 
 const editPrice = (id, name, price) => {
@@ -225,7 +228,7 @@ const deleteItem = (id, name) => {
 
         <!-- Stock -->
         <template #item.stock="{ item }">
-          <span class="text-body-1 text-high-emphasis">{{ item.stock }}</span>
+          <span class="text-body-1 text-high-emphasis">{{ item.product_stock[0].amount }}</span>
         </template>
 
         <!-- status -->
@@ -276,15 +279,9 @@ const deleteItem = (id, name) => {
                 </VListItem>
                 <VListItem
                   value="edit_stock"
-                  @click="editStock(item.id, item.name, item.stock)"
+                  @click="editStock(item.id, item.name, item.product_stock[0].amount)"
                 >
                   Ubah Stock
-                </VListItem>
-                <VListItem
-                  value="available"
-                  @click="editStatus(item.id, item.name, 1)"
-                >
-                  Jual Produk
                 </VListItem>
                 <VListItem
                   value="deactivate"
@@ -297,12 +294,6 @@ const deleteItem = (id, name) => {
                   @click="editStatus(item.id, item.name, 0)"
                 >
                   Arsipkan Produk
-                </VListItem>
-                <VListItem
-                  value="decline"
-                  @click="editStatus(item.id, item.name, 3)"
-                >
-                  Tolak Produk
                 </VListItem>
                 <VListItem
                   value="delete"
