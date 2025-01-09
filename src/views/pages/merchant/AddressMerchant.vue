@@ -7,10 +7,10 @@ const messageStore = useMessageStore()
 const isFormValid = ref(false)
 const refForm = ref()
 const	merchantAddress = ref('')
-const	merchantProvinsi = ref()
-const	merchantKelurahan = ref()
-const	merchantKecamatan = ref()
-const	merchantKota = ref()
+const	merchantProvinsi = ref(0)
+const	merchantKota = ref(0)
+const	merchantKecamatan = ref(0)
+const	merchantKelurahan = ref(0)
 const	merchantZipCode = ref()
 
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
@@ -24,15 +24,46 @@ if (merchantDetails.value.success) {
   merchantZipCode.value = merchant.postal_code
 }
 
+const urlCities = ref(`/location/province/${merchantProvinsi.value}/city`)
+const urlDistricts = ref(`/location/city/${merchantKota.value}/district`)
+const urlSubDistricts = ref(`/location/district/${merchantKecamatan.value}/subdistrict`)
+
+const { data: provincesData } = await useApiCore(createUrl('/location/province'))
+const { data: citiesData } = await useApiCore(createUrl(urlCities, { refetch: true }))
+const { data: districtsData } = await useApiCore(createUrl(urlDistricts, { refetch: true }))
+const { data: subDistrictsData } = await useApiCore(createUrl(urlSubDistricts, { refetch: true }))
+
+const provinces = computed(() => provincesData.value.data)
+const cities = computed(() => citiesData.value.data)
+const districts = computed(() => districtsData.value.data)
+const subDistricts = computed(() => subDistrictsData.value.data)
+
+const onProvinceChange = () => {
+	urlCities.value = `/location/province/${merchantProvinsi.value}/city`
+	merchantKota.value = null
+	merchantKecamatan.value = null
+	merchantKelurahan.value = null
+}
+
+const onCityChange = () => {
+	urlDistricts.value = `/location/city/${merchantKota.value}/district`
+	merchantKecamatan.value = null
+	merchantKelurahan.value = null
+}
+
+const onDistrictChange = () => {
+	urlSubDistricts.value = `/location/district/${merchantKecamatan.value}/subdistrict`
+	merchantKelurahan.value = null
+}
+
 const saveAddress = async addressData => {
   try {
-    console.log(addressData)
-
     const res = await $apiCore("/seller/command/merchant/atur-lokasi", {
       method: 'POST',
       body: addressData,
       onResponseError({ response }) {
         console.log(response)
+				messageStore.setMessage('error', response.message)
       },
     })
 
@@ -106,11 +137,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-              <AppTextField
+							<AppSelect
                 v-model="merchantProvinsi"
                 :rules="[requiredValidator]"
                 placeholder="Pilih provinsi"
                 label="Provinsi"
+								@update:modelValue="onProvinceChange"
+								:items="provinces"
+								item-title="name"
+								item-value="id"
               />
             </VCol>
 
@@ -118,11 +153,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-              <AppTextField
+							<AppSelect
                 v-model="merchantKota"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kota"
+								@update:modelValue="onCityChange"
                 label="Kota"
+								:items="cities"
+								item-title="name"
+								item-value="id"
               />
             </VCol>
 
@@ -130,11 +169,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-              <AppTextField
+							<AppSelect
                 v-model="merchantKecamatan"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kecamatan"
                 label="Kecamatan"
+								@update:modelValue="onDistrictChange"
+								:items="districts"
+								item-title="name"
+								item-value="id"
               />
             </VCol>
 
@@ -142,11 +185,14 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-              <AppTextField
+							<AppSelect
                 v-model="merchantKelurahan"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kelurahan"
                 label="Kelurahan"
+								:items="subDistricts"
+								item-title="name"
+								item-value="id"
               />
             </VCol>
 

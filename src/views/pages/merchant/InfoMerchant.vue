@@ -17,7 +17,11 @@ const	merchantRequestNPWP = ref(false)
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
   let merchant = merchantDetails.value.data.merchant
-  merchantPhoto.value = merchant.photo_url == "" ? avatar1 : merchant.photo_url
+	if(merchant.photo_url == "" || merchant.photo_url == null) {
+		merchantPhoto.value = avatar1
+	} else {
+		merchantPhoto.value = merchant.photo_url
+	}
   merchantPhotoTmp.value = merchantPhoto.value
   merchantName.value = merchant.name
   merchantDescription.value = merchant.description
