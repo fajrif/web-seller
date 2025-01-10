@@ -32,14 +32,20 @@ const tabs = [
     id: 4,
     title: 'Tidak Aktif',
     tab: 'non-aktif',
-    status: "wait_approval",
+    status: "deactivate",
   },
-  {
-    id: 5,
-    title: 'Ditolak',
-    tab: 'ditolak',
-    status: "declined",
-  },
+  // {
+  //   id: 5,
+  //   title: 'Diverifikasi',
+  //   tab: 'verifikasi',
+  //   status: "wait_approval",
+  // },
+  // {
+  //   id: 6,
+  //   title: 'Ditolak',
+  //   tab: 'ditolak',
+  //   status: "declined",
+  // },
 ]
 
 definePage({ meta: { navActiveLink: 'produk-tab' } })

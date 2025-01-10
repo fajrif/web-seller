@@ -28,7 +28,7 @@ const emit = defineEmits([
 ])
 
 const resolveStatusText = statusId => {
-  if (statusId === 0)
+  if (statusId === 9)
     return {
       title: 'Arsipkan Produk',
       subtitle: 'mengarsipkan produk',
@@ -38,12 +38,17 @@ const resolveStatusText = statusId => {
       title: 'Jual Produk',
       subtitle: 'menjual produk',
     }
-  if (statusId === 2)
+  if (statusId === 3)
     return {
       title: 'Non-Aktifkan Produk',
       subtitle: 'menon-aktifkan produk',
     }
-  if (statusId === 3)
+  if (statusId === 0)
+    return {
+      title: 'Diverifikasi',
+      subtitle: 'verifikasi produk',
+    }
+  if (statusId === 5)
     return {
       title: 'Tolak',
       subtitle: 'menolak produk',

@@ -112,9 +112,9 @@ const updateStatusProduct = async (id, status) => {
   	const res = await $apiCore(`/seller/command/product/archived/${id}`, { method: 'POST' });
   	// Refetch products
   	fetchProducts()
-    messageStore.setMessage('success', 'Berhasil arsipkan produk')
+    messageStore.setMessage('success', 'Berhasil ubah status produk')
   } catch (error) {
-  		messageStore.setMessage('error', 'Gagal arsipkan produk')
+  		messageStore.setMessage('error', 'Gagal ubah status produk')
   		console.error("Error on update product data:", error);
   }
 }
@@ -223,7 +223,19 @@ const deleteItem = (id, name) => {
 
         <!-- Harga -->
         <template #item.price="{ item }">
-          <span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
+					<div class="d-flex flex-column">
+						<span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
+						<div v-if="item.strike_price && item.price < item.strike_price">
+							<span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(item.strike_price) }}</span>
+							<VChip
+								:label="false"
+								size="x-small"
+								color="error"
+							>
+								{{ calculateDiscount(item.price, item.strike_price) }}
+							</VChip>
+						</div>
+					</div>
         </template>
 
         <!-- Stock -->
@@ -285,15 +297,20 @@ const deleteItem = (id, name) => {
                 </VListItem>
                 <VListItem
                   value="deactivate"
-                  @click="editStatus(item.id, item.name, 2)"
                 >
                   Non-Aktifkan Produk
                 </VListItem>
-                <VListItem
+                <VListItem v-if="item.status == 1"
                   value="archive"
-                  @click="editStatus(item.id, item.name, 0)"
+                  @click="editStatus(item.id, item.name, 9)"
                 >
                   Arsipkan Produk
+                </VListItem>
+                <VListItem v-if="item.status == 9"
+                  value="archive"
+                  @click="editStatus(item.id, item.name, 1)"
+                >
+                  Jual Produk
                 </VListItem>
                 <VListItem
                   value="delete"

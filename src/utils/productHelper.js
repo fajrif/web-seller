@@ -47,11 +47,15 @@ export const statusProduct = [
     name: "Dijual",
   },
   {
-    id: 2,
+    id: 3,
     name: "Non-Aktif",
   },
   {
-    id: 3,
+    id: 0,
+    name: "Diverifikasi",
+  },
+  {
+    id: 5,
     name: "Ditolak",
   },
 ]
@@ -78,12 +82,17 @@ export const resolveStatus = statusId => {
       text: 'Dijual',
       color: 'success',
     }
-  if (statusId === 2)
+  if (statusId === 3)
     return {
       text: 'Non-Aktif',
       color: 'secondary',
     }
-  if (statusId === 3)
+  if (statusId === 0)
+    return {
+      text: 'Diverifikasi',
+      color: 'info',
+    }
+  if (statusId === 5)
     return {
       text: 'Ditolak',
       color: 'error',
@@ -100,6 +109,15 @@ export const toCurrency = price => {
     currency: 'IDR',
     maximumFractionDigits: 0,
   })
-  
+
   return formatter.format(parseInt(price))
+}
+
+export const calculateDiscount = (price, strikePrice) => {
+	if (strikePrice !== null && strikePrice > 0) {
+		var discount = ((strikePrice  - price) / strikePrice) *100;
+		return discount.toFixed(0) + "%";
+	} else {
+		return 0
+	}
 }

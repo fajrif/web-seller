@@ -33,6 +33,8 @@ const {
     keyword: searchQuery,
     page,
     limit: itemsPerPage,
+		"filter[status]": "available",
+		is_featured_product: false,
   },
 }))
 

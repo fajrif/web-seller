@@ -102,14 +102,18 @@ register()
             <h3 class="text-h3 mb-1 fw-700 text-primary">
               {{ toCurrency(productData.price) }}
             </h3>
-            <div class="d-flex gap-2 flex-wrap align-center">
+            <div v-if="productData.strike_price && productData.price < productData.strike_price" class="d-flex gap-2 flex-wrap align-center">
               <p class="text-body-1 text-medium-emphasis mb-0" style="text-decoration:line-through;">
 								{{ toCurrency(productData.strike_price) }}
               </p>
 
-              <VChip color="error">
-                10%
-              </VChip>
+							<VChip
+								:label="false"
+								size="small"
+								color="error"
+							>
+								{{ calculateDiscount(productData.price, productData.strike_price) }}
+							</VChip>
             </div>
 
             <div class="d-flex align-center my-2 pa-4 border border-radius-8">

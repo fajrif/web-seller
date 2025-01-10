@@ -372,6 +372,7 @@
     "toCurrency": true,
     "productHeaders": true,
     "statusProduct": true,
-    "conditionProduct": true
+    "conditionProduct": true,
+    "calculateDiscount": true
   }
 }

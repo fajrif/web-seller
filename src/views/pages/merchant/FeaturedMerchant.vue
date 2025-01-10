@@ -5,13 +5,12 @@ import { useMessageStore } from '@core/stores/config'
 const messageStore = useMessageStore()
 const isAddProductFeaturedDialogVisible = ref(false)
 
-const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/merchant?is_featured_product=true&page=1")
+const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/featured?page=1")
 
 const featuredProducts = computed(() => featuredData.value.data.data)
 
 const addFeatured = async ids => {
   try {
-    console.log(ids)
     let _ids = ids
 
     /* eslint-disable camelcase */
@@ -36,8 +35,13 @@ const addFeatured = async ids => {
 }
 
 const deleteFeatured = async id => {
-  messageStore.setMessage('error', 'Gagal menghapus produk unggulan')
-
+  let updateSelectedIds = featuredProducts.value.map(item => {
+    return {
+      id: item.id,
+      is_featured_product: item.id !== id,
+    }
+  })
+	addFeatured(updateSelectedIds)
   // try {
   // 	await $apiCore(`/merchant/products/${id}/delete-featured`, { method: 'DELETE' });
 
@@ -53,19 +57,6 @@ const deleteFeatured = async id => {
 
 const addItem = () => {
   isAddProductFeaturedDialogVisible.value = true
-}
-
-const toCurrency = price => {
-  let _price = price
-  if (typeof value !== "number") {
-    _price
-  }
-  var formatter = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  })
-  
-  return formatter.format(parseInt(price))
 }
 </script>
 
@@ -125,7 +116,9 @@ const toCurrency = price => {
                       />
                       <div class="d-flex flex-column">
                         <h4 class="fw-500">
-                          {{ product.name }}
+													<RouterLink :to="{ name: 'produk-view-id', params: { id: product.id } }">
+														{{ product.name }}
+													</RouterLink>
                         </h4>
                         <p class="text-body-2 mb-0">
                           {{ product.condition }}
@@ -134,7 +127,19 @@ const toCurrency = price => {
                     </div>
                   </td>
                   <td>
-                    {{ toCurrency(product.price) }}
+										<div class="d-flex flex-column">
+											<span class="text-body-1 text-high-emphasis">{{ toCurrency(product.price) }}</span>
+											<div v-if="product.strike_price && product.price < product.strike_price">
+												<span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(product.strike_price) }}</span>
+												<VChip
+													:label="false"
+													size="x-small"
+													color="error"
+												>
+													{{ calculateDiscount(product.price, product.strike_price) }}
+												</VChip>
+											</div>
+										</div>
                   </td>
                   <td>
                     <VBtn
