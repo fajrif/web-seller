@@ -373,6 +373,7 @@
     "productHeaders": true,
     "statusProduct": true,
     "conditionProduct": true,
-    "calculateDiscount": true
+    "calculateDiscount": true,
+    "timeOptions": true
   }
 }

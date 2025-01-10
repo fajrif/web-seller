@@ -3,31 +3,6 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
-const arrayTime = ["06:00",
-  "07:00",
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00",
-  "21:00",
-  "22:00",
-  "23:00",
-  "00:00",
-  "01:00",
-  "02:00",
-  "03:00",
-  "04:00",
-  "05:00"]
-
 const	monday = ref(false)
 const tuesday = ref(false)
 const wednesday = ref(false)
@@ -35,32 +10,59 @@ const thursday = ref(false)
 const friday = ref(false)
 const saturday = ref(false)
 const sunday = ref(false)
-const	startTime = ref('')
-const	endTime = ref('')
+const	openTime = ref('08:00:00')
+const	closedTime = ref('17:00:00')
 
-const { data: scheduleDetails } = await useApiCore("/merchant/operational_hour")
-if (scheduleDetails.value) {
-  monday.value = scheduleDetails.value.monday == 1
-  tuesday.value = scheduleDetails.value.tuesday == 1
-  wednesday.value = scheduleDetails.value.wednesday == 1
-  thursday.value = scheduleDetails.value.thursday == 1
-  friday.value = scheduleDetails.value.friday == 1
-  saturday.value = scheduleDetails.value.saturday == 1
-  sunday.value = scheduleDetails.value.sunday == 1
-  startTime.value = scheduleDetails.value.start_time
-  endTime.value = scheduleDetails.value.end_time
+const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
+if (merchantDetails.value.success) {
+  let operationals = merchantDetails.value.data.merchant.operationals
+	if(Array.isArray(operationals)) {
+		operationals.forEach((op) => {
+			switch (op.master_data_id) {
+				case 7:
+					monday.value = true;
+					break;
+				case 8:
+					tuesday.value = true;
+					break;
+				case 9:
+					wednesday.value = true;
+					break;
+				case 10:
+					thursday.value = true;
+					break;
+				case 11:
+					friday.value = true;
+					break;
+				case 12:
+					saturday.value = true;
+					break;
+				case 13:
+					sunday.value = true;
+					break;
+			};
+		});
+		let firstData = operationals[0]
+		if(firstData){
+			openTime.value = firstData.open_time
+			closedTime.value = firstData.closed_time
+		}
+	}
 }
 
-const saveSchedule = async dataSchedule => {
+const saveSchedule = async merchantData => {
   try {
-    /* eslint-disable camelcase */
-    await $apiCore("/merchant/operational_hour", {
-      method: 'PUT',
-      body: { operational_hour: dataSchedule },
+		console.log(merchantData)
+    const res = await $apiCore("/seller/command/merchant/atur-toko", {
+      method: 'POST',
+      body: merchantData,
+      onResponseError({ response }) {
+        console.log(response)
+      },
     })
-    /* eslint-enable */
 
-    messageStore.setMessage('success', 'Data jadwal toko berhasil disimpan')
+    let msg = res.message
+    messageStore.setMessage('success', msg)
   } catch (error) {
     messageStore.setMessage('error', 'Gagal simpan jadwal toko')
     console.error("Error on update operational hour merchant data:", error)
@@ -69,16 +71,27 @@ const saveSchedule = async dataSchedule => {
 
 /* eslint-disable camelcase */
 const onSubmit = () => {
+	let selectedOperational = []
+
+	if(monday.value == true) { selectedOperational.push(7) }
+	if(tuesday.value == true) { selectedOperational.push(8) }
+	if(wednesday.value == true) { selectedOperational.push(9) }
+	if(thursday.value == true) { selectedOperational.push(10) }
+	if(friday.value == true) { selectedOperational.push(11) }
+	if(saturday.value == true) { selectedOperational.push(12) }
+	if(sunday.value == true) { selectedOperational.push(13) }
+
+  let operationalHours = selectedOperational.map(num => {
+		return {
+				day_id: num,
+				timezone: "Asia/Bangkok"
+		}
+  })
+
   saveSchedule({
-    monday: monday.value == 1,
-    tuesday: tuesday.value == 1,
-    wednesday: wednesday.value == 1,
-    thursday: thursday.value == 1,
-    friday: friday.value == 1,
-    saturday: saturday.value == 1,
-    sunday: sunday.value == 1,
-    start_time: startTime.value,
-    end_time: endTime.value,
+    open_time: openTime.value.slice(0, -3),
+    closed_time: closedTime.value.slice(0, -3),
+		operational: operationalHours
   })
 }
 /* eslint-enable */
@@ -193,9 +206,12 @@ const onSubmit = () => {
                 md="6"
               >
                 <AppSelect
-                  v-model="startTime"
-                  placeholder="Select an option"
-                  :items="arrayTime"
+                  v-model="openTime"
+									label="Jam Buka Toko"
+                  placeholder="Pilih Jam Buka"
+                  :items="timeOptions"
+									item-title="text"
+									item-value="value"
                 />
               </VCol>
               <VCol
@@ -203,9 +219,12 @@ const onSubmit = () => {
                 md="6"
               >
                 <AppSelect
-                  v-model="endTime"
-                  placeholder="Select an option"
-                  :items="arrayTime"
+                  v-model="closedTime"
+									label="Jam Tutup Toko"
+                  placeholder="Pilih Jam Tutup"
+                  :items="timeOptions"
+									item-title="text"
+									item-value="value"
                 />
               </VCol>
             </VRow>

@@ -147,6 +147,7 @@ declare global {
   const templateRef: typeof import('@vueuse/core')['templateRef']
   const throttledRef: typeof import('@vueuse/core')['throttledRef']
   const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
+  const timeOptions: typeof import('./src/utils/merchantHelper.js')['timeOptions']
   const toCurrency: typeof import('./src/utils/productHelper.js')['toCurrency']
   const toRaw: typeof import('vue')['toRaw']
   const toReactive: typeof import('@vueuse/core')['toReactive']
@@ -516,6 +517,7 @@ declare module 'vue' {
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
+    readonly timeOptions: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['timeOptions']>
     readonly toCurrency: UnwrapRef<typeof import('./src/utils/productHelper.js')['toCurrency']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
