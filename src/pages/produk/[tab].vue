@@ -34,6 +34,7 @@ const tabs = [
     tab: 'non-aktif',
     status: "deactivate",
   },
+
   // {
   //   id: 5,
   //   title: 'Diverifikasi',

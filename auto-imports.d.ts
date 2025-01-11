@@ -140,6 +140,7 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
+  const sortOptions: typeof import('./src/utils/productHelper.js')['sortOptions']
   const statusProduct: typeof import('./src/utils/productHelper.js')['statusProduct']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
@@ -148,6 +149,7 @@ declare global {
   const throttledRef: typeof import('@vueuse/core')['throttledRef']
   const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
   const timeOptions: typeof import('./src/utils/merchantHelper.js')['timeOptions']
+  const titleize: typeof import('./src/utils/merchantHelper.js')['titleize']
   const toCurrency: typeof import('./src/utils/productHelper.js')['toCurrency']
   const toRaw: typeof import('vue')['toRaw']
   const toReactive: typeof import('@vueuse/core')['toReactive']
@@ -510,6 +512,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
+    readonly sortOptions: UnwrapRef<typeof import('./src/utils/productHelper.js')['sortOptions']>
     readonly statusProduct: UnwrapRef<typeof import('./src/utils/productHelper.js')['statusProduct']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
@@ -518,6 +521,7 @@ declare module 'vue' {
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
     readonly timeOptions: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['timeOptions']>
+    readonly titleize: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['titleize']>
     readonly toCurrency: UnwrapRef<typeof import('./src/utils/productHelper.js')['toCurrency']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>

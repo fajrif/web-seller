@@ -374,6 +374,8 @@
     "statusProduct": true,
     "conditionProduct": true,
     "calculateDiscount": true,
-    "timeOptions": true
+    "timeOptions": true,
+    "sortOptions": true,
+    "titleize": true
   }
 }

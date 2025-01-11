@@ -1,11 +1,11 @@
 <script setup>
 import notFoundImg from '@images/icons/ic-search.png'
 
-const eventsData = ref()
+const eventsData = ref([])
 
-const { data } = await useApiCore("/events")
-if (data.value) {
-  eventsData.value = data.value
+const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
+if (merchantDetails.value.success) {
+  eventsData.value = merchantDetails.value.data.merchant.can_registered_product_event
 }
 </script>
 
@@ -23,7 +23,7 @@ if (data.value) {
         <!-- 👉 Events Data	-->
         <VCol
           v-for="event in eventsData"
-          :key="event.id"
+          :key="event.event_key"
           cols="12"
           md="6"
         >
@@ -32,31 +32,31 @@ if (data.value) {
               <VImg
                 width="137"
                 height="176"
-                :src="event.image"
+                :src="event.event_logo"
               />
             </div>
 
             <div>
               <VCardItem>
-                <VCardTitle>{{ event.name }}</VCardTitle>
+                <VCardTitle>{{ event.event_name }}</VCardTitle>
               </VCardItem>
 
               <VCardText>
-                {{ event.truncate_desc }}
+                {{ event.event_description }}
               </VCardText>
 
               <VCardText class="text-subtitle-1">
-                <span>Tanggal :</span> <span>{{ event.start_date }} - {{ event.end_date }}</span>
+                <span>Tanggal :</span>
               </VCardText>
 
               <VCardActions class="justify-space-between">
-                <VBtn>
-                  <RouterLink :to="{ name: 'event-id', params: { id: event.id } }">
+                <VBtn variant="plain">
+                  <RouterLink :to="{ name: 'event-products', query: { type: event.event_type, key: event.event_key } }">
                     <span class="ms-2">Daftarkan Produk</span>
                   </RouterLink>
                 </VBtn>
 
-                <RouterLink :to="{ name: 'event-id', params: { id: event.id } }">
+                <RouterLink :to="{ name: 'event-products', query: { type: event.event_type, key: event.event_key } }">
                   <IconBtn
                     color="secondary"
                     icon="tabler-chevron-right"

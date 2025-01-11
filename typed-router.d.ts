@@ -22,7 +22,7 @@ declare module 'vue-router/auto-routes' {
     'access-control': RouteRecordInfo<'access-control', '/access-control', Record<never, never>, Record<never, never>>,
     'dashboards-analytics': RouteRecordInfo<'dashboards-analytics', '/dashboards/analytics', Record<never, never>, Record<never, never>>,
     'event': RouteRecordInfo<'event', '/event', Record<never, never>, Record<never, never>>,
-    'event-id': RouteRecordInfo<'event-id', '/event/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'event-products': RouteRecordInfo<'event-products', '/event/products', Record<never, never>, Record<never, never>>,
     'forgot-password': RouteRecordInfo<'forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'merchant-tab': RouteRecordInfo<'merchant-tab', '/merchant/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,

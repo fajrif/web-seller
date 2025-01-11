@@ -6,15 +6,17 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  eventId: {
-    type: Number,
+  eventKey: {
+    type: String,
     required: true,
-    default: 0,
+  },
+  eventType: {
+    type: String,
+    required: true,
   },
   eventName: {
     type: String,
     required: true,
-    default: "Event dan Promo",
   },
 })
 
@@ -41,6 +43,7 @@ const {
 } = await useApiCore(createUrl('/seller/query/product/merchant', {
   query: {
     keyword: searchQuery,
+    "filter[status]": "available",
     page,
     limit: itemsPerPage,
   },
@@ -50,7 +53,7 @@ const products = computed(() => productsData.value.data.data)
 const totalProduct = computed(() => productsData.value.data.total)
 
 const onSubmit = () => {
-  emit('formSubmitted', props.eventId, selected.value)
+  emit('formSubmitted', props.eventKey, props.eventType, selected.value)
   onReset()
 }
 

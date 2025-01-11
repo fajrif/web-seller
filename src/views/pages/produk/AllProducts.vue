@@ -26,35 +26,6 @@ const itemsPerPage = ref(PAGINATION_PER_PAGE)
 const page = ref(1)
 const sortBy = ref('')
 
-const sortOptions = [
-  {
-    title: 'Urutkan',
-    value: '',
-  },
-  {
-    title: 'Paling Laris',
-    value: 'sold',
-  },
-  {
-    title: 'Paling Baru',
-    value: 'newest',
-  },
-  {
-    title: 'Rating',
-    value: 'rating',
-  },
-  {
-    title: 'Harga Terendah',
-    value: 'lower_price',
-  },
-  {
-    title: 'Harga Tertingi',
-    value: 'higher_price',
-  },
-]
-
-// filter[status] = available,archived,wait_approval,declined
-
 const {
   data: productsData,
   execute: fetchProducts, isFinished: loading,
@@ -79,13 +50,15 @@ const updateHargaProduct = async (id, price) => {
       onResponseError({ response }) {
         throw response.message
       },
-  	});
+  	})
+
+
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Harga berhasil diubah')
   } catch (error) {
   		messageStore.setMessage('error', 'Gagal mengubah harga produk')
-  		console.error("Error on update product data:", error);
+  		console.error("Error on update product data:", error)
   }
 }
 
@@ -97,37 +70,43 @@ const updateStockProduct = async (id, stock) => {
       onResponseError({ response }) {
         throw response.message
       },
-  	});
+  	})
+
+
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Stock berhasil diubah')
   } catch (error) {
   		messageStore.setMessage('error', 'Gagal mengubah stock produk')
-  		console.error("Error on update product data:", error);
+  		console.error("Error on update product data:", error)
   }
 }
 
 const updateStatusProduct = async (id, status) => {
   try {
-  	const res = await $apiCore(`/seller/command/product/archived/${id}`, { method: 'POST' });
+  	const res = await $apiCore(`/seller/command/product/archived/${id}`, { method: 'POST' })
+
+
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Berhasil ubah status produk')
   } catch (error) {
   		messageStore.setMessage('error', 'Gagal ubah status produk')
-  		console.error("Error on update product data:", error);
+  		console.error("Error on update product data:", error)
   }
 }
 
 const deleteProduct = async id => {
   try {
-  	const res = await $apiCore(`/seller/command/product/delete/${id}?accept=true`, { method: 'DELETE' });
+  	const res = await $apiCore(`/seller/command/product/delete/${id}?accept=true`, { method: 'DELETE' })
+
+
   	// Refetch products
   	fetchProducts()
   	messageStore.setMessage('success', res.message)
   } catch (error) {
   		messageStore.setMessage('error', 'Gagal menghapus produk')
-  		console.error("Error on delete product data:", error);
+  		console.error("Error on delete product data:", error)
   }
 }
 
@@ -223,19 +202,19 @@ const deleteItem = (id, name) => {
 
         <!-- Harga -->
         <template #item.price="{ item }">
-					<div class="d-flex flex-column">
-						<span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
-						<div v-if="item.strike_price && item.price < item.strike_price">
-							<span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(item.strike_price) }}</span>
-							<VChip
-								:label="false"
-								size="x-small"
-								color="error"
-							>
-								{{ calculateDiscount(item.price, item.strike_price) }}
-							</VChip>
-						</div>
-					</div>
+          <div class="d-flex flex-column">
+            <span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
+            <div v-if="item.strike_price && item.price < item.strike_price">
+              <span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(item.strike_price) }}</span>
+              <VChip
+                :label="false"
+                size="x-small"
+                color="error"
+              >
+                {{ calculateDiscount(item.price, item.strike_price) }}
+              </VChip>
+            </div>
+          </div>
         </template>
 
         <!-- Stock -->
@@ -295,18 +274,18 @@ const deleteItem = (id, name) => {
                 >
                   Ubah Stock
                 </VListItem>
-                <VListItem
-                  value="deactivate"
-                >
+                <VListItem value="deactivate">
                   Non-Aktifkan Produk
                 </VListItem>
-                <VListItem v-if="item.status == 1"
+                <VListItem
+                  v-if="item.status == 1"
                   value="archive"
                   @click="editStatus(item.id, item.name, 9)"
                 >
                   Arsipkan Produk
                 </VListItem>
-                <VListItem v-if="item.status == 9"
+                <VListItem
+                  v-if="item.status == 9"
                   value="archive"
                   @click="editStatus(item.id, item.name, 1)"
                 >

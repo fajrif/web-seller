@@ -37,7 +37,7 @@ const saveProduct = async productData => {
       method: 'POST',
       body: productData,
       onResponseError({ response }) {
-				messageStore.setMessage('error', response._data.message)
+        messageStore.setMessage('error', response._data.message)
       },
     })
 
@@ -70,7 +70,7 @@ const onSubmit = () => {
         length: productLength.value,
         is_featured_product: productFeatured.value,
         status: productStatus.value,
-				url: productPhotoUrl.value,
+        url: productPhotoUrl.value,
       })
       /* eslint-enable */
     }
@@ -273,7 +273,7 @@ const onSubmit = () => {
                 label="Harga Coret"
                 prefix="Rp"
                 type="number"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -298,7 +298,7 @@ const onSubmit = () => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
@@ -310,7 +310,7 @@ const onSubmit = () => {
                 label="Pembelian Minimum"
                 suffix="Buah"
                 type="number"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 placeholder="Tentukan pembelian minimum"
                 class="mb-6"
               />

@@ -41,7 +41,8 @@ const deleteFeatured = async id => {
       is_featured_product: item.id !== id,
     }
   })
-	addFeatured(updateSelectedIds)
+  addFeatured(updateSelectedIds)
+
   // try {
   // 	await $apiCore(`/merchant/products/${id}/delete-featured`, { method: 'DELETE' });
 
@@ -116,9 +117,9 @@ const addItem = () => {
                       />
                       <div class="d-flex flex-column">
                         <h4 class="fw-500">
-													<RouterLink :to="{ name: 'produk-view-id', params: { id: product.id } }">
-														{{ product.name }}
-													</RouterLink>
+                          <RouterLink :to="{ name: 'produk-view-id', params: { id: product.id } }">
+                            {{ product.name }}
+                          </RouterLink>
                         </h4>
                         <p class="text-body-2 mb-0">
                           {{ product.condition }}
@@ -127,19 +128,19 @@ const addItem = () => {
                     </div>
                   </td>
                   <td>
-										<div class="d-flex flex-column">
-											<span class="text-body-1 text-high-emphasis">{{ toCurrency(product.price) }}</span>
-											<div v-if="product.strike_price && product.price < product.strike_price">
-												<span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(product.strike_price) }}</span>
-												<VChip
-													:label="false"
-													size="x-small"
-													color="error"
-												>
-													{{ calculateDiscount(product.price, product.strike_price) }}
-												</VChip>
-											</div>
-										</div>
+                    <div class="d-flex flex-column">
+                      <span class="text-body-1 text-high-emphasis">{{ toCurrency(product.price) }}</span>
+                      <div v-if="product.strike_price && product.price < product.strike_price">
+                        <span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(product.strike_price) }}</span>
+                        <VChip
+                          :label="false"
+                          size="x-small"
+                          color="error"
+                        >
+                          {{ calculateDiscount(product.price, product.strike_price) }}
+                        </VChip>
+                      </div>
+                    </div>
                   </td>
                   <td>
                     <VBtn

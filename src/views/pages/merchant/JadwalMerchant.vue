@@ -16,43 +16,44 @@ const	closedTime = ref('17:00:00')
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
   let operationals = merchantDetails.value.data.merchant.operationals
-	if(Array.isArray(operationals)) {
-		operationals.forEach((op) => {
-			switch (op.master_data_id) {
-				case 7:
-					monday.value = true;
-					break;
-				case 8:
-					tuesday.value = true;
-					break;
-				case 9:
-					wednesday.value = true;
-					break;
-				case 10:
-					thursday.value = true;
-					break;
-				case 11:
-					friday.value = true;
-					break;
-				case 12:
-					saturday.value = true;
-					break;
-				case 13:
-					sunday.value = true;
-					break;
-			};
-		});
-		let firstData = operationals[0]
-		if(firstData){
-			openTime.value = firstData.open_time
-			closedTime.value = firstData.closed_time
-		}
-	}
+  if(Array.isArray(operationals)) {
+    operationals.forEach(op => {
+      switch (op.master_data_id) {
+      case 7:
+        monday.value = true
+        break
+      case 8:
+        tuesday.value = true
+        break
+      case 9:
+        wednesday.value = true
+        break
+      case 10:
+        thursday.value = true
+        break
+      case 11:
+        friday.value = true
+        break
+      case 12:
+        saturday.value = true
+        break
+      case 13:
+        sunday.value = true
+        break
+      };
+    })
+    let firstData = operationals[0]
+    if(firstData){
+      openTime.value = firstData.open_time
+      closedTime.value = firstData.closed_time
+    }
+  }
 }
 
 const saveSchedule = async merchantData => {
   try {
-		console.log(merchantData)
+    console.log(merchantData)
+
     const res = await $apiCore("/seller/command/merchant/atur-toko", {
       method: 'POST',
       body: merchantData,
@@ -71,27 +72,27 @@ const saveSchedule = async merchantData => {
 
 /* eslint-disable camelcase */
 const onSubmit = () => {
-	let selectedOperational = []
+  let selectedOperational = []
 
-	if(monday.value == true) { selectedOperational.push(7) }
-	if(tuesday.value == true) { selectedOperational.push(8) }
-	if(wednesday.value == true) { selectedOperational.push(9) }
-	if(thursday.value == true) { selectedOperational.push(10) }
-	if(friday.value == true) { selectedOperational.push(11) }
-	if(saturday.value == true) { selectedOperational.push(12) }
-	if(sunday.value == true) { selectedOperational.push(13) }
+  if(monday.value == true) { selectedOperational.push(7) }
+  if(tuesday.value == true) { selectedOperational.push(8) }
+  if(wednesday.value == true) { selectedOperational.push(9) }
+  if(thursday.value == true) { selectedOperational.push(10) }
+  if(friday.value == true) { selectedOperational.push(11) }
+  if(saturday.value == true) { selectedOperational.push(12) }
+  if(sunday.value == true) { selectedOperational.push(13) }
 
   let operationalHours = selectedOperational.map(num => {
-		return {
-				day_id: num,
-				timezone: "Asia/Bangkok"
-		}
+    return {
+      day_id: num,
+      timezone: "Asia/Bangkok",
+    }
   })
 
   saveSchedule({
     open_time: openTime.value.slice(0, -3),
     closed_time: closedTime.value.slice(0, -3),
-		operational: operationalHours
+    operational: operationalHours,
   })
 }
 /* eslint-enable */
@@ -207,11 +208,11 @@ const onSubmit = () => {
               >
                 <AppSelect
                   v-model="openTime"
-									label="Jam Buka Toko"
+                  label="Jam Buka Toko"
                   placeholder="Pilih Jam Buka"
                   :items="timeOptions"
-									item-title="text"
-									item-value="value"
+                  item-title="text"
+                  item-value="value"
                 />
               </VCol>
               <VCol
@@ -220,11 +221,11 @@ const onSubmit = () => {
               >
                 <AppSelect
                   v-model="closedTime"
-									label="Jam Tutup Toko"
+                  label="Jam Tutup Toko"
                   placeholder="Pilih Jam Tutup"
                   :items="timeOptions"
-									item-title="text"
-									item-value="value"
+                  item-title="text"
+                  item-value="value"
                 />
               </VCol>
             </VRow>

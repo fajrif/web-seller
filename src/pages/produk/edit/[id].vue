@@ -28,7 +28,7 @@ const	productPhotoUrl = ref([])
 
 const { data: productDetails } = await useApiCore(`/seller/query/product/detail/${ route.params.id }`)
 if (productDetails.value.success) {
-	let productData = productDetails.value.data
+  let productData = productDetails.value.data
   merchantId.value = productData.merchant_id
   productName.value = productData.name
   productDescription.value = productData.description
@@ -45,9 +45,9 @@ if (productDetails.value.success) {
   productLength.value = productData.length
   productFeatured.value = productData.is_featured_product
   productStatus.value = productData.status
-	if(productData.product_photo) {
-		productPhotoUrl.value = productData.product_photo.map(item => item.url)
-	}
+  if(productData.product_photo) {
+    productPhotoUrl.value = productData.product_photo.map(item => item.url)
+  }
 }
 
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
@@ -60,9 +60,9 @@ const saveProduct = async productData => {
   try {
     const res = await $apiCore(`/seller/command/product/edit/${ route.params.id }`, {
       method: 'POST',
-			body: productData,
+      body: productData,
       onResponseError({ response }) {
-				messageStore.setMessage('error', response._data.message)
+        messageStore.setMessage('error', response._data.message)
       },
     })
 
@@ -95,7 +95,7 @@ const onSubmit = () => {
         length: productLength.value,
         is_featured_product: productFeatured.value,
         status: productStatus.value,
-				url: productPhotoUrl.value,
+        url: productPhotoUrl.value,
       })
       /* eslint-enable */
     }
@@ -305,7 +305,7 @@ const onSubmit = () => {
                 label="Harga Coret"
                 prefix="Rp"
                 type="number"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -330,7 +330,7 @@ const onSubmit = () => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
@@ -339,7 +339,7 @@ const onSubmit = () => {
               />
               <AppTextField
                 v-model="productMinPurchase"
-								:rules="[requiredValidator]"
+                :rules="[requiredValidator]"
                 label="Pembelian Minimum"
                 suffix="Buah"
                 type="number"

@@ -39,21 +39,21 @@ const districts = computed(() => districtsData.value.data)
 const subDistricts = computed(() => subDistrictsData.value.data)
 
 const onProvinceChange = () => {
-	urlCities.value = `/location/province/${merchantProvinsi.value}/city`
-	merchantKota.value = null
-	merchantKecamatan.value = null
-	merchantKelurahan.value = null
+  urlCities.value = `/location/province/${merchantProvinsi.value}/city`
+  merchantKota.value = null
+  merchantKecamatan.value = null
+  merchantKelurahan.value = null
 }
 
 const onCityChange = () => {
-	urlDistricts.value = `/location/city/${merchantKota.value}/district`
-	merchantKecamatan.value = null
-	merchantKelurahan.value = null
+  urlDistricts.value = `/location/city/${merchantKota.value}/district`
+  merchantKecamatan.value = null
+  merchantKelurahan.value = null
 }
 
 const onDistrictChange = () => {
-	urlSubDistricts.value = `/location/district/${merchantKecamatan.value}/subdistrict`
-	merchantKelurahan.value = null
+  urlSubDistricts.value = `/location/district/${merchantKecamatan.value}/subdistrict`
+  merchantKelurahan.value = null
 }
 
 const saveAddress = async addressData => {
@@ -63,7 +63,7 @@ const saveAddress = async addressData => {
       body: addressData,
       onResponseError({ response }) {
         console.log(response)
-				messageStore.setMessage('error', response.message)
+        messageStore.setMessage('error', response.message)
       },
     })
 
@@ -137,15 +137,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-							<AppSelect
+              <AppSelect
                 v-model="merchantProvinsi"
                 :rules="[requiredValidator]"
                 placeholder="Pilih provinsi"
                 label="Provinsi"
-								@update:modelValue="onProvinceChange"
-								:items="provinces"
-								item-title="name"
-								item-value="id"
+                :items="provinces"
+                item-title="name"
+                item-value="id"
+                @update:model-value="onProvinceChange"
               />
             </VCol>
 
@@ -153,15 +153,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-							<AppSelect
+              <AppSelect
                 v-model="merchantKota"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kota"
-								@update:modelValue="onCityChange"
                 label="Kota"
-								:items="cities"
-								item-title="name"
-								item-value="id"
+                :items="cities"
+                item-title="name"
+                item-value="id"
+                @update:model-value="onCityChange"
               />
             </VCol>
 
@@ -169,15 +169,15 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-							<AppSelect
+              <AppSelect
                 v-model="merchantKecamatan"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kecamatan"
                 label="Kecamatan"
-								@update:modelValue="onDistrictChange"
-								:items="districts"
-								item-title="name"
-								item-value="id"
+                :items="districts"
+                item-title="name"
+                item-value="id"
+                @update:model-value="onDistrictChange"
               />
             </VCol>
 
@@ -185,14 +185,14 @@ const onSubmit = () => {
               cols="12"
               md="6"
             >
-							<AppSelect
+              <AppSelect
                 v-model="merchantKelurahan"
                 :rules="[requiredValidator]"
                 placeholder="Pilih kelurahan"
                 label="Kelurahan"
-								:items="subDistricts"
-								item-title="name"
-								item-value="id"
+                :items="subDistricts"
+                item-title="name"
+                item-value="id"
               />
             </VCol>
 

@@ -1,5 +1,5 @@
 export const timeOptions = [
-	{ id: 1, text: "06:00 AM", value: "06:00:00" },
+  { id: 1, text: "06:00 AM", value: "06:00:00" },
   { id: 2, text: "07:00 AM", value: "07:00:00" },
   { id: 3, text: "08:00 AM", value: "08:00:00" },
   { id: 4, text: "09:00 AM", value: "09:00:00" },
@@ -22,6 +22,9 @@ export const timeOptions = [
   { id: 21, text: "02:00 AM", value: "02:00:00" },
   { id: 22, text: "03:00 AM", value: "03:00:00" },
   { id: 23, text: "04:00 AM", value: "04:00:00" },
-	{ id: 24, text: "05:00 AM", value: "05:00:00" },
+  { id: 24, text: "05:00 AM", value: "05:00:00" },
 ]
 
+export const titleize = str => {
+  return str.replace(/(?:^|\s|-)\S/g, x => x.toUpperCase())
+}

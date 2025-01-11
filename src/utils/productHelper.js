@@ -99,11 +99,34 @@ export const resolveStatus = statusId => {
     }
 }
 
+export const sortOptions = [
+  {
+    title: 'Urutkan',
+    value: '',
+  },
+  {
+    title: 'Paling Laris',
+    value: 'sold',
+  },
+  {
+    title: 'Paling Baru',
+    value: 'newest',
+  },
+  {
+    title: 'Rating',
+    value: 'rating',
+  },
+  {
+    title: 'Harga Terendah',
+    value: 'lower_price',
+  },
+  {
+    title: 'Harga Tertingi',
+    value: 'higher_price',
+  },
+]
+
 export const toCurrency = price => {
-  let _price = price
-  if (typeof value !== "number") {
-    _price
-  }
   var formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -114,10 +137,11 @@ export const toCurrency = price => {
 }
 
 export const calculateDiscount = (price, strikePrice) => {
-	if (strikePrice !== null && strikePrice > 0) {
-		var discount = ((strikePrice  - price) / strikePrice) *100;
-		return discount.toFixed(0) + "%";
-	} else {
-		return 0
-	}
+  if (strikePrice !== null && strikePrice > 0) {
+    var discount = ((strikePrice  - price) / strikePrice) *100
+    
+    return discount.toFixed(0) + "%"
+  } else {
+    return 0
+  }
 }
