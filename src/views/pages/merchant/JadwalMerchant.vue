@@ -13,8 +13,15 @@ const sunday = ref(false)
 const	openTime = ref('08:00:00')
 const	closedTime = ref('17:00:00')
 
+// temporary to save data
+var merchantAttrs = {}
+
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
+	// need to save this
+  let merchant = merchantDetails.value.data.merchant
+	merchantAttrs = getInfoAttrs(merchant)
+
   let operationals = merchantDetails.value.data.merchant.operationals
   if(Array.isArray(operationals)) {
     operationals.forEach(op => {
@@ -52,8 +59,6 @@ if (merchantDetails.value.success) {
 
 const saveSchedule = async merchantData => {
   try {
-    console.log(merchantData)
-
     const res = await $apiCore("/seller/command/merchant/atur-toko", {
       method: 'POST',
       body: merchantData,
@@ -93,6 +98,7 @@ const onSubmit = () => {
     open_time: openTime.value.slice(0, -3),
     closed_time: closedTime.value.slice(0, -3),
     operational: operationalHours,
+		...merchantAttrs
   })
 }
 /* eslint-enable */

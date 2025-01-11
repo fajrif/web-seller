@@ -55,39 +55,9 @@ const login = async () => {
     useCookie('accessToken').value = accessToken
 
     await nextTick(() => {
-      getUserData()
-    })
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-const getUserData = async () => {
-  try {
-    // GET Data Merchant
-    const resCore = await $apiCore('/seller/query/merchant/profile-toko', {
-      method: 'GET',
-      onResponseError({ response }) {
-        useCookie('accessToken').value = null
-        throw new Error("Unable to get seller data")
-      },
-    })
-
-    const merchant = resCore.data.merchant
-
-    /* eslint-disable camelcase */
-    const userData = {
-      id: merchant.id,
-      name: merchant.name,
-      photo_url: merchant.photo_url,
-      status: merchant.status,
-    }
-    /* eslint-enable */
-
-    useCookie('userData').value = userData
-
-    await nextTick(() => {
-      router.replace(route.query.to ? String(route.query.to) : '/')
+			updateCookieUserData(() => {
+				router.replace(route.query.to ? String(route.query.to) : '/')
+			})
     })
   } catch (err) {
     console.error(err)

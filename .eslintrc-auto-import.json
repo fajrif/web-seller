@@ -377,6 +377,10 @@
     "timeOptions": true,
     "sortOptions": true,
     "titleize": true,
-    "resolveIconType": true
+    "resolveIconType": true,
+    "operationalAttrs": true,
+    "getInfoAttrs": true,
+    "getOperationalAttrs": true,
+    "updateCookieUserData": true
   }
 }

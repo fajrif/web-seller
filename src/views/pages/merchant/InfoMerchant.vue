@@ -1,5 +1,6 @@
 <script setup>
 import avatar1 from '@images/misc/img-default.png'
+import UserProfile from '@/layouts/components/UserProfile.vue'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
@@ -14,9 +15,16 @@ const	merchantDescription = ref('')
 const	merchantSlogan = ref('')
 const	merchantRequestNPWP = ref(false)
 
+// temporary to save data
+var operationalAttrs = {}
+
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
   let merchant = merchantDetails.value.data.merchant
+	// need to save this
+	let operationals = merchantDetails.value.data.merchant.operationals
+	operationalAttrs = getOperationalAttrs(operationals)
+
   if(merchant.photo_url == "" || merchant.photo_url == null) {
     merchantPhoto.value = avatar1
   } else {
@@ -31,8 +39,6 @@ if (merchantDetails.value.success) {
 
 const saveMerchant = async merchantData => {
   try {
-    console.log(merchantData)
-
     const res = await $apiCore("/seller/command/merchant/atur-toko", {
       method: 'POST',
       body: merchantData,
@@ -40,6 +46,8 @@ const saveMerchant = async merchantData => {
         console.log(response)
       },
     })
+
+		updateCookieUserData(() => {})
 
     let msg = res.message
     messageStore.setMessage('success', msg)
@@ -58,6 +66,7 @@ const onSubmit = () => {
         description: merchantDescription.value,
         slogan: merchantSlogan.value,
         is_npwp_required: merchantRequestNPWP.value,
+				...operationalAttrs
       })
     }
   })

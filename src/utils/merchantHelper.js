@@ -28,3 +28,73 @@ export const timeOptions = [
 export const titleize = str => {
   return str.replace(/(?:^|\s|-)\S/g, x => x.toUpperCase())
 }
+
+export const getOperationalAttrs = operationals => {
+	var openTime = ""
+	var closedTime = ""
+	var operational = []
+
+  if(Array.isArray(operationals)) {
+		operational = operationals.map(item => {
+			return {
+				day_id: item.master_data_id,
+				timezone: "Asia/Bangkok",
+			}
+		})
+
+    let firstData = operationals[0]
+    if(firstData){
+      openTime = firstData.open_time.slice(0, -3)
+      closedTime = firstData.closed_time.slice(0, -3)
+    }
+  }
+
+	return {
+    open_time: openTime,
+    closed_time: closedTime,
+    operational: operational,
+	}
+}
+
+export const getInfoAttrs = merchant => {
+	return {
+    name: merchant.name,
+    slogan: merchant.slogan,
+    description: merchant.description,
+		is_npwp_required: merchant.is_npwp_required,
+	}
+}
+
+export const updateCookieUserData = async (callback) => {
+  try {
+    // GET Data Merchant
+    const resCore = await $apiCore('/seller/query/merchant/profile-toko', {
+      method: 'GET',
+      onResponseError({ response }) {
+        console.log("Unable to get seller data")
+      },
+    })
+
+    const merchant = resCore.data.merchant
+
+    /* eslint-disable camelcase */
+    const userData = {
+      id: merchant.id,
+      name: merchant.name,
+      photo_url: merchant.photo_url,
+      status: merchant.status,
+    }
+    /* eslint-enable */
+
+    useCookie('userData').value = userData
+
+    await nextTick(() => {
+			callback()
+    })
+
+  } catch (err) {
+		useCookie('accessToken').value = null
+    useCookie('userData').value = null
+    console.error(err)
+  }
+}

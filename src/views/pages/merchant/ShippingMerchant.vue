@@ -1,58 +1,81 @@
 <script setup>
-import sicepat from '@images/logos/delivery/sicepat.png'
-import jne from '@images/logos/delivery/jne.png'
-import jnt from '@images/logos/delivery/jnt.png'
-import ninja from '@images/logos/delivery/ninja.png'
-import posaja from '@images/logos/delivery/posaja.png'
-import seller from '@images/logos/delivery/seller.png'
+import shipSeller from '@images/logos/delivery/seller.png'
+import { useMessageStore } from '@core/stores/config'
 
-const kurirTanpaBiaya = ref([
-  {
-    logo: ninja,
-    name: 'Ninja',
-    subtitle: 'Reguler',
-    connected: true,
-  },
-  {
-    logo: posaja,
-    name: 'PT Pos Indonesia',
-    subtitle: 'Reguler (24 Jam)',
-    connected: false,
-  },
-  {
-    logo: sicepat,
-    name: 'SiCepat',
-    subtitle: 'Express',
-    connected: true,
-  },
-])
+const messageStore = useMessageStore()
 
-const kurirBiaya = ref([
-  {
-    logo: seller,
-    name: 'Pengiriman oleh Seller',
-    subtitle: 'Pengiriman oleh Seller',
-    connected: false,
-  },
-  {
-    logo: jne,
-    name: 'JNE',
-    links: {
-      username: '@JNE',
-      link: 'https://www.jne.co.id/',
-    },
-    connected: false,
-  },
-  {
-    logo: jnt,
-    name: 'J&T Express',
-    links: {
-      username: '@JNT',
-      link: 'https://jet.co.id/',
-    },
-    connected: false,
-  },
-])
+const kurirTanpaBiaya = ref([])
+const kurirBiaya = ref([])
+const selectedShipping = ref([])
+const	shipBySeller = ref(false)
+
+const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
+if (merchantDetails.value.success) {
+	// need to save this
+  let merchant = merchantDetails.value.data.merchant
+	shipBySeller.value = merchant.has_custom_logistic
+	let currExpedition = merchant.expedition?.list_expeditions
+	selectedShipping.value = currExpedition.split(":")
+}
+
+const { data: expeditionsData } = await useApiCore(createUrl('/rajaongkir/couriers'))
+if(expeditionsData.value.success) {
+	// kurir tanpa biaya => cashless
+	kurirTanpaBiaya.value = expeditionsData.value.data
+		.filter((item) => {
+      return item.type === "cashless"
+    })
+		.map(item => {
+    return {
+			name: item.name,
+			value: item.value,
+			logo: item.logo,
+			type: item.type,
+		}
+  });
+
+	// kurir dgn biaya => tunai
+	kurirBiaya.value = expeditionsData.value.data
+		.filter((item) => {
+      return item.type === "tunai"
+    })
+		.map(item => {
+    return {
+			name: item.name,
+			value: item.value,
+			logo: item.logo,
+			type: item.type,
+		}
+  });
+
+	// add seller shipping
+	kurirBiaya.value.unshift({
+			name: "Pengiriman oleh Seller",
+			value: "seller",
+			logo: shipSeller,
+			type: "tunai",
+	});
+}
+
+const saveShipping = async () => {
+  try {
+		let selected = selectedShipping.value.join(":")
+    const res = await $apiCore("/seller/command/merchant/set-expedition", {
+      method: 'POST',
+      body: { list_expeditions: selected },
+      onResponseError({ response }) {
+        console.log(response)
+      },
+    })
+
+    let msg = res.message
+    messageStore.setMessage('success', msg)
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal simpan pengiriman toko')
+    console.error("Error on update expedition data data:", error)
+  }
+}
+
 </script>
 
 <template>
@@ -73,7 +96,7 @@ const kurirBiaya = ref([
             <VList class="card-list">
               <VListItem
                 v-for="item in kurirTanpaBiaya"
-                :key="item.logo"
+                :key="item.value"
               >
                 <template #prepend>
                   <VAvatar size="100">
@@ -84,19 +107,26 @@ const kurirBiaya = ref([
                   </VAvatar>
                 </template>
                 <VListItemTitle>
-                  <h6 class="text-h6">
+                  <h6 class="text-h6 fw-700">
                     {{ item.name }}
                   </h6>
                 </VListItemTitle>
                 <VListItemSubtitle class="text-xs">
-                  {{ item.subtitle }}
+									<VChip
+										size="x-small"
+										color="info"
+									>
+										{{ item.type }}
+									</VChip>
                 </VListItemSubtitle>
                 <template #append>
                   <VListItemAction>
                     <VSwitch
-                      v-model="item.connected"
+                      v-model="selectedShipping"
+											:value="item.value"
                       density="compact"
                       class="me-1"
+											@change="saveShipping"
                     />
                   </VListItemAction>
                 </template>
@@ -120,7 +150,7 @@ const kurirBiaya = ref([
             <VList class="card-list">
               <VListItem
                 v-for="item in kurirBiaya"
-                :key="item.logo"
+                :key="item.value"
               >
                 <template #prepend>
                   <VAvatar size="100">
@@ -131,29 +161,34 @@ const kurirBiaya = ref([
                   </VAvatar>
                 </template>
                 <VListItemTitle>
-                  <h6 class="text-h6">
+                  <h6 class="text-h6 fw-700">
                     {{ item.name }}
                   </h6>
                 </VListItemTitle>
-                <VListItemSubtitle v-if="item.links?.link">
-                  <a
-                    :href="item.links.link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >{{ item.links?.username }}</a>
-                </VListItemSubtitle>
-                <VListItemSubtitle
-                  v-else
-                  class="text-xs"
-                >
-                  Tidak Terhubung
+                <VListItemSubtitle class="text-xs">
+									<VChip
+										v-if="item.value !== 'seller'"
+										size="x-small"
+										color="error"
+									>
+										<VIcon
+											start
+											icon="tabler-cash"
+										/>
+										{{ item.value }}
+									</VChip>
+									<p v-else>
+										{{ shipBySeller == true ? 'Aktif' : 'Non-Aktif' }}
+									</p>
                 </VListItemSubtitle>
                 <template #append>
-                  <VListItemAction>
+                  <VListItemAction v-if="item.value !== 'seller'">
                     <VSwitch
-                      v-model="item.connected"
+                      v-model="selectedShipping"
+											:value="item.value"
                       density="compact"
                       class="me-1"
+											@change="saveShipping"
                     />
                   </VListItemAction>
                 </template>
