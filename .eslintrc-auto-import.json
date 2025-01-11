@@ -376,6 +376,7 @@
     "calculateDiscount": true,
     "timeOptions": true,
     "sortOptions": true,
-    "titleize": true
+    "titleize": true,
+    "resolveIconType": true
   }
 }

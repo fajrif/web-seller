@@ -1,51 +1,31 @@
 <script setup>
-const notifications = ref([
+import notFoundImg from '@images/icons/ic-status.png'
+
+// headers
+const notifHeaders = [
   {
-    id: 1,
-    icon: 'tabler-wallet',
-    title: 'Pesanan baru diterima 🎉',
-    subtitle: 'Order #01290 dipesan oleh Kartika Sari',
-    time: 'Hari ini',
-    color: 'primary',
-    isSeen: true,
+    title: '',
+    key: 'notification',
+    sortable: false,
   },
-  {
-    id: 2,
-    icon: 'tabler-wallet',
-    title: 'Pesanan baru diterima 🎉',
-    subtitle: 'Order #01290 dipesan oleh Chow Lin',
-    time: 'Kemarin',
-    color: 'primary',
-    isSeen: false,
+]
+
+const itemsPerPage = ref(PAGINATION_PER_PAGE)
+const page = ref(1)
+
+const {
+  data: notificationsData,
+	execute: fetchNotifications,
+  isFinished: loading
+} = await useApiCore(createUrl('/seller/query/notification/list/2', {
+  query: {
+    page,
   },
-  {
-    id: 3,
-    icon: 'tabler-cash-banknote',
-    title: 'Penarikan dana telah selesai 👋🏻',
-    subtitle: 'Anda telah menarik dana sebesar Rp.500rb',
-    time: '11 Aug',
-    color: 'success',
-    isSeen: true,
-  },
-  {
-    id: 4,
-    icon: 'tabler-cash-banknote-off',
-    title: 'Penarikan dana Gagal',
-    subtitle: 'Maaf untuk sementara penarikan dana di tutup',
-    time: '25 May',
-    isSeen: false,
-    color: 'error',
-  },
-  {
-    id: 5,
-    icon: 'tabler-package',
-    title: 'Pesanan telah sampai 📦',
-    subtitle: 'Pesanan order #5453 telah di terima',
-    time: '19 Mar',
-    color: 'success',
-    isSeen: true,
-  },
-])
+}))
+
+const notifications = computed(() => notificationsData.value.data.data)
+const totalNotifications = computed(() => notificationsData.value.data.total)
+
 </script>
 
 <template>
@@ -58,63 +38,91 @@ const notifications = ref([
     </VCardItem>
 
     <VCardText class="px-0">
-      <VList class="notification-list rounded-0 py-0">
-        <template
-          v-for="(notification, index) in notifications"
-          :key="notification.title"
-        >
-          <VDivider v-if="index > 0" />
-          <VListItem
-            link
-            lines="one"
-            min-height="66px"
-            class="list-item-hover-class"
-          >
-            <!-- Slot: Prepend -->
-            <!-- Handles Avatar: Image, Icon, Text -->
-            <div class="d-flex align-start gap-4">
-              <VAvatar :color="notification.color && !notification.img ? notification.color : undefined">
-                <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
-                <VImg
-                  v-if="notification.img"
-                  :src="notification.img"
-                />
-                <VIcon
-                  v-if="notification.icon"
-                  :icon="notification.icon"
-                />
-              </VAvatar>
 
-              <div>
-                <p class="text-sm font-weight-medium mb-1">
-                  {{ notification.title }}
-                </p>
-                <p
-                  class="text-body-2 mb-2"
-                  style=" letter-spacing: 0.4px !important; line-height: 18px;"
-                >
-                  {{ notification.subtitle }}
-                </p>
-                <p
-                  class="text-sm text-disabled mb-0"
-                  style=" letter-spacing: 0.4px !important; line-height: 18px;"
-                >
-                  {{ notification.time }}
-                </p>
-              </div>
-              <VSpacer />
-            </div>
-          </VListItem>
+      <!-- 👉 Datatable  -->
+      <VDataTableServer
+        v-if="notifications && totalNotifications > 0"
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :headers="notifHeaders"
+        :items="notifications"
+        :items-length="totalNotifications"
+        :loading="!loading"
+				class="notification-list"
+      >
+				<!-- 👉 Template Notifications -->
+				<template #item.notification="{ item }">
+					<div class="list-item-hover-class py-2">
+						<!-- Slot: Prepend -->
+						<!-- Handles Avatar: Image, Icon, Text -->
+						<div class="d-flex align-start gap-4">
+							<VAvatar :color="resolveIconType(item.title).color">
+								<VIcon :icon="resolveIconType(item.title).icon" />
+							</VAvatar>
+							<div>
+								<p class="text-md font-weight-bold mb-1">
+									{{ item.title }}
+								</p>
+								<p
+									class="text-body-2 mb-2"
+									style=" letter-spacing: 0.4px !important; line-height: 18px;"
+								>
+									{{ item.message }}
+								</p>
+								<p
+									class="text-sm text-disabled mb-0"
+									style=" letter-spacing: 0.4px !important; line-height: 18px;"
+								>
+									{{ item.created_at }}
+								</p>
+							</div>
+							<VSpacer />
+						</div>
+					</div>
+				</template>
+
+        <!-- pagination -->
+        <template #bottom>
+          <TablePagination
+            v-model:page="page"
+            :items-per-page="itemsPerPage"
+            :total-items="totalNotifications"
+          />
         </template>
+      </VDataTableServer>
 
-        <VListItem
-          v-show="!notifications.length"
-          class="text-center text-medium-emphasis"
-          style="block-size: 56px;"
-        >
-          <VListItemTitle>No Notification Found!</VListItemTitle>
-        </VListItem>
-      </VList>
+      <!-- 👉 Empty Notifications -->
+      <div
+        v-else
+        class="d-flex justify-center align-center pa-10 ma-10"
+      >
+        <div class="d-flex align-center">
+          <VAvatar
+            size="100"
+            class="me-6"
+          >
+            <VImg
+              :src="notFoundImg"
+              class="mb-2"
+            />
+          </VAvatar>
+          <div class="d-flex flex-column">
+            <p
+              class="text-body-2"
+              style="width:350px"
+            >
+              Saat ini toko anda belum memiliki notifikasi
+            </p>
+          </div>
+        </div>
+      </div>
+
     </VCardText>
   </VCard>
 </template>
+
+<style lang="scss">
+.notification-list thead.v-data-table__thead {
+	display: none !important;
+}
+</style>

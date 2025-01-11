@@ -31,7 +31,9 @@ import { VerticalNavLayout } from '@layouts'
         <VSpacer />
 
         <NavbarThemeSwitcher />
-        <NavBarNotifications class="me-1" />
+				<Suspense>
+					<NavBarNotifications class="me-1" />
+				</Suspense>
         <UserProfile />
       </div>
     </template>

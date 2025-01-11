@@ -130,6 +130,7 @@ declare global {
   const registerPlugins: typeof import('./src/@core/utils/plugins.js')['registerPlugins']
   const requiredValidator: typeof import('./src/@core/utils/validators.js')['requiredValidator']
   const resolveComponent: typeof import('vue')['resolveComponent']
+  const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
@@ -502,6 +503,7 @@ declare module 'vue' {
     readonly registerPlugins: UnwrapRef<typeof import('./src/@core/utils/plugins.js')['registerPlugins']>
     readonly requiredValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['requiredValidator']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
+    readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
