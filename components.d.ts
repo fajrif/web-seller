@@ -18,13 +18,11 @@ declare module 'vue' {
     AppDateTimePicker: typeof import('./src/@core/components/app-form-elements/AppDateTimePicker.vue')['default']
     AppDrawerHeaderSection: typeof import('./src/@core/components/AppDrawerHeaderSection.vue')['default']
     AppLoadingIndicator: typeof import('./src/components/AppLoadingIndicator.vue')['default']
-    AppPricing: typeof import('./src/components/AppPricing.vue')['default']
     AppSearchHeader: typeof import('./src/components/AppSearchHeader.vue')['default']
     AppSelect: typeof import('./src/@core/components/app-form-elements/AppSelect.vue')['default']
     AppStepper: typeof import('./src/@core/components/AppStepper.vue')['default']
     AppTextarea: typeof import('./src/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./src/@core/components/app-form-elements/AppTextField.vue')['default']
-    BuyNow: typeof import('./src/@core/components/BuyNow.vue')['default']
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
@@ -55,5 +53,6 @@ declare module 'vue' {
     UpdateHargaDialog: typeof import('./src/components/dialogs/UpdateHargaDialog.vue')['default']
     UpdateStatusDialog: typeof import('./src/components/dialogs/UpdateStatusDialog.vue')['default']
     UpdateStockDialog: typeof import('./src/components/dialogs/UpdateStockDialog.vue')['default']
+    UploadAvatarDialog: typeof import('./src/components/dialogs/UploadAvatarDialog.vue')['default']
   }
 }

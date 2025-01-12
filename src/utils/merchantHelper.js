@@ -62,6 +62,7 @@ export const getInfoAttrs = merchant => {
     slogan: merchant.slogan,
     description: merchant.description,
 		is_npwp_required: merchant.is_npwp_required,
+		photo_url: merchant.photo_url,
 	}
 }
 

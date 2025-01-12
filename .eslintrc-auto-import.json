@@ -381,6 +381,10 @@
     "operationalAttrs": true,
     "getInfoAttrs": true,
     "getOperationalAttrs": true,
-    "updateCookieUserData": true
+    "updateCookieUserData": true,
+    "data2blob": true,
+    "effectRipple": true,
+    "language": true,
+    "mimes": true
   }
 }
