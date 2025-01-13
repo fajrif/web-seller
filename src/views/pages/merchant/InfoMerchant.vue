@@ -1,11 +1,13 @@
 <script setup>
-import addBannerImg from '@images/misc/add-banner.png'
+import addBannerImg from '@images/misc/add-banner1.png'
 import notFoundImg from '@images/icons/ic-search.png'
 import avatar from '@images/misc/img-default.png'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
+const isUploadPhotoDialogVisible = ref(false)
+const isUploadBannerDialogVisible = ref(false)
 const isFormValid = ref(false)
 const refForm = ref()
 const	merchantPhoto = ref('')
@@ -14,13 +16,24 @@ const	merchantDescription = ref('')
 const	merchantSlogan = ref('')
 const	merchantRequestNPWP = ref(false)
 
-// image-upload
-const show = ref(false)
-const showBanner = ref(false)
-const allowImgFormat = ['jpg','png']
-const uploadUrl = import.meta.env.VITE_API_CDN_URL + '/upload'
-const fileLoadUrl = import.meta.env.VITE_API_CDN_URL + '/file/load/'
-const params = { type: 'merchant' }
+const	photoAttr = {
+	title: "Upload Foto Toko",
+	description: "Ukuran optimal 300 x 300 piksel dengan Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG",
+	params: {
+		type: 'merchant'
+	},
+}
+
+const	bannerAttr = {
+	title: "Upload Banner",
+	description: "Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG",
+	params: {
+		type: 'merchant'
+	},
+	stencil: {
+		aspectRatio: 16/8,
+	},
+}
 
 // temporary to save data
 var operationalAttrs = {}
@@ -99,21 +112,17 @@ const clearAvatar = () => {
 	merchantPhoto.value = null
 }
 
-const toggleShow = () => {
-	show.value = !show.value;
+const openPhotoDialog = () => {
+  isUploadPhotoDialogVisible.value = true
 }
 
-const toggleShowBanner = () => {
-	showBanner.value = !showBanner.value;
+const openBannerDialog = () => {
+  isUploadBannerDialogVisible.value = true
 }
 
-const cropSuccess = (imgDataUrl, field) => {
-	merchantPhoto.value = imgDataUrl
-}
-
-const cropUploadSuccess = async (data, field) => {
-	if (data.success) {
-		merchantPhoto.value = fileLoadUrl + data.path
+const uploadMerchantPhoto = async (path) => {
+	if (path !== '') {
+		merchantPhoto.value = path
 
 		let merchantData = {
 			name: merchantName.value,
@@ -140,20 +149,13 @@ const cropUploadSuccess = async (data, field) => {
 	}
 }
 
-const cropUploadFail = (status, field) => {
-	console.log('Upload CDN fail')
-	console.log(status)
-}
-
 // crop banner
-const cropBannerUploadSuccess = async (data, field) => {
-	if (data.success) {
-		let bannerPath = fileLoadUrl + data.path
-
+const uploadMerchantBanner = async (path) => {
+	if (path !== '') {
     await $apiCore("/seller/command/merchant/banner", {
       method: 'POST',
 			body: {
-				url: bannerPath
+				url: path
 			},
       onResponseError({ response }) {
         console.log(response)
@@ -168,10 +170,6 @@ const cropBannerUploadSuccess = async (data, field) => {
 	}
 }
 
-const cropBannerUploadFail = (status, field) => {
-	console.log('Upload CDN fail')
-	console.log(status)
-}
 </script>
 
 <template>
@@ -201,18 +199,18 @@ const cropBannerUploadFail = (status, field) => {
 								<VBtn
 									color="primary"
 									size="small"
-									@click="toggleShow"
+									@click="openPhotoDialog"
 									>
 									<VIcon
 										icon="tabler-cloud-upload"
 										class="d-sm-none"
 										/>
-									<span class="d-none d-sm-block">Upload photo</span>
+									<span class="d-none d-sm-block">{{ photoAttr.title }}</span>
 								</VBtn>
 							</div>
 
 							<p class="text-body-1 mb-0">
-								Ukuran optimal 300 x 300 piksel dengan Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG
+								{{ photoAttr.description }}
 							</p>
 						</div>
 					</VCardText>
@@ -352,7 +350,7 @@ const cropBannerUploadFail = (status, field) => {
 										md="2"
 									>
 										<VCard :ripple="false">
-											<VCardText class="d-flex flex-column pa-2">
+											<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
 												<VImg
 													rounded
 													:src="addBannerImg"
@@ -365,7 +363,7 @@ const cropBannerUploadFail = (status, field) => {
 													variant="flat"
 													color="primary"
 													block
-													@click.stop="toggleShowBanner"
+													@click="openBannerDialog"
 												>
 													Tambah Banner
 												</VBtn>
@@ -398,7 +396,7 @@ const cropBannerUploadFail = (status, field) => {
 										color="primary"
 										style="width:fit-content"
 										prepend-icon="tabler-plus"
-										@click="toggleShowBanner"
+										@click="openBannerDialog"
 									>
 										Tambah Banner
 									</VBtn>
@@ -410,30 +408,20 @@ const cropBannerUploadFail = (status, field) => {
 			</VCol>
 
 		</VRow>
-		<UploadAvatarDialog
-			v-model="show"
-			:width="300"
-			:height="300"
-			:url="uploadUrl"
-			lang-type="en"
-			:no-circle="true"
-			:params="params"
-			:allow-img-format="allowImgFormat"
-			field="file"
-			@crop-success="cropSuccess"
-			@crop-upload-success="cropUploadSuccess"
-			@crop-upload-fail="cropUploadFail" />
-		<UploadAvatarDialog
-			v-model="showBanner"
-			:width="600"
-			:height="600"
-			:url="uploadUrl"
-			lang-type="en"
-			:no-circle="true"
-			:params="params"
-			:allow-img-format="allowImgFormat"
-			field="file"
-			@crop-upload-success="cropBannerUploadSuccess"
-			@crop-upload-fail="cropBannerUploadFail" />
+    <UploadCropStencilImageDialog
+      v-model:is-dialog-visible="isUploadPhotoDialogVisible"
+      v-model:title="photoAttr.title"
+      v-model:description="photoAttr.description"
+      v-model:params="photoAttr.params"
+      @form-submitted="uploadMerchantPhoto"
+    />
+    <UploadCropStencilImageDialog
+      v-model:is-dialog-visible="isUploadBannerDialogVisible"
+      v-model:title="bannerAttr.title"
+      v-model:description="bannerAttr.description"
+      v-model:params="photoAttr.params"
+      v-model:stencil-props="bannerAttr.stencil"
+      @form-submitted="uploadMerchantBanner"
+    />
 	</div>
 </template>
