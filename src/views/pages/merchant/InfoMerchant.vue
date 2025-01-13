@@ -145,7 +145,7 @@ const uploadMerchantPhoto = async (path) => {
 			updateCookieUserData(() => {})
     })
 	} else {
-		console.log(jsonData)
+    messageStore.setMessage('error', 'Gagal update photo')
 	}
 }
 
@@ -166,7 +166,7 @@ const uploadMerchantBanner = async (path) => {
 			fetchBanners()
     })
 	} else {
-		console.log(jsonData)
+    messageStore.setMessage('error', 'Gagal update banner')
 	}
 }
 

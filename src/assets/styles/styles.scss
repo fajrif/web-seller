@@ -23,6 +23,9 @@
 .bg-white {
   background-color: #fff !important;
 }
+.v-theme--light {
+  --swiper-navigation-color: #8e8e8e;
+}
 .v-theme--light .bg-pink {
   background-color: #f7e1e5 !important;
 }

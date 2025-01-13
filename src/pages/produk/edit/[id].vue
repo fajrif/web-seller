@@ -1,10 +1,20 @@
 <script setup>
-import { reactive } from 'vue'
+import addBannerImg from '@images/misc/add-banner.png'
+import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 const router = useRouter()
 const route = useRoute('produk-edit-id')
+
+const isUploadImageDialogVisible = ref(false)
+const	imageAttr = {
+	title: "Upload Gambar Produk",
+	description: "Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG",
+	params: {
+		type: 'product'
+	},
+}
 
 const isFormValid = ref(false)
 const refForm = ref()
@@ -66,7 +76,6 @@ const saveProduct = async productData => {
       },
     })
 
-    router.push('/produk/semua')
     messageStore.setMessage('success', 'Data produk berhasil diubah')
   } catch (error) {
     messageStore.setMessage('error', 'Gagal mengubah data produk')
@@ -74,32 +83,58 @@ const saveProduct = async productData => {
   }
 }
 
+const savingProduct = () => {
+	/* eslint-disable camelcase */
+	saveProduct({
+		merchant_id: merchantId.value,
+		name: productName.value,
+		description: productDescription.value,
+		category_id: productCategory.value,
+		etalase_id: productEtalase.value,
+		condition: productCondition.value,
+		price: parseInt(productPrice.value),
+		strike_price: parseInt(productStrikePrice.value),
+		amount: parseInt(productStock.value),
+		minimum_purchase: productMinPurchase.value,
+		weight: productWeight.value,
+		height: productHeight.value,
+		width: productWidth.value,
+		length: productLength.value,
+		is_featured_product: productFeatured.value,
+		status: productStatus.value,
+		url: productPhotoUrl.value,
+	})
+	/* eslint-enable */
+}
+
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      /* eslint-disable camelcase */
-      saveProduct({
-        merchant_id: merchantId.value,
-        name: productName.value,
-        description: productDescription.value,
-        category_id: productCategory.value,
-        etalase_id: productEtalase.value,
-        condition: productCondition.value,
-        price: parseInt(productPrice.value),
-        strike_price: parseInt(productStrikePrice.value),
-        amount: parseInt(productStock.value),
-        minimum_purchase: productMinPurchase.value,
-        weight: productWeight.value,
-        height: productHeight.value,
-        width: productWidth.value,
-        length: productLength.value,
-        is_featured_product: productFeatured.value,
-        status: productStatus.value,
-        url: productPhotoUrl.value,
-      })
-      /* eslint-enable */
+			savingProduct()
     }
   })
+}
+
+const deleteImage = (index) => {
+  // Delete from product urls
+	if (index !== -1) {
+    productPhotoUrl.value.splice(index, 1)
+		savingProduct()
+	}
+}
+
+const openImageDialog = () => {
+  isUploadImageDialogVisible.value = true
+}
+
+const uploadProductPhoto = async (path) => {
+	if (path !== '') {
+		// add to product urls here...
+		productPhotoUrl.value.push(path)
+		savingProduct()
+	} else {
+    messageStore.setMessage('error', 'URL path gambar kosong')
+	}
 }
 </script>
 
@@ -268,15 +303,101 @@ const onSubmit = () => {
           </VCard>
 
           <!-- 👉 Media -->
-          <VCard class="mb-6">
-            <VCardItem>
-              <template #title>
-                Gambar Produk
-              </template>
-            </VCardItem>
-
+          <VCard title="Gambar Produk">
             <VCardText>
-              <DropZone />
+							<div
+								v-if="productPhotoUrl && productPhotoUrl.length > 0"
+								class="d-flex justify-center align-center gap-3 flex-wrap"
+							>
+								<VRow class="match-height w-100">
+									<template
+										v-for="(url, index) in productPhotoUrl"
+										:key="index"
+									>
+										<VCol
+											cols="12"
+											md="2"
+										>
+											<VCard :ripple="false">
+												<VCardText class="d-flex flex-column pa-2">
+													<VImg
+														rounded
+														:src="url"
+														class="w-100 mx-auto"
+													/>
+												</VCardText>
+												<VCardActions>
+													<VBtn
+														size="small"
+														variant="tonal"
+														color="error"
+														block
+														@click.stop="deleteImage(index)"
+													>
+														Hapus
+													</VBtn>
+												</VCardActions>
+											</VCard>
+										</VCol>
+									</template>
+										<VCol
+											cols="12"
+											md="2"
+										>
+											<VCard :ripple="false">
+												<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
+													<VImg
+														rounded
+														:src="addBannerImg"
+														class="w-100 mx-auto"
+													/>
+												</VCardText>
+												<VCardActions>
+													<VBtn
+														size="small"
+														variant="flat"
+														color="primary"
+														block
+														@click="openImageDialog"
+													>
+														Tambah
+													</VBtn>
+												</VCardActions>
+											</VCard>
+										</VCol>
+								</VRow>
+							</div>
+
+							<!-- 👉 Empty banners -->
+							<div v-else class="d-flex justify-center align-center px-10 py-15 border border-radius-8">
+								<div class="d-flex align-center">
+									<VAvatar
+										size="100"
+										class="me-6"
+									>
+										<VImg
+											:src="notFoundImg"
+											class="mb-2"
+										/>
+									</VAvatar>
+									<div class="d-flex flex-column">
+										<p
+											class="text-body-2"
+											style="width:350px"
+										>
+											Anda belum menambahkan gambar untuk produk anda. Silahkan menambahkan gambar produk anda
+										</p>
+										<VBtn
+											color="primary"
+											style="width:fit-content"
+											prepend-icon="tabler-plus"
+											@click="openImageDialog"
+										>
+											Tambah Gambar
+										</VBtn>
+									</div>
+								</div>
+							</div>
             </VCardText>
           </VCard>
         </VCol>
@@ -350,13 +471,6 @@ const onSubmit = () => {
           </VCard>
 
           <div class="d-flex flex-wrap gap-4 justify-end">
-            <VBtn
-              type="reset"
-              variant="tonal"
-              color="secondary"
-            >
-              Reset
-            </VBtn>
             <VBtn type="submit">
               Simpan
             </VBtn>
@@ -364,6 +478,13 @@ const onSubmit = () => {
         </VCol>
       </VRow>
     </VForm>
+    <UploadCropStencilImageDialog
+      v-model:is-dialog-visible="isUploadImageDialogVisible"
+      v-model:title="imageAttr.title"
+      v-model:description="imageAttr.description"
+      v-model:params="imageAttr.params"
+      @form-submitted="uploadProductPhoto"
+    />
   </div>
 </template>
 

@@ -25,14 +25,6 @@ export default {
     stencilCoordinates: {
       type: Object,
     },
-    minRatio: {
-      type: Number,
-			default: 1,
-    },
-    maxRatio: {
-      type: Number,
-			default: 1,
-    },
   },
   computed: {
     style() {
@@ -78,12 +70,6 @@ export default {
     },
     onResizeEnd() {
       this.$emit("resize-end");
-    },
-    aspectRatios() {
-      return {
-        minimum: this.minRatio,
-        maximum: this.maxRatio,
-      };
     },
   },
 };

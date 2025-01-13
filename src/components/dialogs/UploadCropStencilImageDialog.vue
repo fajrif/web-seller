@@ -1,6 +1,7 @@
 <script setup>
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
+import Stencil from "@/components/dialogs/vue-advanced-cropper/Stencil.vue";
 
 const props = defineProps({
   isDialogVisible: {
@@ -49,9 +50,9 @@ const errorMessage = ref('');
 
 // once cropped and publish it
 const cropImage = () => {
-	errorMessage.value = ''
-	loading.value = true
 	if (cropper.value) {
+		errorMessage.value = ''
+		loading.value = true
 		const { canvas } = cropper.value.getResult();
 		if (canvas) {
 			const form = new FormData();
@@ -80,6 +81,8 @@ const cropImage = () => {
 
 			}, image.type);
 		}
+	} else {
+		errorMessage.value = "File tidak ditemukan"
 	}
 };
 
@@ -164,6 +167,7 @@ onUnmounted(() => {
 						ref="cropper"
 						class="upload-example-cropper"
 						:src="image.src"
+						:stencil-component="Stencil"
 						:stencil-props="props.stencilProps"
 					/>
 					<VProgressLinear

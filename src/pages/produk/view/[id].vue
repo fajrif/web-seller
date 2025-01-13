@@ -204,7 +204,7 @@ register()
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-list .v-list-item:not(:last-child) {
 	padding-block-end: 8px !important;
 }
@@ -219,7 +219,7 @@ swiper-container.swiperMain {
 
 .mySwiper2 {
   swiper-slide {
-    border: 5px solid black;
+    border: 3px solid #e9e9e9;
     block-size: 100%;
     inline-size: 25%;
     opacity: 0.4;

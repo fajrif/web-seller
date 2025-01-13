@@ -235,18 +235,6 @@ const onSubmit = () => {
             </VCardText>
           </VCard>
 
-          <!-- 👉 Media -->
-          <VCard class="mb-6">
-            <VCardItem>
-              <template #title>
-                Gambar Produk
-              </template>
-            </VCardItem>
-
-            <VCardText>
-              <DropZone />
-            </VCardText>
-          </VCard>
         </VCol>
 
         <VCol
@@ -318,13 +306,6 @@ const onSubmit = () => {
           </VCard>
 
           <div class="d-flex flex-wrap gap-4 justify-end">
-            <VBtn
-              type="reset"
-              variant="tonal"
-              color="secondary"
-            >
-              Reset
-            </VBtn>
             <VBtn type="submit">
               Simpan
             </VBtn>
@@ -334,13 +315,6 @@ const onSubmit = () => {
     </VForm>
   </div>
 </template>
-
-<style lang="scss" scoped>
-  .drop-zone {
-    border: 2px dashed rgba(var(--v-theme-on-surface), 0.12);
-    border-radius: 6px;
-  }
-</style>
 
 <style lang="scss">
 .ProseMirror {
