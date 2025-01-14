@@ -321,21 +321,21 @@ const uploadMerchantBanner = async (path) => {
 								>
 									<VCol
 										cols="12"
-										md="2"
+										md="3"
 									>
 										<VCard :ripple="false">
-											<VCardText class="d-flex flex-column pa-2">
+											<VCardText class="d-flex flex-column position-relative pa-2">
 												<VImg
 													rounded
 													:src="item.url"
 													class="w-100 mx-auto"
 												/>
 											</VCardText>
-											<VCardActions>
+											<VCardActions class="card-img-action">
 												<VBtn
 													size="small"
-													variant="tonal"
-													color="error"
+													variant="flat"
+													color="secondary"
 													block
 													@click.stop="deleteBanner(item.id)"
 												>

@@ -316,7 +316,7 @@ const uploadProductPhoto = async (path) => {
 									>
 										<VCol
 											cols="12"
-											md="2"
+											md="3"
 										>
 											<VCard :ripple="false">
 												<VCardText class="d-flex flex-column pa-2">
@@ -342,7 +342,7 @@ const uploadProductPhoto = async (path) => {
 									</template>
 										<VCol
 											cols="12"
-											md="2"
+											md="3"
 										>
 											<VCard :ripple="false">
 												<VCardText class="d-flex flex-column px-2 pt-4 pb-2">

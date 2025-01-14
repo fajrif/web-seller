@@ -13,6 +13,16 @@ const	merchantKecamatan = ref(0)
 const	merchantKelurahan = ref(0)
 const	merchantZipCode = ref()
 
+// location attr
+const isLocationDialogVisible = ref(false)
+const locationAttr = {
+	title: 'Pilih Lokasi Alamat',
+	coordinates: {
+		lat: 0,
+		lng: 0
+	}
+}
+
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
   let merchant = merchantDetails.value.data.merchant
@@ -73,6 +83,14 @@ const saveAddress = async addressData => {
     messageStore.setMessage('error', 'Gagal simpan alamat toko')
     console.error("Error on update address merchant data:", error)
   }
+}
+
+const openLocationSelector = () => {
+  isLocationDialogVisible.value = true
+}
+
+const saveMerchantLocation = () => {
+	// save latitude and longitude here
 }
 
 /* eslint-disable camelcase */
@@ -222,5 +240,11 @@ const onSubmit = () => {
         </VForm>
       </VCardText>
     </VCard>
+    <MapLocationPicker
+      v-model:is-dialog-visible="isLocationDialogVisible"
+      v-model:title="locationAttr.title"
+      v-model:coordinates="locationAttr.coordinates"
+      @form-submitted="saveMerchantLocation"
+    />
   </div>
 </template>

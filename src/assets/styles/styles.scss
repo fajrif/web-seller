@@ -44,3 +44,17 @@
 .v-list-item.v-list-item--link a {
 	color: inherit;
 }
+.v-card-actions.card-img-action {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+}
+.v-card-actions.card-img-action > button {
+  background-color: rgb(153 153 153) !important;
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+.v-card-actions.card-img-action > button:hover {
+  opacity: 0.6;
+  filter: alpha(opacity = 60);
+}

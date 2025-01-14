@@ -39,6 +39,7 @@ declare module 'vue' {
     DropZone: typeof import('./src/@core/components/DropZone.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     I18n: typeof import('./src/@core/components/I18n.vue')['default']
+    MapLocationPicker: typeof import('./src/components/dialogs/MapLocationPicker.vue')['default']
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
     Notifications: typeof import('./src/@core/components/Notifications.vue')['default']
     ProductDescriptionEditor: typeof import('./src/@core/components/ProductDescriptionEditor.vue')['default']
