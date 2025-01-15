@@ -12,16 +12,11 @@ const	merchantKota = ref(0)
 const	merchantKecamatan = ref(0)
 const	merchantKelurahan = ref(0)
 const	merchantZipCode = ref()
+const	merchantLatitude = ref(0)
+const	merchantLongitude = ref(0)
 
 // location attr
 const isLocationDialogVisible = ref(false)
-const locationAttr = {
-	title: 'Pilih Lokasi Alamat',
-	coordinates: {
-		lat: 0,
-		lng: 0
-	}
-}
 
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
@@ -32,6 +27,12 @@ if (merchantDetails.value.success) {
   merchantKecamatan.value = merchant.district_id
   merchantKelurahan.value = merchant.subdistrict_id
   merchantZipCode.value = merchant.postal_code
+	if(merchant.latitude !== "" && merchant.latitude !== null) {
+		merchantLatitude.value = parseFloat(merchant.latitude)
+	}
+	if(merchant.longitude !== "" && merchant.longitude !== null) {
+		merchantLongitude.value = parseFloat(merchant.longitude)
+	}
 }
 
 const urlCities = ref(`/location/province/${merchantProvinsi.value}/city`)
@@ -89,22 +90,31 @@ const openLocationSelector = () => {
   isLocationDialogVisible.value = true
 }
 
-const saveMerchantLocation = () => {
+const saveMerchantLocation = (latitude, longitude) => {
 	// save latitude and longitude here
+	merchantLatitude.value = latitude
+	merchantLongitude.value = longitude
+	savingAddress()
+}
+
+const savingAddress = () => {
+	saveAddress({
+		address: merchantAddress.value,
+		province_id: merchantProvinsi.value,
+		city_id: merchantKota.value,
+		district_id: merchantKecamatan.value,
+		subdistrict_id: merchantKelurahan.value,
+		postal_code: merchantZipCode.value,
+		latitude: merchantLatitude.value.toString(),
+		longitude: merchantLongitude.value.toString(),
+	})
 }
 
 /* eslint-disable camelcase */
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      saveAddress({
-        address: merchantAddress.value,
-        province_id: merchantProvinsi.value,
-        city_id: merchantKota.value,
-        district_id: merchantKecamatan.value,
-        subdistrict_id: merchantKelurahan.value,
-        postal_code: merchantZipCode.value,
-      })
+			savingAddress()
     }
   })
 }
@@ -132,7 +142,29 @@ const onSubmit = () => {
                   md="6"
                   cols="12"
                 >
-                  <VImg :src="imgMap1" />
+									<div class="position-relative">
+										<VImg :src="imgMap1" rounded />
+										<div
+											class="position-absolute w-100 d-flex flex-column justify-center align-center"
+											style="top:35%;"
+											>
+											<VIcon
+												icon="tabler-map-pin"
+												color="primary"
+												size="34"
+												class="mb-2"
+											/>
+											<VBtn
+												size="small"
+												type="button"
+												color="primary"
+												variant="flat"
+												@click="openLocationSelector"
+												>
+												Ubah Lokasi
+											</VBtn>
+										</div>
+									</div>
                 </VCol>
 
                 <VCol
@@ -242,8 +274,9 @@ const onSubmit = () => {
     </VCard>
     <MapLocationPicker
       v-model:is-dialog-visible="isLocationDialogVisible"
-      v-model:title="locationAttr.title"
-      v-model:coordinates="locationAttr.coordinates"
+      title="Pilih Alamat"
+      v-model:latitude="merchantLatitude"
+      v-model:longitude="merchantLongitude"
       @form-submitted="saveMerchantLocation"
     />
   </div>

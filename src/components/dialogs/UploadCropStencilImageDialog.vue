@@ -212,6 +212,7 @@ onUnmounted(() => {
 						variant="flat"
 						class="w-100"
 						@click="cropImage()"
+						:disabled="image.src == ''"
 					>
 						<span class="d-none d-sm-block">Crop</span>
 						<VIcon

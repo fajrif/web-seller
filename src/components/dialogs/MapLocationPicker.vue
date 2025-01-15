@@ -1,4 +1,9 @@
 <script setup>
+import imgPin from '@images/misc/pin-location.png'
+import { Loader } from '@googlemaps/js-api-loader'
+
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY
+
 const props = defineProps({
   isDialogVisible: {
     type: Boolean,
@@ -8,12 +13,13 @@ const props = defineProps({
     type: String,
     default: 'Pilih Lokasi',
   },
-  coordinates: {
-    type: Object,
-		default: {
-			lat: 0,
-			lng: 0,
-		},
+  latitude: {
+    type: Number,
+    default: 0,
+  },
+  longitude: {
+    type: Number,
+    default: 0,
   },
 })
 
@@ -22,134 +28,159 @@ const emit = defineEmits([
   'formSubmitted',
 ])
 
-const latitude = ref()
-const longitude = ref()
+// START FROM HERE
+const { coords } = useCustomGeolocation()
+
+const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY })
+const mapDiv = ref(null)
+
+const initPos = {
+	lat: 0,
+	lng: 0
+}
+
+let currentPos = ref({
+	lat: 0,
+	lng: 0
+})
+
+const currPos = computed(() => ({
+	lat: currentPos.value.lat,
+	lng: currentPos.value.lng
+}))
+
+watch(() => props.isDialogVisible, async (visible) => {
+  if (visible) {
+		try {
+			if(coords.value){
+				initPos.lat = props.latitude == 0 ? coords.value.latitude : props.latitude
+				initPos.lng = props.longitude == 0 ? coords.value.longitude : props.longitude
+				currentPos.value.lat = initPos.lat
+				currentPos.value.lng = initPos.lng
+			}
+			// Promise for a specific library
+			loader
+				.importLibrary('maps')
+				.then(async ({ Map, InfoWindow }) => {
+					const map = new Map(mapDiv.value, {
+						center: currPos.value,
+						zoom: 17,
+						treetViewControl: false,
+            mapTypeControl: false,
+						mapId: "ALAMAT_MAP_ID"
+					});
+					const { AdvancedMarkerElement } = await loader.importLibrary('marker');
+					const draggableMarker = new AdvancedMarkerElement({ map, position: currPos.value, gmpDraggable: true });
+					draggableMarker.addListener("dragend", (event) => {
+						const position = draggableMarker.position
+						currentPos.value.lat = position.lat
+						currentPos.value.lng = position.lng
+					});
+
+					map.addListener("click", (event) => {
+						currentPos.value.lat = event.latLng.lat()
+						currentPos.value.lng = event.latLng.lng()
+						draggableMarker.position = { lat: currentPos.value.lat, lng: currentPos.value.lng }
+					});
+
+					// clickListener = map.value.addListener('click',
+					// 	({ latLng: { lat, lng } }) =>
+					// 		(otherPos.value = { lat: lat(), lng: lng() })
+					// )
+
+					// google.maps.event.addListener(map, 'click', function(event) {
+					// 		marker.setPosition(event.latLng);
+					// });
+
+				})
+				.catch((e) => {
+					// do something
+					console.log(e)
+				});
+      } catch (e) {
+        console.log(e.message);
+      }
+	}
+	else {
+		// reset lat,lng
+		initPos.lat = 0
+		initPos.lng = 0
+		currentPos.lat = 0
+		currentPos.lng = 0
+	}
+})
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
-  latitude.value = null
-  longitude.value = null
 }
 
 const onSubmit = () => {
-	emit('formSubmitted', latitude.value, longitude.value)
+	emit('formSubmitted', currentPos.value.lat, currentPos.value.lng)
 	emit('update:isDialogVisible', false)
 }
+
 </script>
 
 <template>
   <VDialog
-    fullscreen
-    :scrim="false"
-    transition="dialog-bottom-transition"
+    :width="$vuetify.display.smAndDown ? 'auto' : 600"
     :model-value="props.isDialogVisible"
     @update:model-value="onReset"
   >
-    <!-- Dialog Content -->
-    <VCard>
-      <!-- Toolbar -->
-      <div>
-        <VToolbar color="primary">
-          <VBtn
-            icon
-            variant="plain"
-            @click="onReset"
-          >
-            <VIcon
-              color="white"
-              icon="tabler-x"
-            />
-          </VBtn>
+    <!-- Dialog close btn -->
+    <DialogCloseBtn @click="onReset()" />
 
-					<VToolbarTitle>{{ props.title }}</VToolbarTitle>
+    <VCard class="pa-2 pa-sm-5">
+      <!-- 👉 Title -->
+      <VCardItem class="text-center pt-0">
+        <VCardTitle>
+          <h4 class="text-h4 mb-2">
+            {{ props.title }}
+          </h4>
+        </VCardTitle>
+        <p class="text-body-1 mb-0">
+        </p>
+      </VCardItem>
 
-          <VSpacer />
+      <VCardText class="pt-6 pb-0">
+				<VRow>
+					<!-- 👉 Card Name -->
+					<VCol cols="12">
 
-          <VToolbarItems>
-            <VBtn
-              variant="text"
-            >
-              Save
-            </VBtn>
-          </VToolbarItems>
-        </VToolbar>
-      </div>
+						<div class="d-flex text-center mb-2">
+							<div class="mx-auto">
+								<h4>Selected Position</h4>
+								<span v-if="currPos">
+									Latitude:  <strong>{{ currPos.lat }}</strong>
+									Longitude: <strong>{{ currPos.lng }}</strong>
+								</span>
+								<span v-else>Click the map to select a position</span>
+							</div>
+						</div>
+						<div ref="mapDiv" style="width:100%;height:60vh" />
 
-      <!-- List -->
-      <VList lines="two">
-        <VListSubheader>User Controls</VListSubheader>
-        <VListItem
-          title="Content filtering"
-          subtitle="Set the content filtering level to restrict apps that can be downloaded"
-        />
-        <VListItem
-          title="Password"
-          subtitle="Require password for purchase or use password to restrict purchase"
-        />
-      </VList>
-
-      <VDivider />
-
-      <!-- List -->
-      <VList
-        lines="two"
-        select-strategy="classic"
-        class="full-screen-dialog-list"
-      >
-        <VListSubheader>General</VListSubheader>
-
-        <VListItem
-          title="Notifications"
-          subtitle="Notify me about updates to apps or games that I downloaded"
-          value="Notifications"
-        >
-          <template #prepend="{ isActive }">
-            <VListItemAction start>
-              <VCheckbox
-                :model-value="isActive"
-                color="primary"
-              />
-            </VListItemAction>
-          </template>
-        </VListItem>
-
-        <VListItem
-          title="Sound"
-          subtitle="Auto-update apps at any time. Data charges may apply"
-          value="Sound"
-        >
-          <template #prepend="{ isActive }">
-            <VListItemAction start>
-              <VCheckbox
-                :model-value="isActive"
-                color="primary"
-              />
-            </VListItemAction>
-          </template>
-        </VListItem>
-
-        <VListItem
-          title="Auto-add widgets"
-          subtitle="Automatically add home screen widgets"
-          value="Auto-add widgets"
-        >
-          <template #prepend="{ isActive }">
-            <VListItemAction start>
-              <VCheckbox
-                :model-value="isActive"
-                color="primary"
-              />
-            </VListItemAction>
-          </template>
-        </VListItem>
-      </VList>
+					</VCol>
+				</VRow>
+      </VCardText>
+      <VCardActions class="pt-5 pb-0">
+				<div class="d-flex justify-center gap-4">
+					<VBtn
+						color="secondary"
+						variant="tonal"
+						@click.stop="onReset"
+						>
+						Batal
+					</VBtn>
+					<VBtn
+						type="button"
+						color="primary"
+						variant="tonal"
+						@click.stop="onSubmit"
+						>
+						Simpan
+					</VBtn>
+				</div>
+      </VCardActions>
     </VCard>
   </VDialog>
 </template>
-
-<style lang="scss">
-.dialog-bottom-transition-enter-active,
-.dialog-bottom-transition-leave-active {
-  transition: transform 0.2s ease-in-out;
-}
-</style>

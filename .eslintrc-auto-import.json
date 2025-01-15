@@ -385,6 +385,7 @@
     "data2blob": true,
     "effectRipple": true,
     "language": true,
-    "mimes": true
+    "mimes": true,
+    "useCustomGeolocation": true
   }
 }
