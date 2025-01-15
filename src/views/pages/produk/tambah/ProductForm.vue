@@ -1,6 +1,8 @@
 <script setup>
 import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 const userData = useCookie('userData')
 const messageStore = useMessageStore()
@@ -28,7 +30,7 @@ const	productPhotoUrl = ref([])
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
 const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/seller/query/etalase'))
 
-const categories = computed(() => categoriesData.value.data)
+const categories = computed(() => sanitizeNullChilds(categoriesData.value.data))
 const showcases = computed(() => showcasesData.value.etalase)
 
 const saveProduct = async productData => {
@@ -76,6 +78,7 @@ const onSubmit = () => {
     }
   })
 }
+
 </script>
 
 <template>
@@ -107,15 +110,17 @@ const onSubmit = () => {
                   cols="12"
                   md="6"
                 >
-                  <AppSelect
+								<div class="flex-grow-1">
+									<label class="v-label mb-1 text-body-2" style="line-height: 15px;">Kategori</label>
+									<treeselect
                     v-model="productCategory"
-                    :rules="[requiredValidator]"
+										:multiple="false"
+										:show-count="true"
                     placeholder="Pilih Kategori"
-                    label="Kategori"
-                    :items="categories"
-                    item-title="value"
-                    item-value="id"
-                  />
+                    :options="categories"
+										:normalizer="normalizerCategories"
+										/>
+								</div>
                 </VCol>
                 <VCol
                   cols="12"

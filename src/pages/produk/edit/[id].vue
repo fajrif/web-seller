@@ -2,6 +2,8 @@
 import addBannerImg from '@images/misc/add-banner.png'
 import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 const messageStore = useMessageStore()
 const router = useRouter()
@@ -63,7 +65,7 @@ if (productDetails.value.success) {
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
 const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/seller/query/etalase'))
 
-const categories = computed(() => categoriesData.value.data)
+const categories = computed(() => sanitizeNullChilds(categoriesData.value.data))
 const showcases = computed(() => showcasesData.value.etalase)
 
 const saveProduct = async productData => {
@@ -174,15 +176,17 @@ const uploadProductPhoto = async (path) => {
                   cols="12"
                   md="6"
                 >
-                  <AppSelect
-                    v-model="productCategory"
-                    :rules="[requiredValidator]"
-                    placeholder="Pilih Kategori"
-                    label="Kategori"
-                    :items="categories"
-                    item-title="value"
-                    item-value="id"
-                  />
+									<div class="flex-grow-1">
+										<label class="v-label mb-1 text-body-2" style="line-height: 15px;">Kategori</label>
+										<treeselect
+											v-model="productCategory"
+											:multiple="false"
+											:show-count="true"
+											placeholder="Pilih Kategori"
+											:options="categories"
+											:normalizer="normalizerCategories"
+											/>
+									</div>
                 </VCol>
                 <VCol
                   cols="12"

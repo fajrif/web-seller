@@ -386,6 +386,8 @@
     "effectRipple": true,
     "language": true,
     "mimes": true,
-    "useCustomGeolocation": true
+    "useCustomGeolocation": true,
+    "normalizerCategories": true,
+    "sanitizeNullChilds": true,
   }
 }

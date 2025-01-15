@@ -139,9 +139,28 @@ export const toCurrency = price => {
 export const calculateDiscount = (price, strikePrice) => {
   if (strikePrice !== null && strikePrice > 0) {
     var discount = ((strikePrice  - price) / strikePrice) *100
-    
+
     return discount.toFixed(0) + "%"
   } else {
     return 0
   }
+}
+
+export const sanitizeNullChilds = (array) => {
+	var result = array.filter((obj) => {
+		if(obj.child) {
+			return sanitizeNullChilds(obj.child);
+		} else {
+			return delete obj.child;
+		}
+	});
+	return result;
+}
+
+export const normalizerCategories = (node) => {
+	return {
+		id: node.id,
+		label: node.value,
+		children: node.child,
+	}
 }
