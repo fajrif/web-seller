@@ -388,6 +388,6 @@
     "mimes": true,
     "useCustomGeolocation": true,
     "normalizerCategories": true,
-    "sanitizeNullChilds": true,
+    "sanitizeNullChilds": true
   }
 }
