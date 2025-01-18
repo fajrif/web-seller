@@ -26,6 +26,19 @@
 .bg-white {
   background-color: #fff !important;
 }
+.v-snackbar__actions {
+  margin-inline-end: 8px;
+}
+.v-snackbar--variant-tonal.text-success .v-snackbar__underlay {
+  background: #c0f5d8 !important;
+}
+.v-snackbar--variant-tonal.text-error .v-snackbar__underlay {
+  background: #ffc8ca !important;
+}
+.v-snackbar--variant-tonal .v-snackbar__underlay {
+  opacity: 1 !important;
+}
+
 .v-theme--light {
   --swiper-navigation-color: #8e8e8e;
 }

@@ -1,5 +1,8 @@
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { useMessageStore } from '@core/stores/config'
+
+const messageStore = useMessageStore()
 
 const router = useRouter()
 const ability = useAbility()
@@ -48,94 +51,106 @@ const logout = async () => {
     console.error(err)
   }
 }
+
+const onChange = async () => {
+	const res = await $apiCore('/seller/command/merchant/nonaktif-toko', {
+		method: 'POST',
+		onResponseError({ response }) {
+			let msg = response._data.message
+			messageStore.setMessage('error', msg)
+			statusUser.value = !statusUser.value
+		},
+	})
+
+	let msg = res.message
+	messageStore.setMessage('success', msg)
+
+	await nextTick(() => {
+		updateCookieUserData(() => {})
+	})
+}
 </script>
 
 <template>
   <div class="cursor-pointer">
     <div class="d-flex gap-2 align-center">
       <VAvatar
-        v-if="userData"
         size="38"
         class="cursor-pointer"
-        :color="!(userData && userData.photo_url) ? 'primary' : undefined"
-        :variant="!(userData && userData.photo_url) ? 'tonal' : undefined"
+        color="primary"
+        variant="tonal"
       >
         <VImg
-          v-if="userData && userData.photo_url"
-          :src="userData.photo_url"
+					v-if="userData && userData.photo_url"
+					:src="userData.photo_url"
         />
         <VIcon
           v-else
           icon="tabler-user"
         />
       </VAvatar>
-      <h6
-        v-if="userData"
-        class="text-h6 font-weight-medium"
-      >
+      <h6 v-if="userData && userData.name" class="text-h6 font-weight-medium">
         {{ userData.name }}
       </h6>
     </div>
-    <!-- SECTION Menu -->
+    <!-- menu section -->
     <VMenu
       activator="parent"
+			:closeOnContentClick="false"
       width="240"
       location="bottom end"
       offset="12px"
     >
-      <VList>
-        <VListItem>
-          <div class="d-flex justify-space-between gap-2 align-center">
-            <div class="d-flex">
-              <VListItemAction>
-                <VAvatar
-                  class="me-2"
-                  :color="!(userData && userData.photo_url) ? 'primary' : undefined"
-                  :variant="!(userData && userData.photo_url) ? 'tonal' : undefined"
-                >
-                  <VImg
-                    v-if="userData && userData.photo_url"
-                    :src="userData.photo_url"
-                  />
-                  <VIcon
-                    v-else
-                    icon="tabler-user"
-                  />
-                </VAvatar>
-              </VListItemAction>
-
-              <div>
-                <h6
-                  v-if="userData"
-                  class="text-h6 font-weight-medium"
-                >
-                  {{ userData.name }}
-                </h6>
-                <VListItemSubtitle class="d-flex justify-between text-capitalize text-disabled">
-                  {{ statusUser ? 'Aktif' : 'Non-Aktif' }}
-                </VListItemSubtitle>
-              </div>
-            </div>
-            <div>
-              <VSwitch v-model="statusUser" />
-            </div>
-          </div>
-        </VListItem>
-        <PerfectScrollbar :options="{ wheelPropagation: false }">
-          <div class="px-4 py-2">
-            <VBtn
-              block
-              size="small"
-              color="error"
-              append-icon="tabler-logout"
-              @click="logout"
-            >
-              Logout
-            </VBtn>
-          </div>
-        </PerfectScrollbar>
-      </VList>
+			<VCard>
+				<VCardText class="pa-5 pb-2">
+					<div class="d-flex justify-space-between">
+						<div class="d-flex">
+							<VAvatar
+								class="me-2"
+								color="primary"
+								variant="tonal"
+								>
+								<VImg
+									v-if="userData && userData.photo_url"
+									:src="userData.photo_url"
+									/>
+								<VIcon
+									v-else
+									icon="tabler-user"
+									/>
+							</VAvatar>
+							<div v-if="userData">
+								<h6 class="text-h6 font-weight-medium">
+									{{ userData.name }}
+								</h6>
+								<span class="text-sm text-disabled">
+									{{ statusUser ? 'Aktif' : 'Non-Aktif' }}
+								</span>
+							</div>
+						</div>
+						<VSwitch
+							v-model="statusUser"
+							@update:model-value="onChange"
+							/>
+					</div>
+				</VCardText>
+				<VList>
+					<VListItemAction>
+						<div class="w-100 px-4 py-0">
+							<VBtn
+								block
+								size="small"
+								color="error"
+								append-icon="tabler-logout"
+								@click="logout"
+							>
+								Logout
+							</VBtn>
+						</div>
+					</VListItemAction>
+				</VList>
+			</VCard>
     </VMenu>
-    <!-- !SECTION -->
+    <!-- end menu section -->
   </div>
 </template>
