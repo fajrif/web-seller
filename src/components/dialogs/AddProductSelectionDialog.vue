@@ -74,7 +74,7 @@ const onReset = () => {
     <!-- 👉 Dialog close btn -->
     <DialogCloseBtn @click="onReset" />
 
-    <VCard class="pa-sm-10 pa-2">
+    <VCard class="pa-2">
       <VCardText>
         <!-- 👉 Title -->
         <h4 class="text-h4 mb-2">

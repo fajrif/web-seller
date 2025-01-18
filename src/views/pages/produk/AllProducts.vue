@@ -142,209 +142,213 @@ const deleteItem = (id, name) => {
   <div>
     <!-- 👉 products -->
     <VCard>
-      <div class="d-flex flex-wrap gap-4 ma-6">
-        <div class="d-flex align-center">
-          <!-- 👉 Search  -->
-          <AppTextField
-            v-model="searchQuery"
-            placeholder="Cari Produk"
-            style="inline-size: 200px;"
-            class="me-3"
-          />
-        </div>
+			<VCardText>
+				<div class="d-flex flex-wrap gap-4 my-6">
+					<div class="d-flex align-center">
+						<!-- 👉 Search	-->
+						<AppTextField
+							v-model="searchQuery"
+							placeholder="Cari Produk"
+							style="inline-size: 200px;"
+							class="me-3"
+							/>
+					</div>
 
-        <VSpacer />
-        <div class="d-flex gap-4 flex-wrap align-center">
-          <AppSelect
-            v-model="itemsPerPage"
-            :items="[5, 10, 20, 25, 50]"
-          />
-          <AppSelect
-            v-model="sortBy"
-            :items="sortOptions"
-            item-title="title"
-            item-value="value"
-          />
-        </div>
-      </div>
+					<VSpacer />
+					<div class="d-flex gap-4 flex-wrap align-center">
+						<AppSelect
+							v-model="itemsPerPage"
+							:items="[5, 10, 20, 25, 50]"
+							/>
+						<AppSelect
+							v-model="sortBy"
+							:items="sortOptions"
+							item-title="title"
+							item-value="value"
+							/>
+					</div>
+				</div>
 
-      <VDivider class="mt-4" />
+				<VDivider class="mt-4" />
 
-      <!-- 👉 Datatable  -->
-      <VDataTableServer
-        v-if="products && totalProduct > 0"
-        v-model:items-per-page="itemsPerPage"
-        v-model:page="page"
-        :headers="productHeaders"
-        :items="products"
-        :items-length="totalProduct"
-        :loading="!loading"
-        class="text-no-wrap"
-      >
-        <!-- Gambar  -->
-        <template #item.image="{ item }">
-          <VAvatar
-            v-if="item.product_photo[0]"
-            size="50"
-            variant="tonal"
-            class="my-2"
-            rounded
-            :image="item.product_photo[0].url"
-          />
-        </template>
+				<!-- 👉 Datatable	-->
+				<VDataTableServer
+					v-if="products && totalProduct > 0"
+					v-model:items-per-page="itemsPerPage"
+					v-model:page="page"
+					:headers="productHeaders"
+					:items="products"
+					:items-length="totalProduct"
+					:loading="!loading"
+					class="text-no-wrap"
+					>
+					<!-- Gambar	-->
+					<template #item.image="{ item }">
+						<VAvatar
+							v-if="item.product_photo[0]"
+							size="50"
+							variant="tonal"
+							class="my-2"
+							rounded
+							:image="item.product_photo[0].url"
+							/>
+					</template>
 
-        <!-- Judul -->
-        <template #item.name="{ item }">
-          <RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }">
-            {{ item.name }}
-          </RouterLink>
-        </template>
+					<!-- Judul -->
+					<template #item.name="{ item }">
+						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }">
+							{{ item.name }}
+						</RouterLink>
+					</template>
 
-        <!-- Harga -->
-        <template #item.price="{ item }">
-          <div class="d-flex flex-column">
-            <span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
-            <div v-if="item.strike_price && item.price < item.strike_price">
-              <span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(item.strike_price) }}</span>
-              <VChip
-                :label="false"
-                size="x-small"
-                color="error"
-              >
-                {{ calculateDiscount(item.price, item.strike_price) }}
-              </VChip>
-            </div>
-          </div>
-        </template>
+					<!-- Harga -->
+					<template #item.price="{ item }">
+						<div class="d-flex flex-column">
+							<span class="text-body-1 text-high-emphasis">{{ toCurrency(item.price) }}</span>
+							<div v-if="item.strike_price && item.price < item.strike_price">
+								<span class="text-body-2 text-decoration-line-through me-1">{{ toCurrency(item.strike_price) }}</span>
+								<VChip
+									:label="false"
+									size="x-small"
+									color="error"
+									>
+									{{ calculateDiscount(item.price, item.strike_price) }}
+								</VChip>
+							</div>
+						</div>
+					</template>
 
-        <!-- Stock -->
-        <template #item.stock="{ item }">
-          <span class="text-body-1 text-high-emphasis">{{ item.product_stock[0].amount }}</span>
-        </template>
+					<!-- Stock -->
+					<template #item.stock="{ item }">
+						<span class="text-body-1 text-high-emphasis">{{ item.product_stock[0].amount }}</span>
+					</template>
 
-        <!-- status -->
-        <template #item.status="{ item }">
-          <VChip
-            v-bind="resolveStatus(item.status)"
-            density="default"
-            label
-            size="small"
-          />
-        </template>
+					<!-- status -->
+					<template #item.status="{ item }">
+						<VChip
+							v-bind="resolveStatus(item.status)"
+							density="default"
+							label
+							size="small"
+							/>
+					</template>
 
-        <!-- Actions -->
-        <template #item.actions="{ item }">
-          <VBtn
-            size="small"
-            variant="outlined"
-            color="secondary"
-          >
-            Atur
-            <VIcon
-              end
-              icon="tabler-chevron-down"
-            />
-            <VMenu activator="parent">
-              <VList>
-                <VListItem value="edit">
-                  <RouterLink
-                    style="color:inherit"
-                    :to="{ name: 'produk-edit-id', params: { id: item.id } }"
-                  >
-                    Edit Produk
-                  </RouterLink>
-                </VListItem>
-                <VListItem value="view">
-                  <RouterLink
-                    style="color:inherit"
-                    :to="{ name: 'produk-view-id', params: { id: item.id } }"
-                  >
-                    Lihat Produk
-                  </RouterLink>
-                </VListItem>
-                <VListItem
-                  value="edit_price"
-                  @click="editPrice(item.id, item.name, item.price)"
-                >
-                  Ubah Harga
-                </VListItem>
-                <VListItem
-                  value="edit_stock"
-                  @click="editStock(item.id, item.name, item.product_stock[0].amount)"
-                >
-                  Ubah Stock
-                </VListItem>
-                <VListItem value="deactivate">
-                  Non-Aktifkan Produk
-                </VListItem>
-                <VListItem
-                  v-if="item.status == 1"
-                  value="archive"
-                  @click="editStatus(item.id, item.name, 9)"
-                >
-                  Arsipkan Produk
-                </VListItem>
-                <VListItem
-                  v-if="item.status == 9"
-                  value="archive"
-                  @click="editStatus(item.id, item.name, 1)"
-                >
-                  Jual Produk
-                </VListItem>
-                <VListItem
-                  value="delete"
-                  @click="deleteItem(item.id, item.name)"
-                >
-                  Hapus Produk
-                </VListItem>
-              </VList>
-            </VMenu>
-          </VBtn>
-        </template>
+					<!-- Actions -->
+					<template #item.actions="{ item }">
+						<div class="text-center">
+							<VBtn
+								size="small"
+								variant="outlined"
+								color="secondary"
+								>
+								Atur
+								<VIcon
+									end
+									icon="tabler-chevron-down"
+									/>
+								<VMenu activator="parent">
+									<VList>
+										<VListItem value="edit">
+											<RouterLink
+												style="color:inherit"
+												:to="{ name: 'produk-edit-id', params: { id: item.id } }"
+												>
+												Edit Produk
+											</RouterLink>
+										</VListItem>
+										<VListItem value="view">
+											<RouterLink
+												style="color:inherit"
+												:to="{ name: 'produk-view-id', params: { id: item.id } }"
+												>
+												Lihat Produk
+											</RouterLink>
+										</VListItem>
+										<VListItem
+											value="edit_price"
+											@click="editPrice(item.id, item.name, item.price)"
+											>
+											Ubah Harga
+										</VListItem>
+										<VListItem
+											value="edit_stock"
+											@click="editStock(item.id, item.name, item.product_stock[0].amount)"
+											>
+											Ubah Stock
+										</VListItem>
+										<VListItem value="deactivate">
+											Non-Aktifkan Produk
+										</VListItem>
+										<VListItem
+											v-if="item.status == 1"
+											value="archive"
+											@click="editStatus(item.id, item.name, 9)"
+											>
+											Arsipkan Produk
+										</VListItem>
+										<VListItem
+											v-if="item.status == 9"
+											value="archive"
+											@click="editStatus(item.id, item.name, 1)"
+											>
+											Jual Produk
+										</VListItem>
+										<VListItem
+											value="delete"
+											@click="deleteItem(item.id, item.name)"
+											>
+											Hapus Produk
+										</VListItem>
+									</VList>
+								</VMenu>
+							</VBtn>
+						</div>
+					</template>
 
-        <!-- pagination -->
-        <template #bottom>
-          <TablePagination
-            v-model:page="page"
-            :items-per-page="itemsPerPage"
-            :total-items="totalProduct"
-          />
-        </template>
-      </VDataTableServer>
+					<!-- pagination -->
+					<template #bottom>
+						<TablePagination
+							v-model:page="page"
+							:items-per-page="itemsPerPage"
+							:total-items="totalProduct"
+							/>
+					</template>
+				</VDataTableServer>
 
-      <!-- 👉 Empty products -->
-      <div
-        v-else
-        class="d-flex justify-center align-center pa-10 ma-10"
-      >
-        <div class="d-flex align-center">
-          <VAvatar
-            size="100"
-            class="me-6"
-          >
-            <VImg
-              :src="notFoundImg"
-              class="mb-2"
-            />
-          </VAvatar>
-          <div class="d-flex flex-column">
-            <p
-              class="text-body-2"
-              style="width:350px"
-            >
-              Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
-            </p>
-            <VBtn
-              color="primary"
-              style="width:fit-content"
-              prepend-icon="tabler-plus"
-              @click="$router.push('/produk/tambah')"
-            >
-              Tambah Produk
-            </VBtn>
-          </div>
-        </div>
-      </div>
+				<!-- 👉 Empty products -->
+				<div
+					v-else
+					class="d-flex justify-center align-center pa-10 ma-10"
+					>
+					<div class="d-flex align-center">
+						<VAvatar
+							size="100"
+							class="me-6"
+							>
+							<VImg
+								:src="notFoundImg"
+								class="mb-2"
+								/>
+						</VAvatar>
+						<div class="d-flex flex-column">
+							<p
+								class="text-body-2"
+								style="width:350px"
+								>
+								Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
+							</p>
+							<VBtn
+								color="primary"
+								style="width:fit-content"
+								prepend-icon="tabler-plus"
+								@click="$router.push('/produk/tambah')"
+								>
+								Tambah Produk
+							</VBtn>
+						</div>
+					</div>
+				</div>
+			</VCardText>
     </VCard>
     <UpdateHargaDialog
       v-model:is-dialog-visible="isUpdateHargaDialogVisible"

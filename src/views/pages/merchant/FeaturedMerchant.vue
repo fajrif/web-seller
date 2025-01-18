@@ -96,7 +96,7 @@ const addItem = () => {
                   <th>
                     Harga
                   </th>
-                  <th>
+                  <th class="text-center">
                     Hapus
                   </th>
                 </tr>
@@ -142,7 +142,7 @@ const addItem = () => {
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td class="text-center">
                     <VBtn
                       size="small"
                       variant="tonal"

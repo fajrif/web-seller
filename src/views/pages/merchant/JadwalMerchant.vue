@@ -121,18 +121,18 @@ const onSubmit = () => {
             cols="12"
             md="6"
           >
-            <VTable class="text-no-wrap rounded">
+            <VTable class="text-no-wrap px-5">
               <thead>
                 <tr>
                   <th
                     scope="col"
-                    class="fw-700"
+                    class="fw-900"
                   >
                     Hari
                   </th>
                   <th
                     scope="col"
-                    class="fw-700"
+                    class="fw-900"
                   >
                     Aktif
                   </th>
@@ -203,7 +203,7 @@ const onSubmit = () => {
             md="6"
             class="pa-10"
           >
-            <h6 class="text-body-1 font-weight-bold mb-6">
+            <h6 class="text-body-1 font-weight-bold text-black mb-6">
               Atur Waktu (Jam Operasional) Toko Anda
             </h6>
 

@@ -123,7 +123,7 @@ const deleteItem = (id, name, jml) => {
                   <th class="text-center">
                     Jumlah Produk
                   </th>
-                  <th class="text-center" />
+                  <th/>
                 </tr>
               </thead>
               <tbody>
@@ -137,10 +137,10 @@ const deleteItem = (id, name, jml) => {
                   <td class="text-center">
                     {{ item.total_product }}
                   </td>
-                  <td class="text-center">
+                  <td>
                     <div
                       v-if="item.id != 1"
-                      class="d-flex justify-center flex-wrap gap-2"
+                      class="d-flex justify-end flex-wrap gap-2"
                     >
                       <VBtn
                         size="small"
