@@ -100,6 +100,7 @@ watch(() => props.isDialogVisible, async (visible) => {
 					currentPos.value.lat = place.geometry.location.lat()
 					currentPos.value.lng = place.geometry.location.lng()
 					draggableMarker.position = { lat: currentPos.value.lat, lng: currentPos.value.lng }
+					map.setCenter(place.geometry.location);
 				});
 
 			})
