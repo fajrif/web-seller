@@ -1,12 +1,20 @@
 <script setup>
 import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
-import Treeselect from 'vue3-treeselect'
-import 'vue3-treeselect/dist/vue3-treeselect.css'
+// import { vMaska } from "maska/vue";
+import '@cholakovdev/vue3-treeselect/dist/vue3-treeselect.css'
 
 const userData = useCookie('userData')
 const messageStore = useMessageStore()
 const router = useRouter()
+
+// const options = {
+// 	mask: '9.99#',
+// 	tokens: {
+// 		9: { pattern: /[0-9]/, repeated: true },
+// 	},
+// 	reversed: true
+// };
 
 const isFormValid = ref(false)
 const refForm = ref()
@@ -52,7 +60,7 @@ const saveProduct = async productData => {
 }
 
 const onSubmit = () => {
-  refForm.value?.validate().then(({ valid }) => {
+  refForm.value?.validate().then(({ valid, errors }) => {
     if (valid) {
       /* eslint-disable camelcase */
       saveProduct({
@@ -90,10 +98,9 @@ const onSubmit = () => {
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol md="8">
+        <VCol cols="12">
           <!-- 👉 Product Information -->
           <VCard
-            class="mb-6"
             title="Informasi Produk"
           >
             <VCardText>
@@ -110,17 +117,19 @@ const onSubmit = () => {
                   cols="12"
                   md="6"
                 >
-								<div class="flex-grow-1">
-									<label class="v-label mb-1 text-body-2" style="line-height: 15px;">Kategori</label>
-									<treeselect
+									<AppTreeSelect
                     v-model="productCategory"
+                    :rules="[requiredValidator]"
+										:searchable="false"
 										:multiple="false"
+										open-direction="below"
 										:show-count="true"
+										:disable-branch-nodes="true"
+                    label="Kategori"
                     placeholder="Pilih Kategori"
                     :options="categories"
 										:normalizer="normalizerCategories"
 										/>
-								</div>
                 </VCol>
                 <VCol
                   cols="12"
@@ -163,9 +172,21 @@ const onSubmit = () => {
                     item-value="name"
                   />
                 </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+									<div class="d-flex flex-raw align-center justify-start">
+										<span class="fw-700 me-4">Produk Unggulan</span>
+										<VSwitch
+											v-model="productFeatured"
+											density="compact"
+											/>
+									</div>
+                </VCol>
 
-                <VCol>
-                  <span class="mb-1">Deskripsi Produk</span>
+                <VCol cols="12">
+									<p class="fw-700 mb-2">Deskripsi Produk</p>
                   <ProductDescriptionEditor
                     v-model="productDescription"
                     placeholder="Masukan informasi dan detil deskripsi produk anda"
@@ -175,81 +196,15 @@ const onSubmit = () => {
               </VRow>
             </VCardText>
           </VCard>
-
-          <!-- 👉 Ukuran Paket -->
-          <VCard
-            class="mb-6"
-            title="Ukuran Paket"
-          >
-            <VCardText>
-              <VRow>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productWeight"
-                    :rules="[requiredValidator]"
-                    label="Berat"
-                    suffix="gr"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productWidth"
-                    :rules="[requiredValidator]"
-                    label="Lebar"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productLength"
-                    :rules="[requiredValidator]"
-                    label="Panjang"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productHeight"
-                    :rules="[requiredValidator]"
-                    label="Tinggi"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-              </VRow>
-            </VCardText>
-          </VCard>
-
         </VCol>
 
         <VCol
-          md="4"
+          md="6"
           cols="12"
         >
           <!-- 👉 Pricing -->
           <VCard
             title="Harga"
-            class="mb-6"
           >
             <VCardText>
               <AppTextField
@@ -270,23 +225,16 @@ const onSubmit = () => {
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
-
-              <VDivider class="my-2" />
-
-              <div class="d-flex flex-raw align-center justify-space-between">
-                <span class="fw-700">Produk Unggulan</span>
-                <VSwitch
-                  v-model="productFeatured"
-                  density="compact"
-                />
-              </div>
             </VCardText>
           </VCard>
-
+        </VCol>
+        <VCol
+          md="6"
+          cols="12"
+        >
           <!-- 👉 Stock -->
           <VCard
-            title="Stock"
-            class="mb-6"
+            title="Pengelolaan"
           >
             <VCardText>
               <AppTextField
@@ -309,13 +257,79 @@ const onSubmit = () => {
               />
             </VCardText>
           </VCard>
-
-          <div class="d-flex flex-wrap gap-4 justify-end">
-            <VBtn type="submit">
-              Simpan
-            </VBtn>
-          </div>
         </VCol>
+				<VCol cols="12">
+					<!-- 👉 Ukuran Paket -->
+					<VCard
+						title="Ukuran Paket"
+						>
+						<VCardText>
+							<VRow>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productWeight"
+										:rules="[requiredValidator]"
+										label="Berat"
+										suffix="gr"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productWidth"
+										:rules="[requiredValidator]"
+										label="Lebar"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productLength"
+										:rules="[requiredValidator]"
+										label="Panjang"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productHeight"
+										:rules="[requiredValidator]"
+										label="Tinggi"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+							</VRow>
+						</VCardText>
+					</VCard>
+				</VCol>
+				<VCol cols="12">
+					<div class="d-flex flex-wrap gap-4 justify-end">
+						<VBtn type="submit">
+							Simpan
+						</VBtn>
+					</div>
+				</VCol>
+
       </VRow>
     </VForm>
   </div>

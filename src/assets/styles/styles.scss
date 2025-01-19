@@ -94,3 +94,22 @@
 .v-table table tbody tr td:last-child {
   padding-inline-end: 0 !important;
 }
+.v-text-field__suffix {
+  padding-left: var(--v-field-padding-end);
+  padding-right: var(--v-field-padding-end);
+  background-color: rgba(var(--v-global-theme-primary), 1);
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  border: none;
+  color: #fff !important;
+  font-weight: 600;
+}
+.app-text-field.tree-select .v-input__control {
+  display: none;
+}
+body .app-text-field.tree-select .v-label:has(+ .vue-treeselect + .v-input .v-field.v-field--error) {
+  color: rgb(var(--v-theme-error));
+}
+body .app-text-field.tree-select .vue-treeselect:has(+ .v-input .v-field.v-field--error) > .vue-treeselect__control {
+  border: 2px solid rgb(var(--v-theme-error));
+}

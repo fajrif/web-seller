@@ -14,6 +14,7 @@
   "dependencies": {
     "@casl/ability": "6.7.2",
     "@casl/vue": "2.2.2",
+    "@cholakovdev/vue3-treeselect": "^0.2.0",
     "@floating-ui/dom": "1.6.8",
     "@formkit/drag-and-drop": "0.1.6",
     "@googlemaps/js-api-loader": "^1.16.8",
@@ -34,6 +35,7 @@
     "eslint-plugin-regexp": "2.7.0",
     "jwt-decode": "4.0.0",
     "mapbox-gl": "3.5.2",
+    "maska": "^3.0.4",
     "ofetch": "1.4.1",
     "pinia": "2.3.0",
     "prismjs": "1.29.0",
@@ -51,7 +53,6 @@
     "vue-router": "4.5.0",
     "vue3-apexcharts": "1.8.0",
     "vue3-perfect-scrollbar": "2.0.0",
-    "vue3-treeselect": "^0.1.10",
     "vuetify": "3.7.5",
     "webfontloader": "1.6.28"
   },

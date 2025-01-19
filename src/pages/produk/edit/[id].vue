@@ -2,8 +2,7 @@
 import addBannerImg from '@images/misc/add-banner.png'
 import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
-import Treeselect from 'vue3-treeselect'
-import 'vue3-treeselect/dist/vue3-treeselect.css'
+import '@cholakovdev/vue3-treeselect/dist/vue3-treeselect.css'
 
 const messageStore = useMessageStore()
 const router = useRouter()
@@ -156,10 +155,9 @@ const uploadProductPhoto = async (path) => {
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol md="8">
+        <VCol cols="12">
           <!-- 👉 Product Information -->
           <VCard
-            class="mb-6"
             title="Informasi Produk"
           >
             <VCardText>
@@ -176,17 +174,19 @@ const uploadProductPhoto = async (path) => {
                   cols="12"
                   md="6"
                 >
-									<div class="flex-grow-1">
-										<label class="v-label mb-1 text-body-2" style="line-height: 15px;">Kategori</label>
-										<treeselect
-											v-model="productCategory"
-											:multiple="false"
-											:show-count="true"
-											placeholder="Pilih Kategori"
-											:options="categories"
-											:normalizer="normalizerCategories"
-											/>
-									</div>
+									<AppTreeSelect
+                    v-model="productCategory"
+                    :rules="[requiredValidator]"
+										:searchable="false"
+										:multiple="false"
+										open-direction="below"
+										:show-count="true"
+										:disable-branch-nodes="true"
+                    label="Kategori"
+                    placeholder="Pilih Kategori"
+                    :options="categories"
+										:normalizer="normalizerCategories"
+										/>
                 </VCol>
                 <VCol
                   cols="12"
@@ -229,9 +229,21 @@ const uploadProductPhoto = async (path) => {
                     item-value="name"
                   />
                 </VCol>
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+									<div class="d-flex flex-raw align-center justify-start">
+										<span class="fw-700 me-4">Produk Unggulan</span>
+										<VSwitch
+											v-model="productFeatured"
+											density="compact"
+											/>
+									</div>
+                </VCol>
 
-                <VCol>
-                  <span class="mb-1">Deskripsi Produk</span>
+                <VCol cols="12">
+									<p class="fw-700 mb-2">Deskripsi Produk</p>
                   <ProductDescriptionEditor
                     v-model="productDescription"
                     placeholder="Masukan informasi dan detil deskripsi produk anda"
@@ -241,71 +253,140 @@ const uploadProductPhoto = async (path) => {
               </VRow>
             </VCardText>
           </VCard>
-
-          <!-- 👉 Ukuran Paket -->
+				</VCol>
+        <VCol
+          md="6"
+          cols="12"
+        >
+          <!-- 👉 Pricing -->
           <VCard
-            class="mb-6"
-            title="Ukuran Paket"
+            title="Harga"
           >
             <VCardText>
-              <VRow>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productWeight"
-                    :rules="[requiredValidator]"
-                    label="Berat"
-                    suffix="gr"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productWidth"
-                    :rules="[requiredValidator]"
-                    label="Lebar"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productLength"
-                    :rules="[requiredValidator]"
-                    label="Panjang"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppTextField
-                    v-model="productHeight"
-                    :rules="[requiredValidator]"
-                    label="Tinggi"
-                    suffix="cm"
-                    type="number"
-                    placeholder="0"
-                  />
-                </VCol>
-              </VRow>
+              <AppTextField
+                v-model="productPrice"
+                label="Harga Satuan"
+                prefix="Rp"
+                type="number"
+                :rules="[requiredValidator]"
+                placeholder="Masukan harga jual"
+                class="mb-6"
+              />
+              <AppTextField
+                v-model="productStrikePrice"
+                label="Harga Coret"
+                prefix="Rp"
+                type="number"
+                :rules="[requiredValidator]"
+                placeholder="Masukan harga coret"
+                class="mb-6"
+              />
             </VCardText>
           </VCard>
+        </VCol>
+        <VCol
+          md="6"
+          cols="12"
+        >
+          <!-- 👉 Stock -->
+          <VCard
+            title="Pengelolaan"
+          >
+            <VCardText>
+              <AppTextField
+                v-model="productStock"
+                :rules="[requiredValidator]"
+                label="Stock"
+                suffix="Buah"
+                type="number"
+                placeholder="Tentukan jumlah stock"
+                class="mb-6"
+              />
+              <AppTextField
+                v-model="productMinPurchase"
+                label="Pembelian Minimum"
+                suffix="Buah"
+                type="number"
+                :rules="[requiredValidator]"
+                placeholder="Tentukan pembelian minimum"
+                class="mb-6"
+              />
+            </VCardText>
+          </VCard>
+        </VCol>
+				<VCol cols="12">
+					<!-- 👉 Ukuran Paket -->
+					<VCard
+						title="Ukuran Paket"
+						>
+						<VCardText>
+							<VRow>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productWeight"
+										:rules="[requiredValidator]"
+										label="Berat"
+										suffix="gr"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productWidth"
+										:rules="[requiredValidator]"
+										label="Lebar"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
 
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productLength"
+										:rules="[requiredValidator]"
+										label="Panjang"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+								<VCol
+									cols="12"
+									md="6"
+									>
+									<AppTextField
+										v-model="productHeight"
+										:rules="[requiredValidator]"
+										label="Tinggi"
+										suffix="cm"
+										type="number"
+										placeholder="0"
+										/>
+								</VCol>
+							</VRow>
+						</VCardText>
+					</VCard>
+				</VCol>
+				<VCol cols="12">
+					<div class="d-flex flex-wrap gap-4 justify-end">
+						<VBtn type="submit">
+							Simpan
+						</VBtn>
+					</div>
+				</VCol>
+
+				<VCol cols="12">
           <!-- 👉 Media -->
           <VCard title="Gambar Produk">
             <VCardText>
@@ -319,8 +400,8 @@ const uploadProductPhoto = async (path) => {
 										:key="index"
 									>
 										<VCol
-											cols="12"
-											md="3"
+											cols="6"
+											md="2"
 										>
 											<VCard :ripple="false">
 												<VCardText class="d-flex flex-column pa-2">
@@ -345,8 +426,8 @@ const uploadProductPhoto = async (path) => {
 										</VCol>
 									</template>
 										<VCol
-											cols="12"
-											md="3"
+											cols="6"
+											md="2"
 										>
 											<VCard :ripple="false">
 												<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
@@ -406,80 +487,6 @@ const uploadProductPhoto = async (path) => {
           </VCard>
         </VCol>
 
-        <VCol
-          md="4"
-          cols="12"
-        >
-          <!-- 👉 Pricing -->
-          <VCard
-            title="Harga"
-            class="mb-6"
-          >
-            <VCardText>
-              <AppTextField
-                v-model="productPrice"
-                label="Harga Satuan"
-                prefix="Rp"
-                type="number"
-                :rules="[requiredValidator]"
-                placeholder="Masukan harga jual"
-                class="mb-6"
-              />
-              <AppTextField
-                v-model="productStrikePrice"
-                label="Harga Coret"
-                prefix="Rp"
-                type="number"
-                :rules="[requiredValidator]"
-                placeholder="Masukan harga coret"
-                class="mb-6"
-              />
-
-              <VDivider class="my-2" />
-
-              <div class="d-flex flex-raw align-center justify-space-between">
-                <span class="fw-700">Produk Unggulan</span>
-                <VSwitch
-                  v-model="productFeatured"
-                  density="compact"
-                />
-              </div>
-            </VCardText>
-          </VCard>
-
-          <!-- 👉 Stock -->
-          <VCard
-            title="Stock"
-            class="mb-6"
-          >
-            <VCardText>
-              <AppTextField
-                v-model="productStock"
-                :rules="[requiredValidator]"
-                label="Stock"
-                suffix="Buah"
-                type="number"
-                placeholder="Tentukan jumlah stock"
-                class="mb-6"
-              />
-              <AppTextField
-                v-model="productMinPurchase"
-                :rules="[requiredValidator]"
-                label="Pembelian Minimum"
-                suffix="Buah"
-                type="number"
-                placeholder="Tentukan pembelian minimum"
-                class="mb-6"
-              />
-            </VCardText>
-          </VCard>
-
-          <div class="d-flex flex-wrap gap-4 justify-end">
-            <VBtn type="submit">
-              Simpan
-            </VBtn>
-          </div>
-        </VCol>
       </VRow>
     </VForm>
     <UploadCropStencilImageDialog
