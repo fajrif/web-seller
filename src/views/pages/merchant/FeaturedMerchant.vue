@@ -1,5 +1,4 @@
 <script setup>
-import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
@@ -156,38 +155,14 @@ const addItem = () => {
               </tbody>
             </VTable>
             <!-- 👉 Empty products -->
-            <div
-              v-else
-              class="d-flex justify-center align-center pa-10 ma-10"
-            >
-              <div class="d-flex align-center">
-                <VAvatar
-                  size="100"
-                  class="me-6"
-                >
-                  <VImg
-                    :src="notFoundImg"
-                    class="mb-2"
-                  />
-                </VAvatar>
-                <div class="d-flex flex-column">
-                  <p
-                    class="text-body-2"
-                    style="width:400px"
-                  >
-                    Anda sekarang belum memiliki produk unggulan. Silahkan pilih produk-produk yang ingin anda tampilkan sebagai <strong>Produk Unggulan</strong> di toko anda.
-                  </p>
-                  <VBtn
-                    color="primary"
-                    style="width:fit-content"
-                    prepend-icon="tabler-plus"
-                    @click="addItem"
-                  >
-                    Tambah Produk
-                  </VBtn>
-                </div>
-              </div>
-            </div>
+						<template v-else>
+							<EmptyData
+								:border="false"
+								description="Anda sekarang belum memiliki produk unggulan. Silahkan pilih produk-produk <br/>yang ingin anda tampilkan sebagai <strong>Produk Unggulan</strong> di toko anda."
+								btn-text="Tambah Produk"
+								@click-button="addItem"
+								/>
+						</template>
           </VCol>
         </VRow>
       </VCardText>

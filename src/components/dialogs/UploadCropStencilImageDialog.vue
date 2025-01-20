@@ -189,11 +189,8 @@ onUnmounted(() => {
 						class="ms-3 w-100"
 						@click="file.click()"
 					>
-						<VIcon
-							icon="tabler-cloud-upload"
-							class="d-sm-none"
-						/>
-						<span class="d-none d-sm-block">Upload</span>
+						<VIcon icon="tabler-cloud-upload me-2" />
+						<span>Upload</span>
 					</VBtn>
 
 					<input
@@ -214,11 +211,8 @@ onUnmounted(() => {
 						@click="cropImage()"
 						:disabled="image.src == ''"
 					>
-						<span class="d-none d-sm-block">Crop</span>
-						<VIcon
-							icon="tabler-refresh"
-							class="d-sm-none"
-						/>
+						<VIcon icon="tabler-screenshot me-2" />
+						<span>Crop</span>
 					</VBtn>
 				</div>
 			</VCardActions>

@@ -32,7 +32,7 @@ const tabs = [
     id: 4,
     title: 'Tidak Aktif',
     tab: 'non-aktif',
-    status: "deactivate",
+    status: "blocked",
   },
 
   // {

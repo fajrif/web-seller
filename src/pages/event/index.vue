@@ -1,6 +1,4 @@
 <script setup>
-import notFoundImg from '@images/icons/ic-search.png'
-
 const eventsData = ref([])
 
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
@@ -19,7 +17,7 @@ if (merchantDetails.value.success) {
       </div>
     </div>
     <VCard class="pa-2">
-      <VRow v-if="eventsData">
+			<VRow v-if="eventsData.length > 0">
         <!-- 👉 Events Data	-->
         <VCol
           v-for="event in eventsData"
@@ -68,30 +66,17 @@ if (merchantDetails.value.success) {
         </VCol>
       </VRow>
 
-      <!-- 👉 Empty Data -->
-      <div
-        v-else
-        class="d-flex justify-center align-center pa-10 ma-10"
-      >
-        <div class="d-flex flex-column align-center">
-          <VAvatar size="200">
-            <VImg
-              :src="notFoundImg"
-              class="mb-5"
-            />
-          </VAvatar>
-          <h3 class="fw-500">
-            Belum ada Event atau Promo
-          </h3>
-          <p
-            class="text-body-2 text-center"
-            style="width:700px;"
-          >
-            Saat ini PLN Mobile belum ada Event dan Promo yang berjalan untuk Anda.
-            Tingkatkan transaksi terus ya di PLN Mobile agar dapat mengikuti Event dan Promo di PLN Mobile
-          </p>
-        </div>
-      </div>
+			<!-- 👉 Empty Data -->
+			<VRow v-else>
+				<VCol cols="12">
+					<EmptyData
+						:orientation="1"
+						:border="false"
+						title="Belum ada Event atau Promo"
+						description="Saat ini PLN Mobile belum ada Event dan Promo yang berjalan untuk Anda.<br/> Tingkatkan transaksi terus ya di PLN Mobile agar dapat mengikuti Event dan Promo di PLN Mobile"
+						/>
+				</VCol>
+			</VRow>
     </VCard>
   </div>
 </template>

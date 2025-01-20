@@ -1,11 +1,8 @@
 <script setup>
-import addBannerImg from '@images/misc/add-banner.png'
-import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
 import '@cholakovdev/vue3-treeselect/dist/vue3-treeselect.css'
 
 const messageStore = useMessageStore()
-const router = useRouter()
 const route = useRoute('produk-edit-id')
 
 const isUploadImageDialogVisible = ref(false)
@@ -380,7 +377,10 @@ const uploadProductPhoto = async (path) => {
 				</VCol>
 				<VCol cols="12">
 					<div class="d-flex flex-wrap gap-4 justify-end">
-						<VBtn type="submit">
+						<VBtn
+							type="submit"
+							class="w-100 w-md-auto"
+							>
 							Simpan
 						</VBtn>
 					</div>
@@ -431,11 +431,17 @@ const uploadProductPhoto = async (path) => {
 										>
 											<VCard :ripple="false">
 												<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
-													<VImg
-														rounded
-														:src="addBannerImg"
-														class="w-100 mx-auto"
-													/>
+													<div class="d-flex flex-column justify-center align-center border-dashed-primary border-radius-8 py-6">
+														<IconBtn
+															color="primary"
+															variant="tonal"
+															class="rounded-sm my-4"
+															@click.stop="openImageDialog"
+															>
+															<VIcon icon="tabler-photo-up" />
+														</IconBtn>
+														<span class="text-sm text-primary">Tambah Gambar</span>
+													</div>
 												</VCardText>
 												<VCardActions>
 													<VBtn
@@ -443,7 +449,7 @@ const uploadProductPhoto = async (path) => {
 														variant="flat"
 														color="primary"
 														block
-														@click="openImageDialog"
+														@click.stop="openImageDialog"
 													>
 														Tambah
 													</VBtn>
@@ -454,35 +460,14 @@ const uploadProductPhoto = async (path) => {
 							</div>
 
 							<!-- 👉 Empty banners -->
-							<div v-else class="d-flex justify-center align-center px-10 py-15 border border-radius-8">
-								<div class="d-flex align-center">
-									<VAvatar
-										size="100"
-										class="me-6"
-									>
-										<VImg
-											:src="notFoundImg"
-											class="mb-2"
-										/>
-									</VAvatar>
-									<div class="d-flex flex-column">
-										<p
-											class="text-body-2"
-											style="width:350px"
-										>
-											Anda belum menambahkan gambar untuk produk anda. Silahkan menambahkan gambar produk anda
-										</p>
-										<VBtn
-											color="primary"
-											style="width:fit-content"
-											prepend-icon="tabler-plus"
-											@click="openImageDialog"
-										>
-											Tambah Gambar
-										</VBtn>
-									</div>
-								</div>
-							</div>
+							<template v-else>
+								<EmptyData
+									description="Anda belum menambahkan gambar untuk produk anda.<br/> Silahkan menambahkan gambar produk anda"
+									wrapper-class="px-10 py-15"
+									btn-text="Tambah Gambar"
+									@click-button="openImageDialog"
+									/>
+							</template>
             </VCardText>
           </VCard>
         </VCol>

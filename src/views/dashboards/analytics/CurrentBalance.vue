@@ -8,7 +8,10 @@ import img1 from '@images/icons/ic-rupiah.png'
       <VCard color="primary">
         <VCardText>
           <VRow>
-            <VCol cols="6">
+						<VCol
+							cols="12"
+							md="6"
+							>
               <div class="d-flex align-center">
                 <VAvatar
                   rounded
@@ -31,8 +34,9 @@ import img1 from '@images/icons/ic-rupiah.png'
               </div>
             </VCol>
             <VCol
-              cols="3"
               class="d-flex align-center"
+              cols="6"
+							md="3"
             >
               <div class="d-flex align-center">
                 <VAvatar
@@ -56,8 +60,9 @@ import img1 from '@images/icons/ic-rupiah.png'
               </div>
             </VCol>
             <VCol
-              cols="3"
               class="d-flex align-center"
+              cols="6"
+							md="3"
             >
               <div class="d-flex align-center mt2">
                 <VAvatar

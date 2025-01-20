@@ -324,7 +324,10 @@ const onSubmit = () => {
 				</VCol>
 				<VCol cols="12">
 					<div class="d-flex flex-wrap gap-4 justify-end">
-						<VBtn type="submit">
+						<VBtn
+							type="submit"
+							class="w-100 w-md-auto"
+							>
 							Simpan
 						</VBtn>
 					</div>

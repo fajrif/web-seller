@@ -51,9 +51,7 @@ const shippingOptions = [
         <VCol
           v-for="item in shippingOptions"
           :key="item.id"
-          cols="12"
-          sm="6"
-          md="6"
+          cols="6"
         >
           <VCard>
             <VCardText :class="`pa-2 bg-${item.color}`">

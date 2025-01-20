@@ -37,11 +37,13 @@ const contactUs = [
   {
     icon: 'tabler-mail',
     via: 'support.marketplace@iconpln.co.id',
+    link: 'mailto:support.marketplace@iconpln.co.id',
     tagLine: 'Email Support',
   },
   {
     icon: 'tabler-phone',
     via: '0811-8230-433',
+    link: 'https://api.whatsapp.com/send?phone=628118230433',
     tagLine: 'Nomor WhatsApp',
   },
 ]
@@ -80,8 +82,11 @@ const contactUs = [
                       <h3 class="mb-1">
                         FAQ
                       </h3>
-                      <p class="text-body-2 mb-0 me-3">
+                      <p class="text-body-2 d-none d-md-block mb-0 me-3">
                         Pertanyaan yang umum ditanyakan oleh pengguna terkait Marketplace PLN Mobile.
+                      </p>
+                      <p class="text-body-2 d-block d-md-none mb-0 me-3">
+                        Pertanyaan umum..
                       </p>
                     </div>
                   </div>
@@ -96,8 +101,11 @@ const contactUs = [
                       <h3 class="mb-1">
                         Hubungi Kami
                       </h3>
-                      <p class="text-body-2 mb-0 me-3">
+                      <p class="text-body-2 d-none d-md-block mb-0 me-3">
                         Sampaikan masalah atau saran kamu melalui channel - channel komunikasi kami.
+                      </p>
+                      <p class="text-body-2 d-block d-md-none mb-0 me-3">
+                        Channel..
                       </p>
                     </div>
                   </div>
@@ -147,7 +155,7 @@ const contactUs = [
                           </VCardText>
                           <VCardText>
                             <h5 class="text-h5 mb-1">
-                              {{ contact.via }}
+                              <a :href="contact.link" class="text-black">{{ contact.via }}</a>
                             </h5>
                             <div>{{ contact.tagLine }}</div>
                           </VCardText>

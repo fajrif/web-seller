@@ -1,5 +1,4 @@
 <script setup>
-import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
 
 const props = defineProps({
@@ -52,7 +51,6 @@ const updateHargaProduct = async (id, price) => {
       },
   	})
 
-
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Harga berhasil diubah')
@@ -72,7 +70,6 @@ const updateStockProduct = async (id, stock) => {
       },
   	})
 
-
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Stock berhasil diubah')
@@ -86,7 +83,6 @@ const updateStatusProduct = async (id, status) => {
   try {
   	const res = await $apiCore(`/seller/command/product/archived/${id}`, { method: 'POST' })
 
-
   	// Refetch products
   	fetchProducts()
     messageStore.setMessage('success', 'Berhasil ubah status produk')
@@ -99,7 +95,6 @@ const updateStatusProduct = async (id, status) => {
 const deleteProduct = async id => {
   try {
   	const res = await $apiCore(`/seller/command/product/delete/${id}?accept=true`, { method: 'DELETE' })
-
 
   	// Refetch products
   	fetchProducts()
@@ -316,38 +311,14 @@ const deleteItem = (id, name) => {
 				</VDataTableServer>
 
 				<!-- 👉 Empty products -->
-				<div
-					v-else
-					class="d-flex justify-center align-center pa-10 ma-10"
-					>
-					<div class="d-flex align-center">
-						<VAvatar
-							size="100"
-							class="me-6"
-							>
-							<VImg
-								:src="notFoundImg"
-								class="mb-2"
-								/>
-						</VAvatar>
-						<div class="d-flex flex-column">
-							<p
-								class="text-body-2"
-								style="width:350px"
-								>
-								Anda sekarang belum memiliki produk yang di unggah. Silahkan unggah produk anda untuk bisa dijual.
-							</p>
-							<VBtn
-								color="primary"
-								style="width:fit-content"
-								prepend-icon="tabler-plus"
-								@click="$router.push('/produk/tambah')"
-								>
-								Tambah Produk
-							</VBtn>
-						</div>
-					</div>
-				</div>
+				<template v-else>
+					<EmptyData
+						:border="false"
+						description="Anda sekarang belum memiliki produk yang di unggah.<br/>Silahkan unggah produk anda untuk bisa dijual."
+						btn-text="Tambah Produk"
+						@click-button="() => $router.push('/produk/tambah')"
+						/>
+				</template>
 			</VCardText>
     </VCard>
     <UpdateHargaDialog

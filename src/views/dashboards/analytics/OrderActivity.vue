@@ -62,7 +62,7 @@ const orderActivities = [
           <VCol
             v-for="item in orderActivities"
             :key="item.id"
-            cols="12"
+            cols="6"
             md="4"
           >
             <VCard>

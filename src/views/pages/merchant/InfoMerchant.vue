@@ -1,6 +1,4 @@
 <script setup>
-import addBannerImg from '@images/misc/add-banner1.png'
-import notFoundImg from '@images/icons/ic-search.png'
 import avatar from '@images/misc/img-default.png'
 import { useMessageStore } from '@core/stores/config'
 
@@ -351,11 +349,16 @@ const uploadMerchantBanner = async (path) => {
 									>
 										<VCard :ripple="false">
 											<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
-												<VImg
-													rounded
-													:src="addBannerImg"
-													class="w-100 mx-auto"
-												/>
+												<div class="d-flex flex-column justify-center align-center border-dashed-primary border-radius-8">
+													<IconBtn
+														color="primary"
+														variant="tonal"
+														class="rounded-sm my-4"
+														@click="openBannerDialog"
+														>
+														<VIcon icon="tabler-photo-up" />
+													</IconBtn>
+												</div>
 											</VCardText>
 											<VCardActions>
 												<VBtn
@@ -374,35 +377,14 @@ const uploadMerchantBanner = async (path) => {
 						</div>
 
 						<!-- 👉 Empty banners -->
-						<div v-else class="d-flex justify-center align-center px-10 py-15 border border-radius-8">
-							<div class="d-flex align-center">
-								<VAvatar
-									size="100"
-									class="me-6"
-								>
-									<VImg
-										:src="notFoundImg"
-										class="mb-2"
-									/>
-								</VAvatar>
-								<div class="d-flex flex-column">
-									<p
-										class="text-body-2"
-										style="width:350px"
-									>
-										Anda belum menambahkan banner toko untuk toko anda. Silahkan menambahkan banner toko untuk mempercantik tampilan toko anda
-									</p>
-									<VBtn
-										color="primary"
-										style="width:fit-content"
-										prepend-icon="tabler-plus"
-										@click="openBannerDialog"
-									>
-										Tambah Banner
-									</VBtn>
-								</div>
-							</div>
-						</div>
+						<template v-else>
+							<EmptyData
+								description="Anda belum menambahkan banner toko untuk toko anda.<br/>Silahkan menambahkan banner toko untuk mempercantik tampilan toko anda"
+								btn-text="Tambah Banner"
+								wrapper-class="px-10 py-15"
+								@click-button="openBannerDialog"
+								/>
+						</template>
 					</VCardText>
 				</VCard>
 			</VCol>

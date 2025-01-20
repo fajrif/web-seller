@@ -1,6 +1,5 @@
 <script setup>
 import { register } from 'swiper/element/bundle'
-import notFoundImg from '@images/icons/ic-search.png'
 
 const route = useRoute('produk-view-id')
 const productData = ref()
@@ -22,7 +21,10 @@ register()
           Produk Detail
         </h4>
       </div>
-      <div class="d-flex gap-4">
+			<div
+				v-if="productData"
+				class="d-flex gap-4"
+				>
         <VBtn variant="outlined">
           <VIcon
             icon="tabler-eye"
@@ -42,7 +44,6 @@ register()
       <VRow v-if="productData">
         <!-- 👉 Product Images	-->
         <VCol
-          v-if="productData"
           cols="12"
           md="6"
           lg="5"
@@ -169,37 +170,16 @@ register()
         </VCol>
       </VRow>
       <!-- 👉 Empty Data -->
-      <div
-        v-else
-        class="d-flex justify-center align-center pa-10 ma-10"
-      >
-        <div class="d-flex align-center">
-          <VAvatar
-            size="100"
-            class="me-6"
-          >
-            <VImg
-              :src="notFoundImg"
-              class="mb-2"
-            />
-          </VAvatar>
-          <div class="d-flex flex-column">
-            <p
-              class="text-body-2"
-              style="width:350px"
-            >
-              Maaf produk yang anda cari tidak ditemukan. Silahkan coba beberapa saat lagi.
-            </p>
-            <VBtn
-              color="primary"
-              style="width:fit-content"
-              @click="$router.push('/produk/semua')"
-            >
-              Kelola Produk
-            </VBtn>
-          </div>
-        </div>
-      </div>
+			<template v-else>
+				<EmptyData
+					:orientation="1"
+					:border="false"
+					title="Produk tidak ditemukan"
+					description="Maaf produk yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi."
+					btn-text="Kelola Produk"
+					@click-button="() => $router.push('/produk/semua')"
+					/>
+			</template>
     </VCard>
   </div>
 </template>

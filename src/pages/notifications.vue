@@ -1,5 +1,5 @@
 <script setup>
-import notFoundImg from '@images/icons/ic-status.png'
+import imgFileBox from '@images/icons/ic-file-box.png'
 
 // headers
 const notifHeaders = [
@@ -37,7 +37,7 @@ const totalNotifications = computed(() => notificationsData.value.data.total)
       </p>
     </VCardItem>
 
-    <VCardText class="px-0">
+    <VCardText>
 
       <!-- 👉 Datatable  -->
       <VDataTableServer
@@ -92,30 +92,15 @@ const totalNotifications = computed(() => notificationsData.value.data.total)
       </VDataTableServer>
 
       <!-- 👉 Empty Notifications -->
-      <div
-        v-else
-        class="d-flex justify-center align-center pa-10 ma-10"
-      >
-        <div class="d-flex align-center">
-          <VAvatar
-            size="100"
-            class="me-6"
-          >
-            <VImg
-              :src="notFoundImg"
-              class="mb-2"
-            />
-          </VAvatar>
-          <div class="d-flex flex-column">
-            <p
-              class="text-body-2"
-              style="width:350px"
-            >
-              Saat ini toko anda belum memiliki notifikasi
-            </p>
-          </div>
-        </div>
-      </div>
+			<template v-else>
+				<EmptyData
+					:orientation="1"
+					:border="false"
+					:img-src="imgFileBox"
+					title="Notifikasi Kosong"
+					description="Saat ini toko anda belum memiliki notifikasi"
+					/>
+			</template>
 
     </VCardText>
   </VCard>

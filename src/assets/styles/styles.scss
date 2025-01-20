@@ -14,6 +14,9 @@
 .text-decoration-line-through {
   text-decoration: line-through;
 }
+.text-h4 {
+  font-size: 1.2rem !important;
+}
 .w-40 {
   width: 40%;
 }
@@ -112,4 +115,38 @@ body .app-text-field.tree-select .v-label:has(+ .vue-treeselect + .v-input .v-fi
 }
 body .app-text-field.tree-select .vue-treeselect:has(+ .v-input .v-field.v-field--error) > .vue-treeselect__control {
   border: 2px solid rgb(var(--v-theme-error));
+}
+body .v-tabs.v-tabs-pill .v-tab--selected.text-primary {
+  background-color: #fff;
+  color: rgb(0 0 0) !important;
+}
+.v-tabs.v-tabs-pill .v-tab.v-btn:not(.v-tab--selected):hover {
+  background-color: rgba(255,255,255,.16);
+  color: #fff;
+}
+.v-tabs.v-tabs-pill .v-tab.v-btn {
+  border-radius: 15px !important;
+  margin: 6px;
+  color: #eaeaea;
+}
+.v-tabs.v-tabs-pill .v-tab--selected.text-primary {
+  box-shadow: none;
+}
+.v-tabs.v-tabs-pill.v-slide-group,
+.v-tabs.v-tabs-pill .v-slide-group__container {
+  padding: 0;
+  margin: 0;
+  height: 50px;
+  background: linear-gradient(270deg, rgba(var(--v-global-theme-primary), 0.7) 0%, rgb(var(--v-global-theme-primary)) 100%) !important;
+  border-radius: 15px;
+}
+.border-dashed-primary {
+  border: 2px dashed rgba(var(--v-global-theme-primary), .7);
+}
+
+@media (min-width: 992px) {
+  .v-tabs.v-tabs-pill.v-slide-group,
+  .v-tabs.v-tabs-pill .v-slide-group__container {
+    width: min-content;
+  }
 }

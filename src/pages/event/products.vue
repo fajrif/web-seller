@@ -1,5 +1,4 @@
 <script setup>
-import notFoundImg from '@images/icons/ic-search.png'
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
@@ -105,12 +104,16 @@ const addItem = () => {
 const deleteItem = (id, name) => {
 	deleteProduct(id)
 }
+
+const parseDesc = () => {
+	return `Anda sekarang belum memiliki produk untuk promo <strong>${ eventName.value }</strong>.<br/>Silahkan pilih produk-produk yang ingin anda tampilkan sebagai Produk Promo di toko anda.`
+}
 </script>
 
 <template>
   <div>
     <!-- 👉 Event Data	-->
-    <div class="d-flex justify-space-between align-center flex-wrap gap-y-4 mb-6">
+    <div class="d-flex flex-wrap flex-column flex-md-row justify-space-between align-start align-md-center gap-y-4 mb-6">
       <div>
         <h4 class="text-h4 font-weight-medium">
 					Event dan Promo
@@ -138,34 +141,14 @@ const deleteItem = (id, name) => {
     </div>
     <!-- 👉 Empty Event -->
     <VCard v-if="eventData == undefined">
-    <div class="d-flex justify-center align-center pa-10 ma-10">
-      <div class="d-flex align-center">
-        <VAvatar
-          size="100"
-          class="me-6"
-        >
-          <VImg
-            :src="notFoundImg"
-            class="mb-2"
-          />
-        </VAvatar>
-        <div class="d-flex flex-column">
-          <p
-            class="text-body-2"
-            style="width:350px"
-          >
-            Maaf event yang anda cari tidak ditemukan. Silahkan coba beberapa saat lagi.
-          </p>
-          <VBtn
-            color="primary"
-            style="width:fit-content"
-            @click="$router.push('/event')"
-          >
-            Lihat Event dan Promo
-          </VBtn>
-        </div>
-      </div>
-    </div>
+			<EmptyData
+				:orientation="1"
+				:border="false"
+				title="Event tidak ditemukan"
+				description="Maaf event yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi"
+				btn-text="Kembali Event dan Promosi"
+				@click-button="() => $router.push('/event')"
+				/>
     </VCard>
 
     <!-- 👉 products -->
@@ -265,38 +248,14 @@ const deleteItem = (id, name) => {
 				</VDataTableServer>
 
 				<!-- 👉 Empty products -->
-				<div
-					v-else
-					class="d-flex justify-center align-center pa-10 ma-10"
-					>
-					<div class="d-flex align-center">
-						<VAvatar
-							size="100"
-							class="me-6"
-							>
-							<VImg
-								:src="notFoundImg"
-								class="mb-2"
-								/>
-						</VAvatar>
-						<div class="d-flex flex-column">
-							<p
-								class="text-body-2"
-								style="width:350px"
-								>
-								Anda sekarang belum memiliki produk untuk promo <strong>{{ eventName }}</strong>. Silahkan pilih produk-produk yang ingin anda tampilkan sebagai Produk Promo di toko anda.
-							</p>
-							<VBtn
-								color="primary"
-								style="width:fit-content"
-								prepend-icon="tabler-plus"
-								@click="addItem"
-								>
-								Tambah Produk
-							</VBtn>
-						</div>
-					</div>
-				</div>
+				<template v-else>
+					<EmptyData
+						:border="false"
+						:description="parseDesc()"
+						btn-text="Tambah Produk"
+						@click-button="addItem"
+						/>
+				</template>
 			</VCardText>
     </VCard>
 

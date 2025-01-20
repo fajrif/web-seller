@@ -24,7 +24,6 @@ const banners = [
 <template>
   <VCard
     color="lightblue"
-    height="280"
   >
     <VCarousel
       cycle
@@ -32,7 +31,7 @@ const banners = [
       :show-arrows="false"
       hide-delimiter-background
       :delimiter-icon="() => h(VIcon, { icon: 'fa-circle', size: '8' })"
-      height="280"
+      height="fit-content"
       class="carousel-delimiter-top-end web-analytics-carousel"
     >
       <VCarouselItem
