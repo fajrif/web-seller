@@ -18,6 +18,12 @@ const headers = productHeaders.filter(item => {
   return (item.id != 4 && item.id != 5)
 })
 
+const searchTrigger = computed(() => {
+	if (searchQuery.value.length > 3) {
+		 return searchQuery.value
+	}
+})
+
 // get event data
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
@@ -35,7 +41,7 @@ const {
   execute: fetchProducts, isFinished: loading,
 } = await useApiCore(createUrl('/seller/query/product/event', {
   query: {
-    keyword: searchQuery,
+    keyword: searchTrigger,
     page,
     limit: itemsPerPage,
   },

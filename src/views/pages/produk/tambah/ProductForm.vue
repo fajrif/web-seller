@@ -1,20 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
-// import { vMaska } from "maska/vue";
 import '@cholakovdev/vue3-treeselect/dist/vue3-treeselect.css'
 
 const userData = useCookie('userData')
 const messageStore = useMessageStore()
 const router = useRouter()
-
-// const options = {
-// 	mask: '9.99#',
-// 	tokens: {
-// 		9: { pattern: /[0-9]/, repeated: true },
-// 	},
-// 	reversed: true
-// };
 
 const isFormValid = ref(false)
 const refForm = ref()
@@ -207,20 +198,16 @@ const onSubmit = () => {
             title="Harga"
           >
             <VCardText>
-              <AppTextField
+              <AppCurrencyInput
                 v-model="productPrice"
                 label="Harga Satuan"
-                prefix="Rp"
-                type="number"
                 :rules="[requiredValidator]"
                 placeholder="Masukan harga jual"
                 class="mb-6"
               />
-              <AppTextField
+              <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"
-                prefix="Rp"
-                type="number"
                 :rules="[requiredValidator]"
                 placeholder="Masukan harga coret"
                 class="mb-6"

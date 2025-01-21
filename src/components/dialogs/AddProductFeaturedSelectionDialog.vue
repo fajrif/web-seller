@@ -22,13 +22,19 @@ const headers = productHeaders.filter(item => {
   return (item.id != 4 && item.id != 6)
 })
 
+const searchTrigger = computed(() => {
+	if (searchQuery.value.length > 3) {
+		 return searchQuery.value
+	}
+})
+
 const {
   data: productsData,
   execute: fetchProducts,
   isFinished: loading,
 } = await useApiCore(createUrl('/seller/query/product/merchant', {
   query: {
-    keyword: searchQuery,
+    keyword: searchTrigger,
     page,
     limit: itemsPerPage,
     "filter[status]": "available",

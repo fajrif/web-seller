@@ -25,12 +25,18 @@ const itemsPerPage = ref(PAGINATION_PER_PAGE)
 const page = ref(1)
 const sortBy = ref('')
 
+const searchTrigger = computed(() => {
+	if (searchQuery.value.length > 3) {
+		 return searchQuery.value
+	}
+})
+
 const {
   data: productsData,
   execute: fetchProducts, isFinished: loading,
 } = await useApiCore(createUrl('/seller/query/product/merchant', {
   query: {
-    keyword: searchQuery,
+    keyword: searchTrigger,
     "filter[status]": props.selectedStatus,
     page,
     limit: itemsPerPage,
@@ -131,6 +137,7 @@ const deleteItem = (id, name) => {
   productName.value = name
   isDeleteProductDialogVisible.value = true
 }
+
 </script>
 
 <template>

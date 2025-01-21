@@ -21,7 +21,7 @@ export const useApiCore = createFetch({
 
       return { options }
     },
-    onFetchError(ctx) {
+		onFetchError(ctx) {
       const { data, response } = ctx
       try {
         // Invalid or expired JWT
@@ -29,10 +29,10 @@ export const useApiCore = createFetch({
           // Remove "accessToken" from cookie
           useCookie('accessToken').value = null
           useCookie('userData').value = null
-
           // Remove "userAbilities" from cookie
           useCookie('userAbilityRules').value = null
         }
+				return ctx;
       }
       catch (error) {
         console.error(error)

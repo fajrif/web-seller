@@ -43,8 +43,8 @@ if (productDetails.value.success) {
   productCategory.value = productData.category_id
   productEtalase.value = productData.etalase_id
   productCondition.value = productData.condition
-  productPrice.value = productData.price
-  productStrikePrice.value = productData.strike_price
+  productPrice.value = parseInt(productData.price)
+  productStrikePrice.value = parseInt(productData.strike_price)
   productStock.value = productData.product_stock[0].amount
   productMinPurchase.value = productData.minimum_purchase
   productWeight.value = productData.weight
@@ -260,20 +260,16 @@ const uploadProductPhoto = async (path) => {
             title="Harga"
           >
             <VCardText>
-              <AppTextField
+              <AppCurrencyInput
                 v-model="productPrice"
                 label="Harga Satuan"
-                prefix="Rp"
-                type="number"
                 :rules="[requiredValidator]"
                 placeholder="Masukan harga jual"
                 class="mb-6"
               />
-              <AppTextField
+              <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"
-                prefix="Rp"
-                type="number"
                 :rules="[requiredValidator]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
