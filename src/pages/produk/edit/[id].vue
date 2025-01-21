@@ -267,6 +267,9 @@ const uploadProductPhoto = async (path) => {
                 placeholder="Masukan harga jual"
                 class="mb-6"
               />
+							<!-- 👉 MDR Component -->
+              <MdrDisplay v-model="productPrice" />
+
               <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"

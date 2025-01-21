@@ -23,7 +23,7 @@ const elementId = computed(() => {
   const attrs = useAttrs()
   const _elementIdToken = attrs.id
   const _id = useId()
-  
+
   return _elementIdToken ? `app-text-field-${ _elementIdToken }` : _id
 })
 

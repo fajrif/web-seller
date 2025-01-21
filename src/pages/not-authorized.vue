@@ -30,16 +30,6 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
       Back To Home
     </VBtn>
 
-    <!-- 👉 Image -->
-    <div class="misc-avatar w-100 text-center">
-      <VImg
-        :src="pages401"
-        alt="not autorized"
-        :max-height="$vuetify.display.smAndDown ? 350 : 500"
-        class="mx-auto"
-      />
-    </div>
-
     <img
       class="misc-footer-img d-none d-md-block"
       :src="authThemeMask"
