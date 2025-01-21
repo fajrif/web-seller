@@ -114,7 +114,7 @@ const deleteProduct = async id => {
 const editPrice = (id, name, price) => {
   productId.value = id
   productName.value = name
-  productPrice.value = price
+  productPrice.value = parseInt(price)
   isUpdateHargaDialogVisible.value = true
 }
 

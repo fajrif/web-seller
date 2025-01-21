@@ -116,7 +116,6 @@ const contactUs = [
                 <VWindow v-model="currentTab">
                   <VWindowItem
                     value="tab-1"
-                    class="bg-white"
                   >
                     <VExpansionPanels v-model="activeQuestion">
                       <VExpansionPanel
@@ -189,9 +188,12 @@ const contactUs = [
 .v-tabs.v-tabs--horizontal:not(.v-tabs-pill) {
 	border-block-end: none;
 }
-.v-btn.v-tab-item--selected.v-tab--selected {
+.v-theme--light .v-btn.v-tab-item--selected.v-tab--selected {
 	border-color: var(--v-theme-primary) !important;
 	background-color: #d3eef2;
+}
+.v-theme--dark .v-btn.v-tab-item--selected.v-tab--selected {
+	background-color: #1b3535;
 }
 .v-tab__slider {
 	display: none;

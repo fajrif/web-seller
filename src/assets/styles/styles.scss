@@ -26,6 +26,9 @@
 .text-black {
   color: #404040 !important;
 }
+.v-theme--dark .text-black {
+  color: #fff !important;
+}
 .bg-white {
   background-color: #fff !important;
 }
@@ -102,6 +105,7 @@
   padding-inline-end: 0 !important;
 }
 .v-text-field__suffix {
+  --v-global-theme-primary: 0, 162, 185;
   padding-left: var(--v-field-padding-end);
   padding-right: var(--v-field-padding-end);
   background-color: rgba(var(--v-global-theme-primary), 1);
@@ -153,4 +157,9 @@ body .v-tabs.v-tabs-pill .v-tab--selected.text-primary {
   .v-tabs.v-tabs-pill .v-slide-group__container {
     width: min-content;
   }
+}
+
+.v-theme--dark {
+  --v-theme-on-background: 0, 0, 0 !important;
+  --v-theme-on-background: 255,255,255 !important;
 }

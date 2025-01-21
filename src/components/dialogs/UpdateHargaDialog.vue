@@ -31,27 +31,21 @@ const newProductPrice = ref()
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
-  newProductPrice.value = null
-  nextTick(() => {
-    refForm.value?.reset()
-    refForm.value?.resetValidation()
-  })
+	newProductPrice.value = props.productPrice
 }
 
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      // or this one
       emit('formSubmitted', props.productId, newProductPrice.value)
-
-      emit('update:isDialogVisible', false)
-      nextTick(() => {
-        refForm.value?.reset()
-        refForm.value?.resetValidation()
-      })
+			onReset()
     }
   })
 }
+
+watch(() => props.productPrice, (value) => {
+	newProductPrice.value = value
+});
 </script>
 
 <template>
@@ -85,10 +79,8 @@ const onSubmit = () => {
         <VCardText>
           <VRow>
             <VCol cols="12">
-              <AppTextField
+              <AppCurrencyInput
                 v-model="newProductPrice"
-                prefix="Rp"
-                type="number"
                 :rules="[requiredValidator]"
                 placeholder="Masukan harga jual"
               />

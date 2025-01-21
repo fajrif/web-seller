@@ -3,10 +3,15 @@ import { register } from 'swiper/element/bundle'
 
 const route = useRoute('produk-view-id')
 const productData = ref()
+const isSwiperDialogVisible = ref(false)
 
 const { data: productDetails } = await useApiCore(`/seller/query/product/detail/${ route.params.id }`)
 if (productDetails.value.success) {
   productData.value = productDetails.value.data
+}
+
+const openSwiperDialog = () => {
+  isSwiperDialogVisible.value = true
 }
 
 register()
@@ -65,6 +70,8 @@ register()
               >
                 <VImg
                   :src="swiperImg.url"
+									style="cursor:pointer;"
+									@click="openSwiperDialog"
                   cover
                 />
               </swiper-slide>
@@ -181,6 +188,10 @@ register()
 					/>
 			</template>
     </VCard>
+    <SwiperDialog
+      v-model:is-dialog-visible="isSwiperDialogVisible"
+      v-model:images="productData.product_photo"
+    />
   </div>
 </template>
 

@@ -26,11 +26,6 @@ const newEtalaseName = ref('')
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
-  newEtalaseName.value = ''
-  nextTick(() => {
-    refForm.value?.reset()
-    refForm.value?.resetValidation()
-  })
 }
 
 const onSubmit = () => {
@@ -38,15 +33,14 @@ const onSubmit = () => {
     if (valid) {
       // save showcase
       emit('formSubmitted', props.etalaseId, newEtalaseName.value)
-
-      emit('update:isDialogVisible', false)
-      nextTick(() => {
-        refForm.value?.reset()
-        refForm.value?.resetValidation()
-      })
+      onReset()
     }
   })
 }
+
+watch(() => props.etalaseName, (value) => {
+	newEtalaseName.value = value
+});
 </script>
 
 <template>
@@ -90,7 +84,6 @@ const onSubmit = () => {
             <VCol cols="12">
               <AppTextField
                 v-model="newEtalaseName"
-                label="Nama etalase"
                 :rules="[requiredValidator]"
                 placeholder="Masukan nama etalase"
               />

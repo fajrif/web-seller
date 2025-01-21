@@ -27,31 +27,26 @@ const emit = defineEmits([
 
 const isFormValid = ref(false)
 const refForm = ref()
-const newStockPrice = ref()
+const newStockValue = ref()
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
-  newStockPrice.value = null
-  nextTick(() => {
-    refForm.value?.reset()
-    refForm.value?.resetValidation()
-  })
+	newStockValue.value = props.productStock
 }
 
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       // or this one
-      emit('formSubmitted', props.productId, newStockPrice.value)
-
-      emit('update:isDialogVisible', false)
-      nextTick(() => {
-        refForm.value?.reset()
-        refForm.value?.resetValidation()
-      })
+      emit('formSubmitted', props.productId, newStockValue.value)
+      onReset()
     }
   })
 }
+
+watch(() => props.productStock, (value) => {
+	newStockValue.value = value
+});
 </script>
 
 <template>
@@ -86,7 +81,7 @@ const onSubmit = () => {
           <VRow>
             <VCol cols="12">
               <AppTextField
-                v-model="newStockPrice"
+                v-model="newStockValue"
                 suffix="Buah"
                 type="number"
                 :rules="[requiredValidator]"
