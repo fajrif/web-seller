@@ -14,6 +14,7 @@ const props = defineProps({
 
 var mdrData = reactive({})
 const mdrCost = ref(2000)
+const taxCost = ref(0)
 const MIN_CALCULATE = 2000
 
 await $apiCore('/seller/query/mdr/value', {
@@ -48,20 +49,19 @@ const getTaxPercentage = () => {
 	return mdrData.ppn_value.toString() + '%';
 }
 
-const getTaxCost = () => {
-	let _taxCost = 0;
+const getTaxCost = computed(() => {
+	taxCost.value = 0;
 	if(mdrData.ppn_type !== null && props.modelValue > MIN_CALCULATE) {
-		_taxCost = (parseInt(mdrData.ppn_value) * props.modelValue) / 100;
+		taxCost.value = (parseInt(mdrData.ppn_value) * props.modelValue) / 100;
 	}
-	return _taxCost;
-}
+	return taxCost.value;
+})
 
 // Total dana yg diterima =  Harga Satuan - (Hitung Nilai MDR + Hitung PPN)
 const getAmount = computed(() => {
 	let _amount = 0;
-	let _taxCost = getTaxCost();
 	if(props.modelValue > MIN_CALCULATE) {
-		_amount = props.modelValue - (mdrCost.value + _taxCost);
+		_amount = props.modelValue - (mdrCost.value + taxCost.value);
 	}
 	return _amount;
 })
@@ -75,29 +75,35 @@ const getAmount = computed(() => {
 		:class="props.backgroundColor"
 		>
 		<div class="me-auto">
-			<p class="mb-6">
+			<p class="mb-4">
 				Merchant Discount Rate (MDR)
 			</p>
-			<p class="mb-6">
+			<p class="mb-4">
 				Nominal Merchant Discount Rate (MDR)
 			</p>
-			<p v-if="mdrData.ppn_value > 0" class="mb-6">
+			<p v-if="mdrData.ppn_value > 0" class="mb-4">
 				PPN
+			</p>
+			<p v-if="mdrData.ppn_value > 0" class="mb-4">
+				Nominal PPN
 			</p>
 			<p class="text-primary fw-700 mb-0">
 				Dana yang akan diterima
 			</p>
 		</div>
 
-		<div class="ms-auto">
-			<p class="mb-6">
+		<div class="ms-auto text-end">
+			<p class="mb-4">
 				{{ getMdrType() }}
 			</p>
-			<p class="mb-6">
+			<p class="mb-4">
 				{{ toCurrency(getMdrCost) }}
 			</p>
-			<p v-if="mdrData.ppn_value > 0" class="mb-6">
+			<p v-if="mdrData.ppn_value > 0" class="mb-4">
 				{{ getTaxPercentage() }}
+			</p>
+			<p v-if="mdrData.ppn_value > 0" class="mb-4">
+				{{ toCurrency(getTaxCost) }}
 			</p>
 			<p class="text-primary fw-700 mb-0">
 				{{ toCurrency(getAmount) }}

@@ -1,8 +1,7 @@
 <script setup>
 import { useTheme } from 'vuetify'
-import ScrollToTop from '@core/components/ScrollToTop.vue'
 import initCore from '@core/initCore'
-import { initConfigStore, useConfigStore, useMessageStore } from '@core/stores/config'
+import { initConfigStore, useConfigStore } from '@core/stores/config'
 import { hexToRgb } from '@core/utils/colorConverter'
 
 const { global } = useTheme()
@@ -12,7 +11,6 @@ initCore()
 initConfigStore()
 
 const configStore = useConfigStore()
-const snackbar = useMessageStore()
 </script>
 
 <template>
@@ -20,43 +18,7 @@ const snackbar = useMessageStore()
     <!-- ℹ️  This is required to set the background color of active nav link based on currently active global theme's primary -->
     <VApp :style="`--v-global-theme-primary: ${hexToRgb(global.current.value.colors.primary)}`">
       <RouterView />
-
-      <VSnackbar
-        v-model="snackbar.visible"
-        auto-height
-        variant="tonal"
-        :color="snackbar.color"
-        :multi-line="snackbar.mode === 'multi-line'"
-        :timeout="snackbar.timeout"
-        :location="snackbar.position"
-      >
-        <VLayout
-          align-center
-          me-4
-        >
-          <div class="d-flex align-start">
-            <VIcon
-							size="30"
-              :icon="snackbar.icon"
-              class="me-2 mt-1"
-            />
-            <div class="d-flex flex-column text-black">
-              <h2 class="text-black" style="font-size:1.3em;">{{ snackbar.title }}</h2>
-              <p class="text-body-1 fw-500 mb-0">
-                {{ snackbar.text }}
-              </p>
-            </div>
-          </div>
-        </VLayout>
-        <template #actions>
-          <VBtn
-            icon="tabler-x"
-            variant="text"
-            color="secondary"
-            @click="snackbar.visible = false"
-          />
-        </template>
-      </VSnackbar>
+      <SnackBarMessage />
     </VApp>
   </VLocaleProvider>
 </template>
