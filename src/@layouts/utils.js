@@ -45,6 +45,18 @@ export const resolveNavLinkRouteName = (link, router) => {
  * @param {object} link nav-link object
  */
 export const isNavLinkActive = (link, router) => {
+
+	// custom nav link activation
+	if (typeof link.to === 'string') {
+		if(link.to == 'event' && router.currentRoute.value.name == 'event-products') {
+			return true
+		}
+	} else if(typeof link.to === 'object'){
+		if(link.to.name == 'produk-tab' && (router.currentRoute.value.name == 'produk-view-id' || router.currentRoute.value.name == 'produk-edit-id')) {
+			return true
+		}
+	}
+
   // Matched routes array of current route
   const matchedRoutes = router.currentRoute.value.matched
 

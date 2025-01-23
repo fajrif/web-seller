@@ -11,3 +11,12 @@ export const resolveIconType = title => {
     }
 	}
 }
+
+export const formattedDate = str => {
+	let formatted = ''
+	let strDate = Date.parse(str);
+	if(strDate !== null){
+		formatted = useDateFormat(strDate, 'DD MMM YYYY HH:mm', { locales: 'id-ID' });
+	}
+	return formatted;
+}

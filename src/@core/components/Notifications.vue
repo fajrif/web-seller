@@ -155,7 +155,7 @@ const toggleReadUnread = (isSeen, Id) => {
                       class="text-sm text-disabled mb-0"
                       style=" letter-spacing: 0.4px !important; line-height: 18px;"
                     >
-                      {{ notification.time }}
+											{{ formattedDate(notification.time) }}
                     </p>
                   </div>
                   <VSpacer />

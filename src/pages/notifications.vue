@@ -73,7 +73,7 @@ const totalNotifications = computed(() => notificationsData.value.data.total)
 									class="text-sm text-disabled mb-0"
 									style=" letter-spacing: 0.4px !important; line-height: 18px;"
 								>
-									{{ item.created_at }}
+									{{ formattedDate(item.created_at) }}
 								</p>
 							</div>
 							<VSpacer />
