@@ -4,9 +4,9 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
+const loading = ref(false)
 const isUploadPhotoDialogVisible = ref(false)
 const isUploadBannerDialogVisible = ref(false)
-const isFormValid = ref(false)
 const refForm = ref()
 const	merchantPhoto = ref('')
 const	merchantName = ref('')
@@ -60,36 +60,52 @@ const saveMerchant = async merchantData => {
       method: 'POST',
       body: merchantData,
       onResponseError({ response }) {
-        console.log(response)
+				loading.value = false
+				messageStore.setMessage('error', response._data.message)
       },
     })
 
-		updateCookieUserData(() => {})
+    await nextTick(() => {
+			loading.value = false
+			updateCookieUserData(() => {
+				let msg = res.message
+				messageStore.setMessage('success', msg)
+			})
+		})
 
-    let msg = res.message
-    messageStore.setMessage('success', msg)
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal simpan informasi toko')
     console.error("Error on update merchant data:", error)
   }
 }
 
-/* eslint-disable camelcase */
-const onSubmit = () => {
-  refForm.value?.validate().then(({ valid }) => {
-    if (valid) {
-      saveMerchant({
-        name: merchantName.value,
-        description: merchantDescription.value,
-        slogan: merchantSlogan.value,
-        is_npwp_required: merchantRequestNPWP.value,
-				photo_url: merchantPhoto.value,
-				...operationalAttrs
-      })
-    }
-  })
+const savingMerchant = () => {
+	/* eslint-disable camelcase */
+	saveMerchant({
+		name: merchantName.value,
+		description: merchantDescription.value,
+		slogan: merchantSlogan.value,
+		is_npwp_required: merchantRequestNPWP.value,
+		photo_url: merchantPhoto.value,
+		...operationalAttrs
+	})
+	/* eslint-enable */
 }
-/* eslint-enable */
+
+const onSubmit = () => {
+	loading.value = true
+	refForm.value?.validate().then(({ valid }) => {
+		if (valid) {
+			setTimeout(() => {
+				savingMerchant()
+			}, 1000)
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Gagal simpan informasi toko')
+		}
+	})
+}
 
 // hapus banner
 const deleteBanner = async (id) => {
@@ -217,7 +233,6 @@ const uploadMerchantBanner = async (path) => {
 						<!-- 👉 Form -->
 						<VForm
 							ref="refForm"
-							v-model="isFormValid"
 							class="mt-3"
 							@submit.prevent="onSubmit"
 							>
@@ -294,7 +309,11 @@ const uploadMerchantBanner = async (path) => {
 									cols="12"
 									class="d-flex flex-wrap justify-end gap-4"
 									>
-									<VBtn type="submit">
+									<VBtn
+										:disabled="loading"
+										:loading="loading"
+										type="submit"
+										>
 										Simpan Informasi
 									</VBtn>
 								</VCol>

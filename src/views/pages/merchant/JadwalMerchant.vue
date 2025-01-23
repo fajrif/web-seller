@@ -3,6 +3,8 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
+const loading = ref(false)
+
 const	monday = ref(false)
 const tuesday = ref(false)
 const wednesday = ref(false)
@@ -63,20 +65,24 @@ const saveSchedule = async merchantData => {
       method: 'POST',
       body: merchantData,
       onResponseError({ response }) {
-        console.log(response)
+				loading.value = false
+				messageStore.setMessage('error', response._data.message)
       },
     })
 
-    let msg = res.message
-    messageStore.setMessage('success', msg)
+    await nextTick(() => {
+			loading.value = false
+			let msg = res.message
+			messageStore.setMessage('success', msg)
+		})
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal simpan jadwal toko')
     console.error("Error on update operational hour merchant data:", error)
   }
 }
 
-/* eslint-disable camelcase */
-const onSubmit = () => {
+const savingSchedule = () => {
   let selectedOperational = []
 
   if(monday.value == true) { selectedOperational.push(7) }
@@ -101,7 +107,13 @@ const onSubmit = () => {
 		...merchantAttrs
   })
 }
-/* eslint-enable */
+
+const onSubmit = () => {
+	loading.value = true
+	setTimeout(() => {
+		savingSchedule()
+	}, 1000)
+}
 </script>
 
 <template>
@@ -241,6 +253,8 @@ const onSubmit = () => {
       </VCardText>
       <VCardActions class="justify-center">
         <VBtn
+					:disabled="loading"
+					:loading="loading"
           type="submit"
           variant="flat"
         >

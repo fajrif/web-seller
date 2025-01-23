@@ -1,4 +1,5 @@
 <script setup>
+import { useMessageStore } from '@core/stores/config'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 
 definePage({
@@ -10,6 +11,7 @@ definePage({
 
 const router = useRouter()
 const route = useRoute('verification')
+const messageStore = useMessageStore()
 const otp = ref('')
 const isOtpInserted = ref(false)
 const isOtpError = ref(false)
@@ -18,11 +20,6 @@ const email = ref()
 if(route.query.email){
   email.value = route.query.email
 }
-
-const message = ref({
-  text: '',
-  color: 'text-success',
-})
 
 const replaceEmailSent = () => {
   if(email.value != undefined && email.value != '') {
@@ -35,22 +32,24 @@ const replaceEmailSent = () => {
 
 const sendResetPassword = async () => {
   try {
+		isOtpInserted.value = true
     const res = await $apiAuth('/password/email', {
       method: 'POST',
       body: {
         email: email.value,
       },
       onResponseError({ response }) {
+				isOtpInserted.value = false
         let msg = response._data.message
-        message.value.text = msg
-        message.value.color = 'text-error'
+        messageStore.setMessage('error', msg)
       },
     })
 
-    message.value.text = res.message
-    message.value.color = 'text-success'
-
+		isOtpInserted.value = false
+		messageStore.setMessage('success', res.message)
   } catch (err) {
+		isOtpInserted.value = false
+		messageStore.setMessage('error', "Gagal kirim email kode verifikasi")
     console.error(err)
   }
 }
@@ -66,29 +65,34 @@ const sendVerificationCode = async () => {
       onResponseError({ response }) {
         let msg = response._data.message
         isOtpError.value = true
-        message.value.text = msg
-        message.value.color = 'text-error'
+        messageStore.setMessage('error', msg)
       },
     })
 
-    isOtpError.value = false
-    message.value.text = res.message
-    message.value.color = 'text-success'
-
     await nextTick(() => {
-      router.push({ name: 'reset-password', query: { email: email.value, token: otp.value } })
+			if(res.success && res.status_code == 200) {
+				isOtpError.value = false
+        messageStore.setMessage('success', res.message)
+				router.push({ name: 'reset-password', query: { email: email.value, token: otp.value } })
+			} else {
+				isOtpError.value = true
+        messageStore.setMessage('error', res.message)
+			}
     })
+
   } catch (err) {
+		isOtpError.value = true
+		messageStore.setMessage('error', "Gagal melakukan proses verifikasi")
     console.error(err)
   }
 }
 
-const onFinish = () => {
-  isOtpInserted.value = true
-  setTimeout(() => {
-    isOtpInserted.value = false
-    sendVerificationCode()
-  }, 2000)
+const onSubmit = () => {
+	isOtpInserted.value = true
+	setTimeout(() => {
+		isOtpInserted.value = false
+		sendVerificationCode()
+	}, 2000)
 }
 </script>
 
@@ -108,13 +112,6 @@ const onFinish = () => {
             </h4>
             <p class="mb-1">
               Kami telah mengirimkan kode verifikasi untuk login anda, mohon cek kembali Pesan Masuk di email Anda. <strong>{{ replaceEmailSent() }}</strong>
-            </p>
-            <p
-              v-if="message.text"
-              class="mb-1"
-              :class="message.color"
-            >
-              {{ message.text }}
             </p>
           </div>
           <div v-else>
@@ -139,7 +136,9 @@ const onFinish = () => {
         </VCardText>
 
         <VCardText v-if="email">
-          <VForm @submit.prevent="() => {}">
+					<VForm
+						@submit.prevent="onSubmit"
+						>
             <VRow>
               <!-- email -->
               <VCol cols="12">
@@ -153,7 +152,7 @@ const onFinish = () => {
                   type="number"
                   length="4"
                   class="pa-0"
-                  @finish="onFinish"
+                  @finish="onSubmit"
                 />
               </VCol>
 

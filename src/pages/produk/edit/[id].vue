@@ -14,7 +14,7 @@ const	imageAttr = {
 	},
 }
 
-const isFormValid = ref(false)
+const loading = ref(false)
 const refForm = ref()
 const	merchantId = ref(0)
 const	productName = ref('')
@@ -70,12 +70,17 @@ const saveProduct = async productData => {
       method: 'POST',
       body: productData,
       onResponseError({ response }) {
+				loading.value = false
         messageStore.setMessage('error', response._data.message)
       },
     })
 
-    messageStore.setMessage('success', 'Data produk berhasil diubah')
+    await nextTick(() => {
+			loading.value = false
+			messageStore.setMessage('success', 'Data produk berhasil diubah')
+		})
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal mengubah data produk')
     console.error("Error on posting product data:", error)
   }
@@ -106,11 +111,17 @@ const savingProduct = () => {
 }
 
 const onSubmit = () => {
-  refForm.value?.validate().then(({ valid }) => {
-    if (valid) {
-			savingProduct()
-    }
-  })
+	loading.value = true
+	refForm.value?.validate().then(({ valid }) => {
+		if (valid) {
+			setTimeout(() => {
+				savingProduct()
+			}, 1000)
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Gagal simpan data produk')
+		}
+	})
 }
 
 const deleteImage = (index) => {
@@ -148,7 +159,6 @@ const uploadProductPhoto = async (path) => {
     <!-- 👉 Form -->
     <VForm
       ref="refForm"
-      v-model="isFormValid"
       @submit.prevent="onSubmit"
     >
       <VRow>
@@ -377,6 +387,8 @@ const uploadProductPhoto = async (path) => {
 				<VCol cols="12">
 					<div class="d-flex flex-wrap gap-4 justify-end">
 						<VBtn
+							:disabled="loading"
+							:loading="loading"
 							type="submit"
 							class="w-100 w-md-auto"
 							>

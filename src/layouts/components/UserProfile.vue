@@ -7,6 +7,9 @@ const messageStore = useMessageStore()
 const router = useRouter()
 const ability = useAbility()
 
+const loading = ref(false)
+const switchOnLoading = ref(false)
+
 // TODO: Get type from backend
 const userData = useCookie('userData')
 
@@ -33,10 +36,14 @@ const clearCookies = async () => {
 
   // Reset ability to initial ability
   ability.update([])
+
+	// reset loading
+	loading.value = false
 }
 
 const logout = async () => {
   try {
+		loading.value = true
     const res = await $apiAuth('/logout', {
       method: 'POST',
       onResponseError({ response }) {
@@ -48,14 +55,17 @@ const logout = async () => {
       clearCookies()
     })
   } catch (err) {
+		loading.value = false
     console.error(err)
   }
 }
 
 const onChange = async () => {
+	loading.value = true
 	const res = await $apiCore('/seller/command/merchant/nonaktif-toko', {
 		method: 'POST',
 		onResponseError({ response }) {
+			loading.value = false
 			let msg = response._data.message
 			messageStore.setMessage('error', msg)
 			statusUser.value = !statusUser.value
@@ -66,7 +76,9 @@ const onChange = async () => {
 	messageStore.setMessage('success', msg)
 
 	await nextTick(() => {
-		updateCookieUserData(() => {})
+		updateCookieUserData(() => {
+			loading.value = false
+		})
 	})
 }
 </script>
@@ -130,6 +142,7 @@ const onChange = async () => {
 						</div>
 						<VSwitch
 							v-model="statusUser"
+							:loading="loading"
 							@update:model-value="onChange"
 							/>
 					</div>
@@ -138,6 +151,8 @@ const onChange = async () => {
 					<VListItemAction>
 						<div class="w-100 px-4 py-0">
 							<VBtn
+								:disabled="loading"
+								:loading="loading"
 								block
 								size="small"
 								color="error"

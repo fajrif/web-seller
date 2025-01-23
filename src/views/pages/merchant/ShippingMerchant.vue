@@ -4,6 +4,7 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
+const loading = ref(false)
 const kurirTanpaBiaya = ref([])
 const kurirBiaya = ref([])
 const selectedShipping = ref([])
@@ -59,18 +60,24 @@ if(expeditionsData.value.success) {
 
 const saveShipping = async () => {
   try {
+		loading.value = true
 		let selected = selectedShipping.value.join(":")
     const res = await $apiCore("/seller/command/merchant/set-expedition", {
       method: 'POST',
       body: { list_expeditions: selected },
       onResponseError({ response }) {
-        console.log(response)
+				loading.value = false
+				messageStore.setMessage('error', response._data.message)
       },
     })
 
-    let msg = res.message
-    messageStore.setMessage('success', msg)
+    await nextTick(() => {
+			loading.value = false
+			let msg = res.message
+			messageStore.setMessage('success', msg)
+		})
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal simpan pengiriman toko')
     console.error("Error on update expedition data data:", error)
   }
@@ -124,6 +131,7 @@ const saveShipping = async () => {
                     <VSwitch
                       v-model="selectedShipping"
 											:value="item.value"
+											:loading="loading"
                       density="compact"
                       class="me-1"
 											@change="saveShipping"
@@ -186,6 +194,7 @@ const saveShipping = async () => {
                     <VSwitch
                       v-model="selectedShipping"
 											:value="item.value"
+											:loading="loading"
                       density="compact"
                       class="me-1"
 											@change="saveShipping"

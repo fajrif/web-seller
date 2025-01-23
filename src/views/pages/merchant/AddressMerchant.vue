@@ -4,7 +4,7 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
-const isFormValid = ref(false)
+const loading = ref(false)
 const refForm = ref()
 const	merchantAddress = ref('')
 const	merchantProvinsi = ref(0)
@@ -73,14 +73,18 @@ const saveAddress = async addressData => {
       method: 'POST',
       body: addressData,
       onResponseError({ response }) {
-        console.log(response)
+				loading.value = false
         messageStore.setMessage('error', response.message)
       },
     })
 
-    let msg = res.message
-    messageStore.setMessage('success', msg)
+    await nextTick(() => {
+			loading.value = false
+			let msg = res.message
+			messageStore.setMessage('success', msg)
+		})
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal simpan alamat toko')
     console.error("Error on update address merchant data:", error)
   }
@@ -97,6 +101,7 @@ const saveMerchantLocation = (latitude, longitude) => {
 	savingAddress()
 }
 
+/* eslint-disable camelcase */
 const savingAddress = () => {
 	saveAddress({
 		address: merchantAddress.value,
@@ -109,16 +114,21 @@ const savingAddress = () => {
 		longitude: merchantLongitude.value.toString(),
 	})
 }
-
-/* eslint-disable camelcase */
-const onSubmit = () => {
-  refForm.value?.validate().then(({ valid }) => {
-    if (valid) {
-			savingAddress()
-    }
-  })
-}
 /* eslint-enable */
+
+const onSubmit = () => {
+	loading.value = true
+	refForm.value?.validate().then(({ valid }) => {
+		if (valid) {
+			setTimeout(() => {
+				savingAddress()
+			}, 1000)
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Gagal simpan alamat toko')
+		}
+	})
+}
 </script>
 
 <template>
@@ -131,7 +141,6 @@ const onSubmit = () => {
         <!-- 👉 Form -->
         <VForm
           ref="refForm"
-          v-model="isFormValid"
           class="mt-3"
           @submit.prevent="onSubmit"
         >
@@ -254,6 +263,7 @@ const onSubmit = () => {
                 v-model="merchantZipCode"
                 :rules="[requiredValidator]"
                 type="number"
+								min="0"
                 placeholder="Kode Pos"
                 label="Kode Pos"
               />
@@ -264,7 +274,11 @@ const onSubmit = () => {
               cols="12"
               class="d-flex flex-wrap justify-end gap-4"
             >
-              <VBtn type="submit">
+							<VBtn
+								:disabled="loading"
+								:loading="loading"
+								type="submit"
+								>
                 Simpan Alamat
               </VBtn>
             </VCol>

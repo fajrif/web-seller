@@ -1,4 +1,5 @@
 <script setup>
+import { useMessageStore } from '@core/stores/config'
 import { VForm } from 'vuetify/components/VForm'
 import logoImg from '@images/logo.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -10,10 +11,12 @@ definePage({
   },
 })
 
+const loading = ref(false)
 const isPasswordVisible = ref(false)
 const route = useRoute()
 const router = useRouter()
 const ability = useAbility()
+const messageStore = useMessageStore()
 
 const errors = ref({
   email: undefined,
@@ -38,12 +41,14 @@ const login = async () => {
         password: credentials.value.password,
       },
       onResponseError({ response }) {
+				loading.value = false
         let msg = response._data.message
         if(msg.toUpperCase().indexOf("EMAIL") === -1) {
           errors.value.password = msg
         } else {
           errors.value.email = msg
         }
+        messageStore.setMessage('error', "Login tidak berhasil")
       },
     })
 
@@ -56,18 +61,24 @@ const login = async () => {
 
     await nextTick(() => {
 			updateCookieUserData(() => {
+				loading.value = false
+        messageStore.setMessage('success', "Login berhasil")
 				router.replace(route.query.to ? String(route.query.to) : '/')
 			})
     })
   } catch (err) {
+		loading.value = false
+		messageStore.setMessage('error', "Login tidak berhasil")
     console.error(err)
   }
 }
 
 const onSubmit = () => {
-  refVForm.value?.validate().then(({ valid: isValid }) => {
-    if (isValid)
+  refVForm.value?.validate().then(({ valid }) => {
+		loading.value = valid
+		if (valid) {
       login()
+		}
   })
 }
 </script>
@@ -110,6 +121,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <AppTextField
                   v-model="credentials.email"
+									:disabled="loading"
                   label="Email"
                   placeholder="Alamat Email"
                   type="email"
@@ -123,6 +135,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <AppTextField
                   v-model="credentials.password"
+									:disabled="loading"
                   label="Password"
                   placeholder="············"
                   :rules="[requiredValidator]"
@@ -143,6 +156,8 @@ const onSubmit = () => {
                 </div>
 
                 <VBtn
+									:disabled="loading"
+									:loading="loading"
                   block
                   type="submit"
                 >

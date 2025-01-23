@@ -1,4 +1,5 @@
 <script setup>
+import { useMessageStore } from '@core/stores/config'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 
 definePage({
@@ -8,17 +9,14 @@ definePage({
   },
 })
 
+const loading = ref(false)
 const refVForm = ref()
 const isPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 
-const message = ref({
-  text: '',
-  color: 'text-success',
-})
-
 const router = useRouter()
 const route = useRoute('reset-password')
+const messageStore = useMessageStore()
 
 const form = ref({
   email: '',
@@ -44,31 +42,35 @@ const resetPassword = async () => {
         password_confirmation: form.value.passwordConfirmation,
       },
       onResponseError({ response }) {
+				loading.value = false
         let msg = response._data.message
-        message.value.text = msg
-        message.value.color = 'text-error'
+        messageStore.setMessage('error', msg)
       },
     })
     /* eslint-enable */
 
     await nextTick(() => {
-      message.value.text = res.message
+			loading.value = false
       if(res.status_code == 400) {
-        message.value.color = 'text-error'
+        messageStore.setMessage('error', res.message)
       } else {
-        message.value.color = 'text-success'
+        messageStore.setMessage('success', res.message)
         router.push('/login')
       }
     })
   } catch (err) {
+		loading.value = false
+		messageStore.setMessage('error', "Gagal melakukan reset password")
     console.error(err)
   }
 }
 
 const onSubmit = () => {
-  refVForm.value?.validate().then(({ valid: isValid }) => {
-    if (isValid)
+  refVForm.value?.validate().then(({ valid }) => {
+		if (valid) {
+			loading.value = valid
       resetPassword()
+		}
   })
 }
 </script>
@@ -88,13 +90,6 @@ const onSubmit = () => {
           </h4>
           <p class="mb-0">
             Silahkan masukkan kata sandi anda yang baru
-          </p>
-          <p
-            v-if="message.text"
-            class="mb-1"
-            :class="message.color"
-          >
-            {{ message.text }}
           </p>
         </VCardText>
 
@@ -136,6 +131,8 @@ const onSubmit = () => {
               <!-- reset password -->
               <VCol cols="12">
                 <VBtn
+									:disabled="loading"
+									:loading="loading"
                   block
                   type="submit"
                 >

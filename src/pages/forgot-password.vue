@@ -1,4 +1,5 @@
 <script setup>
+import { useMessageStore } from '@core/stores/config'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 
 definePage({
@@ -14,8 +15,10 @@ const errors = ref({
   email: undefined,
 })
 
+const loading = ref(false)
 const refVForm = ref()
 const email = ref('')
+const messageStore = useMessageStore()
 
 const sendResetPassword = async () => {
   try {
@@ -27,23 +30,30 @@ const sendResetPassword = async () => {
         email: email.value,
       },
       onResponseError({ response }) {
+				loading.value = false
         let msg = response._data.message
         errors.value.email = msg
+        messageStore.setMessage('error', "Reset kata sandi gagal")
       },
     })
 
     await nextTick(() => {
+			loading.value = false
+			messageStore.setMessage('success', "Berhasil reset kata sandi")
       router.push(`/verification?email=${email.value}`)
     })
   } catch (err) {
-    errors.value.email = "Error: kirim email verifikasi tidak dapat diproses"
+		loading.value = false
+		messageStore.setMessage('error', "Reset kata sandi gagal")
+    errors.value.email = "Kirim email verifikasi tidak dapat diproses"
     console.error(err)
   }
 }
 
 const onSubmit = () => {
-  refVForm.value?.validate().then(({ valid: isValid }) => {
-    if (isValid)
+  refVForm.value?.validate().then(({ valid }) => {
+		loading.value = valid
+    if (valid)
       sendResetPassword()
   })
 }
@@ -89,6 +99,8 @@ const onSubmit = () => {
               <!-- reset password -->
               <VCol cols="12">
                 <VBtn
+									:disabled="loading"
+									:loading="loading"
                   block
                   type="submit"
                 >

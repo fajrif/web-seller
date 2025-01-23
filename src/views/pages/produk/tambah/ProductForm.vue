@@ -7,7 +7,7 @@ const userData = useCookie('userData')
 const messageStore = useMessageStore()
 const router = useRouter()
 
-const isFormValid = ref(false)
+const loading = ref(false)
 const refForm = ref()
 const	productName = ref('')
 const	productDescription = ref('')
@@ -38,44 +38,59 @@ const saveProduct = async productData => {
       method: 'POST',
       body: productData,
       onResponseError({ response }) {
+				loading.value = false
         messageStore.setMessage('error', response._data.message)
       },
     })
 
-    router.push('/produk/semua')
-    messageStore.setMessage('success', 'Data produk berhasil disimpan')
+    await nextTick(() => {
+			loading.value = false
+			messageStore.setMessage('success', 'Data produk berhasil disimpan')
+			router.push('/produk/semua')
+		})
   } catch (error) {
+		loading.value = false
     messageStore.setMessage('error', 'Gagal menyimpan data produk')
     console.error("Error on posting product data:", error)
   }
 }
 
+const savingProduct = () => {
+	/* eslint-disable camelcase */
+	saveProduct({
+		merchant_id: userData.id,
+		name: productName.value,
+		description: productDescription.value,
+		category_id: productCategory.value,
+		etalase_id: productEtalase.value,
+		condition: productCondition.value,
+		price: parseInt(productPrice.value),
+		strike_price: parseInt(productStrikePrice.value),
+		amount: parseInt(productStock.value),
+		minimum_purchase: productMinPurchase.value,
+		weight: productWeight.value,
+		height: productHeight.value,
+		width: productWidth.value,
+		length: productLength.value,
+		is_featured_product: productFeatured.value,
+		status: productStatus.value,
+		url: productPhotoUrl.value,
+	})
+	/* eslint-enable */
+}
+
 const onSubmit = () => {
-  refForm.value?.validate().then(({ valid, errors }) => {
-    if (valid) {
-      /* eslint-disable camelcase */
-      saveProduct({
-        merchant_id: userData.id,
-        name: productName.value,
-        description: productDescription.value,
-        category_id: productCategory.value,
-        etalase_id: productEtalase.value,
-        condition: productCondition.value,
-        price: parseInt(productPrice.value),
-        strike_price: parseInt(productStrikePrice.value),
-        amount: parseInt(productStock.value),
-        minimum_purchase: productMinPurchase.value,
-        weight: productWeight.value,
-        height: productHeight.value,
-        width: productWidth.value,
-        length: productLength.value,
-        is_featured_product: productFeatured.value,
-        status: productStatus.value,
-        url: productPhotoUrl.value,
-      })
-      /* eslint-enable */
-    }
-  })
+	loading.value = true
+	refForm.value?.validate().then(({ valid }) => {
+		if (valid) {
+			setTimeout(() => {
+				savingProduct()
+			}, 1000)
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Gagal simpan data produk')
+		}
+	})
 }
 
 </script>
@@ -85,7 +100,6 @@ const onSubmit = () => {
     <!-- 👉 Form -->
     <VForm
       ref="refForm"
-      v-model="isFormValid"
       @submit.prevent="onSubmit"
     >
       <VRow>
@@ -315,6 +329,8 @@ const onSubmit = () => {
 				<VCol cols="12">
 					<div class="d-flex flex-wrap gap-4 justify-end">
 						<VBtn
+							:disabled="loading"
+							:loading="loading"
 							type="submit"
 							class="w-100 w-md-auto"
 							>
