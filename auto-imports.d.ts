@@ -26,6 +26,7 @@ declare global {
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
   const conditionProduct: typeof import('./src/utils/productHelper.js')['conditionProduct']
   const confirmedValidator: typeof import('./src/@core/utils/validators.js')['confirmedValidator']
+  const containsCommaValidator: typeof import('./src/@core/utils/validators.js')['containsCommaValidator']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
   const createApp: typeof import('vue')['createApp']
@@ -63,6 +64,7 @@ declare global {
   const getInfoAttrs: typeof import('./src/utils/merchantHelper.js')['getInfoAttrs']
   const getOperationalAttrs: typeof import('./src/utils/merchantHelper.js')['getOperationalAttrs']
   const h: typeof import('vue')['h']
+  const headersFileUpload: typeof import('./src/utils/productHelper.js')['headersFileUpload']
   const hexToRgb: typeof import('./src/@core/utils/colorConverter.js')['hexToRgb']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -92,6 +94,7 @@ declare global {
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
   const mimes: typeof import('./src/utils/mimes.js')['default']
+  const minLengthValidator: typeof import('./src/@core/utils/validators.js')['minLengthValidator']
   const nextTick: typeof import('vue')['nextTick']
   const normalizerCategories: typeof import('./src/utils/productHelper.js')['normalizerCategories']
   const onActivated: typeof import('vue')['onActivated']
@@ -362,6 +365,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const validateProductDataStore: typeof import('./src/utils/storeValidation.js')['validateProductDataStore']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -446,6 +450,7 @@ declare module 'vue' {
     readonly getInfoAttrs: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['getInfoAttrs']>
     readonly getOperationalAttrs: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['getOperationalAttrs']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
+    readonly headersFileUpload: UnwrapRef<typeof import('./src/utils/productHelper.js')['headersFileUpload']>
     readonly hexToRgb: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['hexToRgb']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -473,6 +478,7 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly minLengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minLengthValidator']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly normalizerCategories: UnwrapRef<typeof import('./src/utils/productHelper.js')['normalizerCategories']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
@@ -742,6 +748,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly validateProductDataStore: UnwrapRef<typeof import('./src/utils/storeValidation.js')['validateProductDataStore']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

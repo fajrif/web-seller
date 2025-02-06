@@ -37,6 +37,78 @@ export const productHeaders = [
   },
 ]
 
+export const headersFileUpload = [
+  {
+    key: 'status',
+		sortable: false,
+  },
+  {
+    title: 'Nama Produk',
+    key: 'nama_produk',
+		sortable: false,
+  },
+  {
+    title: 'Kategori',
+    key: 'id_kategori',
+		sortable: false,
+  },
+  {
+    title: 'Etalase',
+    key: 'kode_etalase',
+		sortable: false,
+  },
+  {
+    title: 'Kondisi',
+    key: 'kondisi',
+		sortable: false,
+  },
+  {
+    title: 'Harga',
+    key: 'harga',
+		sortable: false,
+  },
+  {
+    title: 'Harga Coret',
+    key: 'harga_coret',
+		sortable: false,
+  },
+  {
+    title: 'Berat',
+    key: 'berat',
+		sortable: false,
+  },
+  {
+    title: 'Panjang',
+    key: 'panjang',
+		sortable: false,
+  },
+  {
+    title: 'Lebar',
+    key: 'lebar',
+		sortable: false,
+  },
+  {
+    title: 'Tinggi',
+    key: 'tinggi',
+		sortable: false,
+  },
+  {
+    title: 'Min. Pembelian',
+    key: 'minimum_pembelian',
+		sortable: false,
+  },
+  {
+    title: 'Stok',
+    key: 'stok',
+		sortable: false,
+  },
+  {
+    title: 'Deskripsi Produk',
+    key: 'deskripsi',
+		sortable: false,
+  },
+]
+
 export const statusProduct = [
   {
     id: 9,

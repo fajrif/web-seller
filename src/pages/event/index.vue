@@ -3,7 +3,9 @@ const eventsData = ref([])
 
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
-  eventsData.value = merchantDetails.value.data.merchant.can_registered_product_event
+	if(merchantDetails.value.data.merchant.can_registered_product_event){
+		eventsData.value = merchantDetails.value.data.merchant.can_registered_product_event
+	}
 }
 </script>
 

@@ -42,9 +42,9 @@ export const integerValidator = value => {
   if (isEmpty(value))
     return true
   if (Array.isArray(value))
-    return value.every(val => /^-?\d+$/.test(String(val))) || 'Harus menggunakan angka'
+    return value.every(val => /^-?\d+$/.test(String(val))) || 'Harus menggunakan angka (tanpa titik koma)'
 
-  return /^-?\d+$/.test(String(value)) || 'Harus menggunakan angka'
+  return /^-?\d+$/.test(String(value)) || 'Harus menggunakan angka (tanpa titik koma)'
 }
 
 // 👉 Regex Validator
@@ -83,6 +83,14 @@ export const lengthValidator = (value, length) => {
     return true
 
   return String(value).length === length || `"Panjang karakter harus ${length} karakter"`
+}
+
+// 👉 Minimum Length Validator
+export const minLengthValidator = (value, length) => {
+  if (isEmpty(value))
+    return true
+
+	return String(value).length >= length || `"Panjang karakter minimum ${length} karakter"`
 }
 
 // 👉 Alpha-dash Validator

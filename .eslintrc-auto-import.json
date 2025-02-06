@@ -389,6 +389,10 @@
     "useCustomGeolocation": true,
     "normalizerCategories": true,
     "sanitizeNullChilds": true,
-    "formattedDate": true
+    "formattedDate": true,
+    "headersFileUpload": true,
+    "validateProductDataStore": true,
+    "minLengthValidator": true,
+    "containsCommaValidator": true
   }
 }

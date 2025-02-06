@@ -58,7 +58,7 @@ const saveProduct = async productData => {
 const savingProduct = () => {
 	/* eslint-disable camelcase */
 	saveProduct({
-		merchant_id: userData.id,
+		merchant_id: userData.value.id,
 		name: productName.value,
 		description: productDescription.value,
 		category_id: productCategory.value,
