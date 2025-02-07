@@ -40,6 +40,7 @@ declare module 'vue' {
     DeleteProductDialog: typeof import('./src/components/dialogs/DeleteProductDialog.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     DropZone: typeof import('./src/@core/components/DropZone.vue')['default']
+    EditDataProductDialog: typeof import('./src/components/dialogs/EditDataProductDialog.vue')['default']
     EmptyData: typeof import('./src/components/EmptyData.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     FileUploadProductCard: typeof import('./src/components/FileUploadProductCard.vue')['default']

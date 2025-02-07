@@ -9,8 +9,9 @@ const messageStore = useMessageStore()
 const loading = ref(false)
 const isDeleteDataDialogVisible = ref(false)
 const isSaveDataDialogVisible = ref(false)
+const isEditDataDialogVisible = ref(false)
 const triggerReset = ref(false)
-const itemId = ref()
+const itemId = ref(-1)
 
 const products = computed(() => productStore.products)
 const totalProducts = computed(() => productStore.products.length)
@@ -69,6 +70,17 @@ const savingProduct = (id) => {
 	}
 }
 
+const editDataItem = id => {
+  itemId.value = id
+  isEditDataDialogVisible.value = true
+}
+
+const saveEditItem = (id) => {
+	// do something here ...
+	console.log('save edit item: ' + id)
+	console.log(productStore.products)
+}
+
 const deleteItem = id => {
   itemId.value = id
   isDeleteDataDialogVisible.value = true
@@ -76,7 +88,7 @@ const deleteItem = id => {
 
 const deleteItemConfirm = id => {
 	loading.value = true
-  itemId.value = null
+  itemId.value = -1
 	productStore.remove(id)
 	if(totalProducts.value <= 0) {
 		triggerReset.value = !triggerReset.value
@@ -91,7 +103,7 @@ const saveItem = id => {
 
 const saveItemConfirm = id => {
 	loading.value = true
-  itemId.value = null
+  itemId.value = -1
 	savingProduct(id)
 }
 
@@ -101,7 +113,7 @@ const computedMoreList = computed(() => {
       title: 'Ubah',
       value: 'edit',
 			onClick: () => {
-				console.log('edit: ' + paramId)
+				editDataItem(paramId)
 			},
     },
     {
@@ -205,6 +217,11 @@ const computedMoreList = computed(() => {
       v-model:is-dialog-visible="isDeleteDataDialogVisible"
       v-model:item-id="itemId"
       @delete-confirm="deleteItemConfirm"
+    />
+    <EditDataProductDialog
+      v-model:is-dialog-visible="isEditDataDialogVisible"
+      v-model:item-id="itemId"
+      @form-submitted="saveEditItem"
     />
 	</div>
 </template>

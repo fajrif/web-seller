@@ -107,7 +107,6 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 		products.value = data.map((item, index) => {
 			return { id: index + 1, ...item, ...validate(item) }
 		})
-		console.log(products.value)
 		filename.value = _fname
   }
 
@@ -205,9 +204,7 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			if(typeof result === 'string') {
 				errors.push('minimum_pembelian: ' + result)
 			} else {
-				console.log('betweenValidator')
 				result = betweenValidator(item.minimum_pembelian,1,9999)
-				console.log(result)
 				if(typeof result === 'string') {
 					errors.push('minimum_pembelian: ' + result)
 				}
@@ -273,5 +270,5 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 		filename.value = ''
   }
 
-  return { products, filename, setDataParsed, remove, clear }
+  return { products, filename, setDataParsed, validate, remove, clear }
 })
