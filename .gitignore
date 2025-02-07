@@ -40,4 +40,5 @@ public/mockServiceWorker.js
 
 # Env files
 .env*
+!.env.development
 !.env.example
