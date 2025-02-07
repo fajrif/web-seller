@@ -2,7 +2,7 @@ FROM nginx:1.21-alpine
 ARG DIST_FOLDER
 RUN mkdir -p /usr/share/nginx/html/app
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
-COPY ${DIST_FOLDER} /usr/share/nginx/html/app
+COPY ./dist /usr/share/nginx/html/app
 RUN nginx -t
 RUN rm -Rf /etc/nginx/conf.d
 RUN ls -lah /etc/nginx
