@@ -78,7 +78,6 @@ const editDataItem = id => {
 const saveEditItem = (id) => {
 	// do something here ...
 	console.log('save edit item: ' + id)
-	console.log(productStore.products)
 }
 
 const deleteItem = id => {

@@ -61,8 +61,8 @@ const onReset = () => {
 	productTab.value = 'product-tab-1'
 }
 
-watch(() => props.itemId, (value) => {
-	var item = productStore.products.find(p => p.id === value)
+watch(() => props.itemId, (newVal, oldVal) => {
+	var item = productStore.products.find(p => p.id === newVal)
 	if(item && typeof item === 'object'){
 		editedItem.value = { ...item }
 	}
@@ -205,7 +205,7 @@ watch(() => props.itemId, (value) => {
 									label="Pembelian Minimum"
 									suffix="Buah"
 									type="number"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.minimum_pembelian,1,9999)]"
 									placeholder="Tentukan pembelian minimum"
 									class="mb-6"
 								/>
