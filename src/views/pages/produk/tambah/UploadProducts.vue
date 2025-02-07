@@ -41,32 +41,49 @@ const saveProduct = async (productData, id) => {
 }
 
 const savingProduct = (id) => {
+	loading.value = true
 	var item = productStore.products.find(p => p.id === id)
 
 	if(item !== null && typeof item === 'object') {
-		/* eslint-disable camelcase */
-		saveProduct({
-			merchant_id: userData.value.id,
-			name: item.nama_produk,
-			description: item.deskripsi,
-			category_id: parseInt(item.id_kategori),
-			etalase_id: parseInt(item.kode_etalase),
-			condition: item.kondisi,
-			price: parseInt(item.harga),
-			strike_price: parseInt(item.harga_coret),
-			amount: parseInt(item.stok),
-			minimum_purchase: parseInt(item.minimum_pembelian),
-			weight: item.berat,
-			height: item.tinggi,
-			width: item.lebar,
-			length: item.panjang,
-			status: 9,
-			url: [],
-		}, id)
-		/* eslint-enable */
+		if(item.status) {
+			/* eslint-disable camelcase */
+			saveProduct({
+				merchant_id: userData.value.id,
+				name: item.nama_produk,
+				description: item.deskripsi,
+				category_id: parseInt(item.id_kategori),
+				etalase_id: parseInt(item.kode_etalase),
+				condition: item.kondisi,
+				price: parseInt(item.harga),
+				strike_price: parseInt(item.harga_coret),
+				amount: parseInt(item.stok),
+				minimum_purchase: parseInt(item.minimum_pembelian),
+				weight: item.berat,
+				height: item.tinggi,
+				width: item.lebar,
+				length: item.panjang,
+				status: 9,
+				url: [],
+			}, id)
+			/* eslint-enable */
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Data produk masih salah')
+		}
 	} else {
 		loading.value = false
     messageStore.setMessage('error', 'Gagal menyimpan data produk')
+	}
+}
+
+const uploadAll = (value) => {
+	if(value){
+		var data = productStore.products.map(i => i.id)
+		data.forEach(function (id, index) {
+			savingProduct(id)
+		});
+	} else {
+    messageStore.setMessage('error', 'Data Kosong')
 	}
 }
 
@@ -101,7 +118,6 @@ const saveItem = id => {
 }
 
 const saveItemConfirm = id => {
-	loading.value = true
   itemId.value = -1
 	savingProduct(id)
 }
@@ -150,6 +166,7 @@ const computedMoreList = computed(() => {
 			<VCardText>
 				<FileUploadProductCard
 					:trigger-reset="triggerReset"
+					@upload-all="uploadAll"
 					/>
 
 				<div

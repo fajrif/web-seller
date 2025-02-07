@@ -11,6 +11,10 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits([
+  'uploadAll',
+])
+
 const productStore = useFileUploadProductStore()
 
 const inputFile = ref();
@@ -24,6 +28,16 @@ const progressValue = ref(0)
 // 	uploaded.value = true
 // 	parsed.value = true
 // }
+
+const uploadAll = () => {
+	var data = productStore.products
+
+	if(data && data.length > 0) {
+		emit('uploadAll', true)
+	} else {
+		emit('uploadAll', false)
+	}
+}
 
 const parseFile = () => {
 	Papa.parse(file.value, {
@@ -115,6 +129,7 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						<VBtn
 							color="primary"
 							prepend-icon="tabler-cloud-upload"
+							@click="uploadAll"
 							>
 							Upload All
 						</VBtn>
