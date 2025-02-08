@@ -393,6 +393,7 @@
     "headersFileUpload": true,
     "validateProductDataStore": true,
     "minLengthValidator": true,
-    "containsCommaValidator": true
+    "containsCommaValidator": true,
+    "download": true
   }
 }

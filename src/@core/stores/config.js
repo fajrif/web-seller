@@ -105,6 +105,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 
   function setDataParsed(data, _fname) {
 		products.value = data.map((item, index) => {
+			if(item.id_kategori)
+				item.id_kategori = parseInt(item.id_kategori)
+			if(item.kode_etalase)
+				item.kode_etalase = parseInt(item.kode_etalase)
+
 			return { id: index + 1, ...item, ...validate(item) }
 		})
 		filename.value = _fname

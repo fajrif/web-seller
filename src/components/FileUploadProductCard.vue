@@ -3,6 +3,7 @@ import iconFileBox from '@images/icons/ic-file-box.png'
 import iconFile from '@images/icons/ic-file.png'
 import Papa from 'papaparse';
 import { useFileUploadProductStore } from '@core/stores/config'
+import { useMessageStore } from '@core/stores/config'
 
 const props = defineProps({
   triggerReset: {
@@ -16,9 +17,11 @@ const emit = defineEmits([
 ])
 
 const productStore = useFileUploadProductStore()
+const messageStore = useMessageStore()
 
 const inputFile = ref();
 const file = ref();
+const loading = ref(false);
 const uploaded = ref(false);
 const parsed = ref(false);
 const interval = ref()
@@ -72,17 +75,35 @@ const uploadingData = () => {
   }, 500)
 }
 
-const downloadTemplate = () => {
-	// create element <a> for download PDF
-	const link = document.createElement('a');
-	link.href = '/Template_Upload_Produk.xlsx';
-	link.target = '_blank';
-	link.download = 'Template_Upload_Produk.xlsx';
+const downloadTemplate = async () => {
+	loading.value = true;
 
-	// Simulate a click on the element <a>
-	document.body.appendChild(link);
-	link.click();
-	document.body.removeChild(link);
+	await $apiCore('/seller/query/product/export-template', {
+		method: 'GET',
+		responseType: 'blob'
+	})
+  .then( res => {
+    var file = window.URL.createObjectURL(res);
+    window.location.assign(file);
+		loading.value = false;
+	})
+	.catch(error => {
+		loading.value = false;
+		console.log(error);
+		messageStore.setMessage('error', 'Tidak dapat unduh template')
+	});
+
+	// let type = 'application/vnd.ms-excel';
+	// let fileUrl = URL.createObjectURL(new Blob([res], { type }));
+
+	// let link = document.createElement('a');
+	// link.href = fileUrl;
+	// link.target = '_blank';
+	// link.download = 'export-template.xls';
+
+	// document.body.appendChild(link);
+	// link.click();
+	// document.body.removeChild(link);
 }
 
 const reset = () => {
@@ -210,6 +231,7 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						<VBtn
 							color="primary"
 							variant="outlined"
+							:loading="loading"
 							prepend-icon="tabler-file"
 							@click="downloadTemplate"
 							>

@@ -50,6 +50,7 @@ declare global {
   const defineComponent: typeof import('vue')['defineComponent']
   const definePage: typeof import('unplugin-vue-router/runtime')['definePage']
   const defineStore: typeof import('pinia')['defineStore']
+  const download: typeof import('./src/utils/merchantHelper.js')['download']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectRipple: typeof import('./src/utils/effectRipple.js')['default']
   const effectScope: typeof import('vue')['effectScope']

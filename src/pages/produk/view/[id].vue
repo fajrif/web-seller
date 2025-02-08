@@ -139,10 +139,10 @@ register()
                   class="me-2"
                 />
                 <div class="text-body-1">
-                  5.0 dari 100
+									{{ productData?.avg_rating }} dari {{ productData?.review_count }}
                 </div>
               </div>
-              &nbsp;&nbsp;|&nbsp;&nbsp; Terjual 200 kali &nbsp;&nbsp;|&nbsp;&nbsp; Dilihat 15rb kali
+              &nbsp;&nbsp;|&nbsp;&nbsp; Terjual {{ productData?.items_sold }} kali &nbsp;&nbsp;|&nbsp;&nbsp; Dilihat 15rb kali
             </div>
 
             <h5 class="text-h5 my-4">

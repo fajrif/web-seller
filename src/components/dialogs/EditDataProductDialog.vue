@@ -28,8 +28,8 @@ const showcases = computed(() => showcasesData.value.etalase)
 const defaultItem = {
 	nama_produk: '',
 	deskripsi: '',
-	id_kategori: -1,
-	kode_etalase: -1,
+	id_kategori: '',
+	kode_etalase: '',
 	kondisi: '',
 	harga: -1,
 	harga_coret: -1,
