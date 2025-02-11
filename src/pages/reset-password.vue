@@ -106,7 +106,7 @@ const onSubmit = () => {
                   autofocus
                   label="Password Baru"
                   placeholder="············"
-                  :rules="[requiredValidator, alphaDashValidator]"
+                  :rules="[requiredValidator, passwordValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   autocomplete="password"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"

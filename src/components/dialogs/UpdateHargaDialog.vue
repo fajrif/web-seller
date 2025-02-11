@@ -25,7 +25,6 @@ const emit = defineEmits([
   'formSubmitted',
 ])
 
-const isFormValid = ref(false)
 const refForm = ref()
 const newProductPrice = ref()
 
@@ -61,7 +60,6 @@ watch(() => props.productPrice, (value) => {
     <VCard>
       <VForm
         ref="refForm"
-        v-model="isFormValid"
         @submit.prevent="onSubmit"
       >
         <!-- 👉 Title -->
@@ -81,7 +79,7 @@ watch(() => props.productPrice, (value) => {
             <VCol cols="12">
               <AppCurrencyInput
                 v-model="newProductPrice"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minIntegerValidator(newProductPrice,1)]"
                 placeholder="Masukan harga jual"
               />
             </VCol>

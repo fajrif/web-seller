@@ -3,6 +3,7 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 const isAddProductFeaturedDialogVisible = ref(false)
+const selected = ref([])
 
 const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/featured?page=1")
 
@@ -26,7 +27,7 @@ const addFeatured = async ids => {
     // Refetch products
     fetchFeatured()
     let msg = res.message
-    messageStore.setMessage('success', msg)
+    messageStore.setMessage('success', 'Berhasil update produk unggulan')
   } catch (error) {
     messageStore.setMessage('error', error)
     console.error("Error on add product featured:", error)
@@ -41,21 +42,12 @@ const deleteFeatured = async id => {
     }
   })
   addFeatured(updateSelectedIds)
-
-  // try {
-  // 	await $apiCore(`/merchant/products/${id}/delete-featured`, { method: 'DELETE' });
-
-  // 	// Refetch products
-  // 	fetchFeatured()
-  // 	messageStore.setMessage('success', 'Produk unngulan berhasil dihapus')
-  // } catch (error) {
-  // 		messageStore.setMessage('error', 'Gagal menghapus produk unggulan')
-  // 		console.error("Error on delete featured product data:", error);
-  // }
 }
 
 
 const addItem = () => {
+  selected.value = featuredProducts.value.map(item => item.id)
+	console.log(featuredData.value)
   isAddProductFeaturedDialogVisible.value = true
 }
 </script>
@@ -108,6 +100,7 @@ const addItem = () => {
                   <td>
                     <div class="d-flex align-center">
                       <VAvatar
+												v-if="product.product_photo[0]"
                         size="50"
                         variant="tonal"
                         class="my-2 me-2"
@@ -169,6 +162,7 @@ const addItem = () => {
     </VCard>
     <AddProductFeaturedSelectionDialog
       v-model:is-dialog-visible="isAddProductFeaturedDialogVisible"
+			:selected-value="selected"
       @form-submitted="addFeatured"
     />
   </div>

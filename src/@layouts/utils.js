@@ -46,14 +46,11 @@ export const resolveNavLinkRouteName = (link, router) => {
  */
 export const isNavLinkActive = (link, router) => {
 
-	console.log(link.to)
-	console.log(router.currentRoute.value.name)
 	// custom nav link activation
 	if (typeof link.to === 'string') {
 		if(link.to == 'event' && router.currentRoute.value.name == 'event-products') {
 			return true
 		}
-	} else if (typeof link.to === 'string') {
 		if(link.to == 'promo' && router.currentRoute.value.name == 'promo-products') {
 			return true
 		}

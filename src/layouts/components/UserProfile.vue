@@ -8,7 +8,7 @@ const router = useRouter()
 const ability = useAbility()
 
 const loading = ref(false)
-const switchOnLoading = ref(false)
+const isNonAktifMerchantDialogVisible = ref(false)
 
 // TODO: Get type from backend
 const userData = useCookie('userData')
@@ -60,26 +60,31 @@ const logout = async () => {
   }
 }
 
-const onChange = async () => {
-	loading.value = true
-	const res = await $apiCore('/seller/command/merchant/nonaktif-toko', {
-		method: 'POST',
-		onResponseError({ response }) {
-			loading.value = false
-			let msg = response._data.message
-			messageStore.setMessage('error', msg)
-			statusUser.value = !statusUser.value
-		},
-	})
-
-	let msg = res.message
-	messageStore.setMessage('success', msg)
-
-	await nextTick(() => {
-		updateCookieUserData(() => {
-			loading.value = false
+const nonAktifToko = async (status) => {
+	if(status === false) {
+		statusUser.value = !statusUser.value
+	} else {
+		const res = await $apiCore('/seller/command/merchant/nonaktif-toko', {
+			method: 'POST',
+			onResponseError({ response }) {
+				loading.value = false
+				let msg = response._data.message
+				messageStore.setMessage('error', msg)
+				statusUser.value = !statusUser.value
+			},
 		})
-	})
+
+		let msg = res.message
+		messageStore.setMessage('success', msg)
+
+		await nextTick(() => {
+			updateCookieUserData(() => {})
+		})
+	}
+}
+
+const onChange = async () => {
+	isNonAktifMerchantDialogVisible.value = true
 }
 </script>
 
@@ -142,7 +147,7 @@ const onChange = async () => {
 						</div>
 						<VSwitch
 							v-model="statusUser"
-							:loading="loading"
+							:loading="isNonAktifMerchantDialogVisible"
 							@update:model-value="onChange"
 							/>
 					</div>
@@ -167,5 +172,10 @@ const onChange = async () => {
 			</VCard>
     </VMenu>
     <!-- end menu section -->
+    <NonAktifMerchantDialog
+      v-model:is-dialog-visible="isNonAktifMerchantDialogVisible"
+			:status-user="!statusUser"
+      @form-submitted="nonAktifToko"
+    />
   </div>
 </template>

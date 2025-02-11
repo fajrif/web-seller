@@ -28,25 +28,6 @@ const tabs = [
     tab: 'arsip',
     status: "archived",
   },
-  {
-    id: 4,
-    title: 'Tidak Aktif',
-    tab: 'non-aktif',
-    status: "blocked",
-  },
-
-  // {
-  //   id: 5,
-  //   title: 'Diverifikasi',
-  //   tab: 'verifikasi',
-  //   status: "wait_approval",
-  // },
-  // {
-  //   id: 6,
-  //   title: 'Ditolak',
-  //   tab: 'ditolak',
-  //   status: "declined",
-  // },
 ]
 
 definePage({ meta: { navActiveLink: 'produk-tab' } })

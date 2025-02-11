@@ -4,6 +4,11 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  selectedValue: {
+    type: Array,
+    required: true,
+		default: [],
+  },
 })
 
 const emit = defineEmits([
@@ -60,7 +65,6 @@ const onSubmit = () => {
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
-  selected.value = []
   searchQuery.value = ''
   page.value = 1
 }
@@ -71,6 +75,10 @@ watch(selected, (val, oldVal) => {
 			 selected.value = oldVal
 		 })
 	 }
+})
+
+onMounted(() => {
+	selected.value = props.selectedValue
 })
 </script>
 
@@ -104,7 +112,12 @@ watch(selected, (val, oldVal) => {
 
             <VSpacer />
             <div class="d-flex gap-4 flex-wrap align-center">
-              {{ selected.length }} selected
+							<span v-if="selected.length >= 5" class="text-body-1 text-error">
+								Produk yang dipilih maksimum 5
+							</span>
+							<span v-else class="text-body-1">
+								{{ selected.length }} produk
+							</span>
             </div>
           </div>
 

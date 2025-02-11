@@ -82,9 +82,10 @@ watch(() => props.productStock, (value) => {
             <VCol cols="12">
               <AppTextField
                 v-model="newStockValue"
+                :rules="[requiredValidator,betweenValidator(newStockValue,1,9999)]"
                 suffix="Buah"
                 type="number"
-                :rules="[requiredValidator]"
+								min="1"
                 placeholder="Masukan stock"
               />
             </VCol>

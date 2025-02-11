@@ -394,6 +394,8 @@
     "validateProductDataStore": true,
     "minLengthValidator": true,
     "containsCommaValidator": true,
-    "download": true
+    "download": true,
+    "minIntegerValidator": true,
+    "lineBreaksValidator": true
   }
 }

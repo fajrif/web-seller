@@ -84,6 +84,7 @@ declare global {
   const kFormatter: typeof import('./src/@core/utils/formatters.js')['kFormatter']
   const language: typeof import('./src/utils/language.js')['default']
   const lengthValidator: typeof import('./src/@core/utils/validators.js')['lengthValidator']
+  const lineBreaksValidator: typeof import('./src/@core/utils/validators.js')['lineBreaksValidator']
   const logicAnd: typeof import('@vueuse/math')['logicAnd']
   const logicNot: typeof import('@vueuse/math')['logicNot']
   const logicOr: typeof import('@vueuse/math')['logicOr']
@@ -95,6 +96,7 @@ declare global {
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
   const mimes: typeof import('./src/utils/mimes.js')['default']
+  const minIntegerValidator: typeof import('./src/@core/utils/validators.js')['minIntegerValidator']
   const minLengthValidator: typeof import('./src/@core/utils/validators.js')['minLengthValidator']
   const nextTick: typeof import('vue')['nextTick']
   const normalizerCategories: typeof import('./src/utils/productHelper.js')['normalizerCategories']
@@ -469,6 +471,7 @@ declare module 'vue' {
     readonly isToday: UnwrapRef<typeof import('./src/@core/utils/helpers.js')['isToday']>
     readonly kFormatter: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['kFormatter']>
     readonly lengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['lengthValidator']>
+    readonly lineBreaksValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['lineBreaksValidator']>
     readonly logicAnd: UnwrapRef<typeof import('@vueuse/math')['logicAnd']>
     readonly logicNot: UnwrapRef<typeof import('@vueuse/math')['logicNot']>
     readonly logicOr: UnwrapRef<typeof import('@vueuse/math')['logicOr']>
@@ -479,6 +482,7 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly minIntegerValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minIntegerValidator']>
     readonly minLengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minLengthValidator']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly normalizerCategories: UnwrapRef<typeof import('./src/utils/productHelper.js')['normalizerCategories']>

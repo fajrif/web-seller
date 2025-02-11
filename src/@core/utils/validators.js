@@ -47,6 +47,14 @@ export const integerValidator = value => {
   return /^-?\d+$/.test(String(value)) || 'Harus menggunakan angka (tanpa titik koma)'
 }
 
+// 👉 Integer Min Validator
+export const minIntegerValidator = (value, min) => {
+  if (isEmpty(value))
+    return true
+
+	return Number(value) >= Number(min) || `Nilai minimum ${min}`
+}
+
 // 👉 Regex Validator
 export const regexValidator = (value, regex) => {
   if (isEmpty(value))
@@ -100,4 +108,13 @@ export const alphaDashValidator = value => {
   const valueAsString = String(value)
 
   return /^[\w-]*$/.test(valueAsString) || 'Semua karakter tidak valid'
+}
+
+// 👉 Line-breaks Validator
+export const lineBreaksValidator = value => {
+  if (isEmpty(value))
+    return true
+  const valueAsString = String(value)
+
+  return (valueAsString.match(/\n/g)||[]).length === 0 || 'Tidak boleh menggunakan line break'
 }

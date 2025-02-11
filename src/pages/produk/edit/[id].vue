@@ -31,7 +31,6 @@ const	productHeight = ref()
 const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
-const	productStatus = ref(9)
 const	productPhotoUrl = ref([])
 
 const { data: productDetails } = await useApiCore(`/seller/query/product/detail/${ route.params.id }`)
@@ -52,8 +51,7 @@ if (productDetails.value.success) {
   productWidth.value = productData.width
   productLength.value = productData.length
   productFeatured.value = productData.is_featured_product
-  productStatus.value = productData.status
-  if(productData.product_photo) {
+  if(productData.product_photo && Array.isArray(productData.product_photo)) {
     productPhotoUrl.value = productData.product_photo.map(item => item.url)
   }
 }
@@ -104,7 +102,6 @@ const savingProduct = () => {
 		width: productWidth.value,
 		length: productLength.value,
 		is_featured_product: productFeatured.value,
-		status: productStatus.value,
 		url: productPhotoUrl.value,
 	})
 	/* eslint-enable */
@@ -114,9 +111,14 @@ const onSubmit = () => {
 	loading.value = true
 	refForm.value?.validate().then(({ valid }) => {
 		if (valid) {
-			setTimeout(() => {
-				savingProduct()
-			}, 1000)
+			if(productPhotoUrl.value.length >= 1) {
+				setTimeout(() => {
+					savingProduct()
+				}, 1000)
+			} else {
+				loading.value = false
+				messageStore.setMessage('error', 'Produk minimal ada 1 gambar')
+			}
 		} else {
 			loading.value = false
 			messageStore.setMessage('error', 'Gagal simpan data produk')
@@ -128,7 +130,6 @@ const deleteImage = (index) => {
   // Delete from product urls
 	if (index !== -1) {
     productPhotoUrl.value.splice(index, 1)
-		savingProduct()
 	}
 }
 
@@ -140,7 +141,6 @@ const uploadProductPhoto = async (path) => {
 	if (path !== '') {
 		// add to product urls here...
 		productPhotoUrl.value.push(path)
-		savingProduct()
 	} else {
     messageStore.setMessage('error', 'URL path gambar kosong')
 	}
@@ -215,19 +215,6 @@ const uploadProductPhoto = async (path) => {
                   md="6"
                 >
                   <AppSelect
-                    v-model="productStatus"
-                    placeholder="Pilih Status"
-                    label="Status"
-                    :items="statusProduct"
-                    item-title="name"
-                    item-value="id"
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppSelect
                     v-model="productCondition"
                     placeholder="Pilih Kondisi"
                     label="Kondisi"
@@ -239,8 +226,9 @@ const uploadProductPhoto = async (path) => {
                 <VCol
                   cols="12"
                   md="6"
+									class="d-flex align-center"
                 >
-									<div class="d-flex flex-raw align-center justify-start">
+									<div class="d-flex flex-raw align-center justify-start mt-20">
 										<span class="fw-700 me-4">Produk Unggulan</span>
 										<VSwitch
 											v-model="productFeatured"
@@ -250,12 +238,13 @@ const uploadProductPhoto = async (path) => {
                 </VCol>
 
                 <VCol cols="12">
-									<p class="fw-700 mb-2">Deskripsi Produk</p>
-                  <ProductDescriptionEditor
-                    v-model="productDescription"
-                    placeholder="Masukan informasi dan detil deskripsi produk anda"
-                    class="border rounded"
-                  />
+									<AppTextarea
+										v-model="productDescription"
+										:rules="[requiredValidator,lineBreaksValidator,minLengthValidator(productDescription,100)]"
+										counter
+										label="Deskripsi Produk"
+										placeholder="Masukan informasi dan detil deskripsi produk anda"
+										/>
                 </VCol>
               </VRow>
             </VCardText>
@@ -273,7 +262,7 @@ const uploadProductPhoto = async (path) => {
               <AppCurrencyInput
                 v-model="productPrice"
                 label="Harga Satuan"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minIntegerValidator(productPrice,1)]"
                 placeholder="Masukan harga jual"
                 class="mb-6"
               />
@@ -283,7 +272,7 @@ const uploadProductPhoto = async (path) => {
               <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minIntegerValidator(productStrikePrice,productPrice)]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -301,10 +290,11 @@ const uploadProductPhoto = async (path) => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator,betweenValidator(productStock,1,9999)]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
+								min="1"
                 placeholder="Tentukan jumlah stock"
                 class="mb-6"
               />
@@ -313,7 +303,9 @@ const uploadProductPhoto = async (path) => {
                 label="Pembelian Minimum"
                 suffix="Buah"
                 type="number"
-                :rules="[requiredValidator]"
+								min="1"
+								max="9999"
+								:rules="[requiredValidator,integerValidator,betweenValidator(productMinPurchase,1,9999)]"
                 placeholder="Tentukan pembelian minimum"
                 class="mb-6"
               />
@@ -333,10 +325,11 @@ const uploadProductPhoto = async (path) => {
 									>
 									<AppTextField
 										v-model="productWeight"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productWeight,10)]"
 										label="Berat"
 										suffix="gr"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -346,10 +339,11 @@ const uploadProductPhoto = async (path) => {
 									>
 									<AppTextField
 										v-model="productWidth"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productWidth,10)]"
 										label="Lebar"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -360,10 +354,11 @@ const uploadProductPhoto = async (path) => {
 									>
 									<AppTextField
 										v-model="productLength"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productLength,10)]"
 										label="Panjang"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -373,10 +368,11 @@ const uploadProductPhoto = async (path) => {
 									>
 									<AppTextField
 										v-model="productHeight"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productHeight,10)]"
 										label="Tinggi"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -384,19 +380,6 @@ const uploadProductPhoto = async (path) => {
 						</VCardText>
 					</VCard>
 				</VCol>
-				<VCol cols="12">
-					<div class="d-flex flex-wrap gap-4 justify-end">
-						<VBtn
-							:disabled="loading"
-							:loading="loading"
-							type="submit"
-							class="w-100 w-md-auto"
-							>
-							Simpan
-						</VBtn>
-					</div>
-				</VCol>
-
 				<VCol cols="12">
           <!-- 👉 Media -->
           <VCard title="Gambar Produk">
@@ -469,7 +452,6 @@ const uploadProductPhoto = async (path) => {
 										</VCol>
 								</VRow>
 							</div>
-
 							<!-- 👉 Empty banners -->
 							<template v-else>
 								<EmptyData
@@ -482,7 +464,18 @@ const uploadProductPhoto = async (path) => {
             </VCardText>
           </VCard>
         </VCol>
-
+				<VCol cols="12">
+					<div class="d-flex flex-wrap gap-4 justify-end">
+						<VBtn
+							:disabled="loading"
+							:loading="loading"
+							type="submit"
+							class="w-100 w-md-auto"
+							>
+							Simpan
+						</VBtn>
+					</div>
+				</VCol>
       </VRow>
     </VForm>
     <UploadCropStencilImageDialog

@@ -7,6 +7,15 @@ const userData = useCookie('userData')
 const messageStore = useMessageStore()
 const router = useRouter()
 
+const isUploadImageDialogVisible = ref(false)
+const	imageAttr = {
+	title: "Upload Gambar Produk",
+	description: "Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG",
+	params: {
+		type: 'product'
+	},
+}
+
 const loading = ref(false)
 const refForm = ref()
 const	productName = ref('')
@@ -23,7 +32,6 @@ const	productHeight = ref()
 const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
-const	productStatus = ref(9)
 const	productPhotoUrl = ref([])
 
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
@@ -73,7 +81,6 @@ const savingProduct = () => {
 		width: productWidth.value,
 		length: productLength.value,
 		is_featured_product: productFeatured.value,
-		status: productStatus.value,
 		url: productPhotoUrl.value,
 	})
 	/* eslint-enable */
@@ -83,14 +90,39 @@ const onSubmit = () => {
 	loading.value = true
 	refForm.value?.validate().then(({ valid }) => {
 		if (valid) {
-			setTimeout(() => {
-				savingProduct()
-			}, 1000)
+			if(productPhotoUrl.value.length >= 1) {
+				setTimeout(() => {
+					savingProduct()
+				}, 1000)
+			} else {
+				loading.value = false
+				messageStore.setMessage('error', 'Produk minimal ada 1 gambar')
+			}
 		} else {
 			loading.value = false
 			messageStore.setMessage('error', 'Gagal simpan data produk')
 		}
 	})
+}
+
+const deleteImage = (index) => {
+  // Delete from product urls
+	if (index !== -1) {
+    productPhotoUrl.value.splice(index, 1)
+	}
+}
+
+const openImageDialog = () => {
+  isUploadImageDialogVisible.value = true
+}
+
+const uploadProductPhoto = async (path) => {
+	if (path !== '') {
+		// add to product urls here...
+		productPhotoUrl.value.push(path)
+	} else {
+    messageStore.setMessage('error', 'URL path gambar kosong')
+	}
 }
 
 </script>
@@ -150,20 +182,6 @@ const onSubmit = () => {
                     item-value="id"
                   />
                 </VCol>
-
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <AppSelect
-                    v-model="productStatus"
-                    placeholder="Pilih Status"
-                    label="Status"
-                    :items="statusProduct"
-                    item-title="name"
-                    item-value="id"
-                  />
-                </VCol>
                 <VCol
                   cols="12"
                   md="6"
@@ -180,8 +198,9 @@ const onSubmit = () => {
                 <VCol
                   cols="12"
                   md="6"
+									class="d-flex align-center"
                 >
-									<div class="d-flex flex-raw align-center justify-start">
+									<div class="d-flex flex-raw align-center justify-start mt-20">
 										<span class="fw-700 me-4">Produk Unggulan</span>
 										<VSwitch
 											v-model="productFeatured"
@@ -191,12 +210,13 @@ const onSubmit = () => {
                 </VCol>
 
                 <VCol cols="12">
-									<p class="fw-700 mb-2">Deskripsi Produk</p>
-                  <ProductDescriptionEditor
-                    v-model="productDescription"
-                    placeholder="Masukan informasi dan detil deskripsi produk anda"
-                    class="border rounded"
-                  />
+									<AppTextarea
+										v-model="productDescription"
+										:rules="[requiredValidator,lineBreaksValidator,minLengthValidator(productDescription,100)]"
+										counter
+										label="Deskripsi Produk"
+										placeholder="Masukan informasi dan detil deskripsi produk anda"
+										/>
                 </VCol>
               </VRow>
             </VCardText>
@@ -215,7 +235,7 @@ const onSubmit = () => {
               <AppCurrencyInput
                 v-model="productPrice"
                 label="Harga Satuan"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minIntegerValidator(productPrice,1)]"
                 placeholder="Masukan harga jual"
                 class="mb-6"
               />
@@ -225,7 +245,7 @@ const onSubmit = () => {
               <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minIntegerValidator(productStrikePrice,productPrice)]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -243,10 +263,11 @@ const onSubmit = () => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator,betweenValidator(productStock,1,9999)]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
+								min="1"
                 placeholder="Tentukan jumlah stock"
                 class="mb-6"
               />
@@ -255,7 +276,9 @@ const onSubmit = () => {
                 label="Pembelian Minimum"
                 suffix="Buah"
                 type="number"
-                :rules="[requiredValidator]"
+								min="1"
+								max="9999"
+								:rules="[requiredValidator,betweenValidator(productMinPurchase,1,9999)]"
                 placeholder="Tentukan pembelian minimum"
                 class="mb-6"
               />
@@ -275,10 +298,11 @@ const onSubmit = () => {
 									>
 									<AppTextField
 										v-model="productWeight"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productWeight,10)]"
 										label="Berat"
 										suffix="gr"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -288,10 +312,11 @@ const onSubmit = () => {
 									>
 									<AppTextField
 										v-model="productWidth"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productWidth,10)]"
 										label="Lebar"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -302,10 +327,11 @@ const onSubmit = () => {
 									>
 									<AppTextField
 										v-model="productLength"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productLength,10)]"
 										label="Panjang"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -315,10 +341,11 @@ const onSubmit = () => {
 									>
 									<AppTextField
 										v-model="productHeight"
-										:rules="[requiredValidator]"
+										:rules="[requiredValidator,minIntegerValidator(productHeight,10)]"
 										label="Tinggi"
 										suffix="cm"
 										type="number"
+										min="10"
 										placeholder="0"
 										/>
 								</VCol>
@@ -326,6 +353,90 @@ const onSubmit = () => {
 						</VCardText>
 					</VCard>
 				</VCol>
+				<VCol cols="12">
+          <!-- 👉 Media -->
+          <VCard title="Gambar Produk">
+            <VCardText>
+							<div
+								v-if="productPhotoUrl && productPhotoUrl.length > 0"
+								class="d-flex justify-center align-center gap-3 flex-wrap"
+							>
+								<VRow class="match-height w-100">
+									<template
+										v-for="(url, index) in productPhotoUrl"
+										:key="index"
+									>
+										<VCol
+											cols="6"
+											md="2"
+										>
+											<VCard :ripple="false">
+												<VCardText class="d-flex flex-column pa-2">
+													<VImg
+														rounded
+														:src="url"
+														class="w-100 mx-auto"
+													/>
+												</VCardText>
+												<VCardActions>
+													<VBtn
+														size="small"
+														variant="tonal"
+														color="error"
+														block
+														@click.stop="deleteImage(index)"
+													>
+														Hapus
+													</VBtn>
+												</VCardActions>
+											</VCard>
+										</VCol>
+									</template>
+										<VCol
+											cols="6"
+											md="2"
+										>
+											<VCard :ripple="false">
+												<VCardText class="d-flex flex-column px-2 pt-4 pb-2">
+													<div class="d-flex flex-column justify-center align-center border-dashed-primary border-radius-8 py-6">
+														<IconBtn
+															color="primary"
+															variant="tonal"
+															class="rounded-sm my-4"
+															@click.stop="openImageDialog"
+															>
+															<VIcon icon="tabler-photo-up" />
+														</IconBtn>
+														<span class="text-sm text-primary">Tambah Gambar</span>
+													</div>
+												</VCardText>
+												<VCardActions>
+													<VBtn
+														size="small"
+														variant="flat"
+														color="primary"
+														block
+														@click.stop="openImageDialog"
+													>
+														Tambah
+													</VBtn>
+												</VCardActions>
+											</VCard>
+										</VCol>
+								</VRow>
+							</div>
+							<!-- 👉 Empty banners -->
+							<template v-else>
+								<EmptyData
+									description="Anda belum menambahkan gambar untuk produk anda.<br/> Silahkan menambahkan gambar produk anda"
+									wrapper-class="px-10 py-15"
+									btn-text="Tambah Gambar"
+									@click-button="openImageDialog"
+									/>
+							</template>
+            </VCardText>
+          </VCard>
+        </VCol>
 				<VCol cols="12">
 					<div class="d-flex flex-wrap gap-4 justify-end">
 						<VBtn
@@ -341,8 +452,22 @@ const onSubmit = () => {
 
       </VRow>
     </VForm>
+    <UploadCropStencilImageDialog
+      v-model:is-dialog-visible="isUploadImageDialogVisible"
+      v-model:title="imageAttr.title"
+      v-model:description="imageAttr.description"
+      v-model:params="imageAttr.params"
+      @form-submitted="uploadProductPhoto"
+    />
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .drop-zone {
+    border: 2px dashed rgba(var(--v-theme-on-surface), 0.12);
+    border-radius: 6px;
+  }
+</style>
 
 <style lang="scss">
 .ProseMirror {

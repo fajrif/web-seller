@@ -255,6 +255,7 @@ const uploadMerchantBanner = async (path) => {
 												<VCol cols="12">
 													<AppTextField
 														v-model="merchantSlogan"
+														:rules="[requiredValidator]"
 														placeholder="Slogan toko anda"
 														label="Slogan Toko"
 														/>
@@ -268,6 +269,7 @@ const uploadMerchantBanner = async (path) => {
 											>
 											<AppTextarea
 												v-model="merchantDescription"
+												:rules="[requiredValidator]"
 												placeholder="Deskripsi dan Informasi toko"
 												label="Deskripsi Toko"
 												/>

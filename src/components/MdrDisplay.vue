@@ -40,7 +40,7 @@ const getMdrType = () => {
 const getMdrCost = computed(() => {
 	mdrCost.value = 2000;
 	if(mdrData.mdr_type !== null && props.modelValue > MIN_CALCULATE) {
-		mdrCost.value = (parseInt(mdrData.mdr_value) * props.modelValue) / 100;
+		mdrCost.value = (mdrData.mdr_value * props.modelValue) / 100;
 	}
 	return mdrCost.value;
 })
@@ -52,7 +52,7 @@ const getTaxPercentage = () => {
 const getTaxCost = computed(() => {
 	taxCost.value = 0;
 	if(mdrData.ppn_type !== null && props.modelValue > MIN_CALCULATE) {
-		taxCost.value = (parseInt(mdrData.ppn_value) * props.modelValue) / 100;
+		taxCost.value = (mdrData.ppn_value * props.modelValue) / 100;
 	}
 	return taxCost.value;
 })

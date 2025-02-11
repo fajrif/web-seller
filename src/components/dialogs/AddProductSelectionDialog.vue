@@ -44,14 +44,16 @@ const {
   data: productsData,
   execute: fetchProducts,
   isFinished: loading,
-} = await useApiCore(createUrl('/seller/query/product/merchant', {
+} = await useApiCore(createUrl('/seller/query/product/for-event', {
   query: {
     keyword: searchTrigger,
-    "filter[status]": "available",
     page,
     limit: itemsPerPage,
   },
-}))
+})).post({
+	event_key: props.eventKey,
+	event_type: props.eventType,
+})
 
 const products = computed(() => productsData.value.data.data)
 const totalProduct = computed(() => productsData.value.data.total)
@@ -166,9 +168,7 @@ const onReset = () => {
 					<template v-else>
 						<EmptyData
 							:border="false"
-							description="Anda sekarang belum memiliki produk yang di unggah.<br/>Silahkan unggah produk anda untuk bisa dijual."
-							btn-text="Tambah Produk"
-							@click-button="() => $router.push('/produk/tambah')"
+							description="Pilihan Produk tidak ada<br/>Silahkan pilih produk yang belum didaftarkan di Event atau Promo."
 							/>
 					</template>
         </div>

@@ -154,7 +154,7 @@ watch(() => props.itemId, (newVal, oldVal) => {
 							<VCol cols="12">
 								<AppTextarea
 									v-model="editedItem.deskripsi"
-									:rules="[requiredValidator,minLengthValidator(editedItem.deskripsi,100)]"
+									:rules="[requiredValidator,lineBreaksValidator,minLengthValidator(editedItem.deskripsi,100)]"
 									counter
 									label="Deskripsi Produk"
 									placeholder="Tambahkan detil informasi produk"
@@ -191,10 +191,12 @@ watch(() => props.itemId, (newVal, oldVal) => {
 							<VCol cols="12">
 								<AppTextField
 									v-model="editedItem.stok"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.stok,1,9999)]"
 									label="Stock"
 									suffix="Buah"
 									type="number"
+									min="1"
+									max="9999"
 									placeholder="Tentukan jumlah stock"
 									class="mb-6"
 								/>
@@ -205,6 +207,8 @@ watch(() => props.itemId, (newVal, oldVal) => {
 									label="Pembelian Minimum"
 									suffix="Buah"
 									type="number"
+									min="1"
+									max="9999"
 									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.minimum_pembelian,1,9999)]"
 									placeholder="Tentukan pembelian minimum"
 									class="mb-6"
@@ -220,10 +224,11 @@ watch(() => props.itemId, (newVal, oldVal) => {
 								>
 								<AppTextField
 									v-model="editedItem.berat"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.berat,10)]"
 									label="Berat"
 									suffix="gr"
 									type="number"
+									min="10"
 									placeholder="0"
 									/>
 							</VCol>
@@ -233,10 +238,11 @@ watch(() => props.itemId, (newVal, oldVal) => {
 								>
 								<AppTextField
 									v-model="editedItem.lebar"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.lebar,10)]"
 									label="Lebar"
 									suffix="cm"
 									type="number"
+									min="10"
 									placeholder="0"
 									/>
 							</VCol>
@@ -247,10 +253,11 @@ watch(() => props.itemId, (newVal, oldVal) => {
 								>
 								<AppTextField
 									v-model="editedItem.panjang"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.panjang,10)]"
 									label="Panjang"
 									suffix="cm"
 									type="number"
+									min="10"
 									placeholder="0"
 									/>
 							</VCol>
@@ -260,10 +267,11 @@ watch(() => props.itemId, (newVal, oldVal) => {
 								>
 								<AppTextField
 									v-model="editedItem.tinggi"
-									:rules="[requiredValidator,integerValidator]"
+									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.tinggi,10)]"
 									label="Tinggi"
 									suffix="cm"
 									type="number"
+									min="10"
 									placeholder="0"
 									/>
 							</VCol>

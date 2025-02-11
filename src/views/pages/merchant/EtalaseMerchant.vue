@@ -32,7 +32,7 @@ const addShowcase = async (id, name) => {
     // Refetch showcases
     fetchShowcases()
     let msg = res.message
-    messageStore.setMessage('success', msg)
+    messageStore.setMessage('success', 'Berhasil menambahkan etalase baru')
   } catch (error) {
     messageStore.setMessage('error', 'Gagal menambahkan etalase')
     console.error("Error on add merchant showcase:", error)
@@ -49,7 +49,7 @@ const updateShowcase = async (id, name) => {
     // Refetch showcases
     fetchShowcases()
     let msg = res.message
-    messageStore.setMessage('success', msg)
+    messageStore.setMessage('success', 'Berhasil ubah nama etalase')
   } catch (error) {
     messageStore.setMessage('error', 'Gagal update etalase')
     console.error("Error on add merchant showcase:", error)
@@ -63,9 +63,9 @@ const deleteShowcase = async id => {
     // Refetch showcases
     fetchShowcases()
     let msg = res.message
-    messageStore.setMessage('success', msg)
+    messageStore.setMessage('success', 'Berhasil menghapus etalase')
   } catch (error) {
-    messageStore.setMessage('error', 'Gagal menghapus etalase')
+		messageStore.setMessage('error', 'Gagal menghapus etalase.')
     console.error("Error on delete showcase data:", error)
   }
 }

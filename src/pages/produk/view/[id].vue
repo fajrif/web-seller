@@ -131,7 +131,7 @@ register()
             </div>
 
             <div class="d-flex align-center my-2 pa-4 border border-radius-8">
-              <div class="d-flex">
+              <div class="d-flex me-2">
                 <VIcon
                   icon="tabler-star-filled"
                   color="warning"
@@ -139,10 +139,32 @@ register()
                   class="me-2"
                 />
                 <div class="text-body-1">
-									{{ productData?.avg_rating }} dari {{ productData?.review_count }}
+									<template v-if="productData?.avg_rating">
+										{{ productData?.avg_rating }} dari 5.0
+									</template>
+									<template v-else>
+										N/A
+									</template>
                 </div>
               </div>
-              &nbsp;&nbsp;|&nbsp;&nbsp; Terjual {{ productData?.items_sold }} kali &nbsp;&nbsp;|&nbsp;&nbsp; Dilihat 15rb kali
+							|
+							<div class="text-body-1 mx-2">
+								<template v-if="productData?.order_details_count">
+									Terjual {{ productData?.order_details_count }} kali
+								</template>
+								<template v-else>
+									N/A
+								</template>
+							</div>
+							|
+							<div class="text-body-1 ms-2">
+								<template v-if="productData?.review_count">
+									Ulasan {{ productData?.review_count }} kali
+								</template>
+								<template v-else>
+									N/A
+								</template>
+							</div>
             </div>
 
             <h5 class="text-h5 my-4">

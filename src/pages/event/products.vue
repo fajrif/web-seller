@@ -72,7 +72,7 @@ const addProducts = async (key, type, ids) => {
     // Refetch products
     fetchProducts()
 		let msg = res.message
-    messageStore.setMessage('success', msg)
+    messageStore.setMessage('success', 'Berhasil menyimpan produk event')
   } catch (error) {
     messageStore.setMessage('error', 'Gagal menambahkan produk')
     console.error("Error on add product event:", error)
@@ -196,7 +196,7 @@ const parseDesc = () => {
 					<!-- Gambar	-->
 					<template #item.image="{ item }">
 						<VAvatar
-							v-if="item.product_photo"
+							v-if="item.product_photo[0]"
 							size="50"
 							variant="tonal"
 							class="my-2"

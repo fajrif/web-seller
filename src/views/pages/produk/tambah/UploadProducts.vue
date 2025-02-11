@@ -242,7 +242,7 @@ const computedMoreList = computed(() => {
 	</div>
 </template>
 
-<style>
+<style scoped>
 .v-table__wrapper thead > tr > th:nth-child(2) {
 	min-width: 200px;
 }

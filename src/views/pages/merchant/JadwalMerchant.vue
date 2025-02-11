@@ -18,12 +18,7 @@ const	closedTime = ref('17:00:00')
 // temporary to save data
 var merchantAttrs = {}
 
-const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
-if (merchantDetails.value.success) {
-	// need to save this
-  let merchant = merchantDetails.value.data.merchant
-	merchantAttrs = getInfoAttrs(merchant)
-
+const setOperationalHours = (setTgl=true) => {
   let operationals = merchantDetails.value.data.merchant.operationals
   if(Array.isArray(operationals)) {
     operationals.forEach(op => {
@@ -51,12 +46,22 @@ if (merchantDetails.value.success) {
         break
       };
     })
-    let firstData = operationals[0]
-    if(firstData){
-      openTime.value = firstData.open_time
-      closedTime.value = firstData.closed_time
-    }
+		if(setTgl){
+			let firstData = operationals[0]
+			if(firstData){
+				openTime.value = firstData.open_time
+				closedTime.value = firstData.closed_time
+			}
+		}
   }
+}
+
+const { data: merchantDetails, execute: fetchMerchant } = await useApiCore("/seller/query/merchant/profile-toko")
+if (merchantDetails.value.success) {
+	// need to save this
+  let merchant = merchantDetails.value.data.merchant
+	merchantAttrs = getInfoAttrs(merchant)
+	setOperationalHours()
 }
 
 const saveSchedule = async merchantData => {
@@ -71,6 +76,7 @@ const saveSchedule = async merchantData => {
     })
 
     await nextTick(() => {
+			fetchMerchant()
 			loading.value = false
 			let msg = res.message
 			messageStore.setMessage('success', msg)
@@ -100,12 +106,18 @@ const savingSchedule = () => {
     }
   })
 
-  saveSchedule({
-    open_time: openTime.value.slice(0, -3),
-    closed_time: closedTime.value.slice(0, -3),
-    operational: operationalHours,
-		...merchantAttrs
-  })
+	if(selectedOperational.length === 0) {
+		loading.value = false
+		setOperationalHours(false)
+    messageStore.setMessage('error', 'Minimal 1 hari aktif')
+	} else {
+		saveSchedule({
+			open_time: openTime.value.slice(0, -3),
+			closed_time: closedTime.value.slice(0, -3),
+			operational: operationalHours,
+			...merchantAttrs
+		})
+	}
 }
 
 const onSubmit = () => {

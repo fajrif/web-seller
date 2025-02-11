@@ -278,9 +278,6 @@ const deleteItem = (id, name) => {
 											>
 											Ubah Stock
 										</VListItem>
-										<VListItem value="deactivate">
-											Non-Aktifkan Produk
-										</VListItem>
 										<VListItem
 											v-if="item.status == 1"
 											value="archive"

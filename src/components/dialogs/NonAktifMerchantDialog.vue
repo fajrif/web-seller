@@ -6,19 +6,9 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  etalaseId: {
-    type: Number,
+  statusUser: {
+    type: Boolean,
     required: true,
-    default: 0,
-  },
-  etalaseName: {
-    type: String,
-    required: false,
-  },
-  etalaseJmlProduk: {
-    type: Number,
-    required: false,
-    default: 0,
   },
 })
 
@@ -28,11 +18,12 @@ const emit = defineEmits([
 ])
 
 const onReset = () => {
+  emit('formSubmitted', false)
   emit('update:isDialogVisible', false)
 }
 
 const onSubmit = () => {
-  emit('formSubmitted', props.etalaseId)
+  emit('formSubmitted', true)
   emit('update:isDialogVisible', false)
 }
 </script>
@@ -55,11 +46,13 @@ const onSubmit = () => {
                   :src="iconAsk"
                   class="mx-auto w-40"
                 />
-                <h3>Hapus Etalase</h3>
-                <p class="text-body-2">
-                  Apakah anda yakin ingin menghapus etalase <strong>{{ props.etalaseName }}</strong>?
-									Terdapat <strong>{{ props.etalaseJmlProduk }} produk</strong> dalam etalase ini.
-									Anda tidak dapat menghapus etalase jika terdapat produk dalam etalase ini.
+                <h3 v-if="props.statusUser === true">Non-Aktifkan Merchant</h3>
+                <h3 v-else>Aktifkan Merchant</h3>
+                <p v-if="props.statusUser === true" class="text-body-2">
+                 Akun anda akan di <strong>non-aktif</strong> kan. Aktifkan kembali dengan cara menguhubungi admin marketplace PLN Mobile.
+                </p>
+                <p v-else class="text-body-2">
+                 Akun anda telah <strong>non-aktif</strong>. Aktifkan kembali dengan cara menguhubungi admin marketplace PLN Mobile.
                 </p>
               </div>
             </VCol>
@@ -71,11 +64,13 @@ const onSubmit = () => {
             color="primary"
             variant="outlined"
             @click="onReset"
-          >
-            Batal
-          </VBtn>
-          <VBtn type="submit">
-            Ya, Lanjutkan
+						:text="props.statusUser === true ? 'Batal' : 'Tutup'"
+          />
+					<VBtn
+						v-if="props.statusUser === true"
+						type="submit"
+						>
+            Non-Aktifkan
           </VBtn>
         </VCardText>
       </VForm>
