@@ -4,7 +4,7 @@ const eventsData = ref([])
 const { data: merchantDetails } = await useApiCore("/seller/query/merchant/profile-toko")
 if (merchantDetails.value.success) {
 	if(merchantDetails.value.data.merchant.can_registered_product_event){
-		eventsData.value = merchantDetails.value.data.merchant.can_registered_product_event.filter((e) => e.event_type == 'badge')
+		eventsData.value = merchantDetails.value.data.merchant.can_registered_product_event.filter((e) => e.event_type == 'promo')
 	}
 }
 </script>
@@ -14,7 +14,7 @@ if (merchantDetails.value.success) {
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
-          Daftar Event
+          Daftar Promo
         </h4>
       </div>
     </div>
@@ -39,12 +39,12 @@ if (merchantDetails.value.success) {
             <div>
               <VCardItem>
                 <VCardTitle>{{ event.event_name }}</VCardTitle>
-								<VChip size="small" color="info" class="mt-2">
+								<VChip size="small" color="warning" class="mt-2">
 									<VIcon
 										start
-										icon="tabler-ticket"
+										icon="tabler-speakerphone"
 									/>
-									Event
+									Promo
 								</VChip>
               </VCardItem>
 
@@ -58,12 +58,12 @@ if (merchantDetails.value.success) {
 
               <VCardActions class="justify-space-between">
                 <VBtn variant="plain">
-                  <RouterLink :to="{ name: 'event-products', query: { type: event.event_type, key: event.event_key } }">
+                  <RouterLink :to="{ name: 'promo-products', query: { type: event.event_type, key: event.event_key } }">
                     <span class="ms-2">Daftarkan Produk</span>
                   </RouterLink>
                 </VBtn>
 
-                <RouterLink :to="{ name: 'event-products', query: { type: event.event_type, key: event.event_key } }">
+                <RouterLink :to="{ name: 'promo-products', query: { type: event.event_type, key: event.event_key } }">
                   <IconBtn
                     color="secondary"
                     icon="tabler-chevron-right"
@@ -81,8 +81,8 @@ if (merchantDetails.value.success) {
 					<EmptyData
 						:orientation="1"
 						:border="false"
-						title="Belum ada Event"
-						description="Saat ini PLN Mobile belum ada Event yang berjalan untuk Anda.<br/> Silahkan tingkatkan transaksi terus ya di PLN Mobile agar dapat mengikuti Event dan Promo di PLN Mobile"
+						title="Belum ada Promo"
+						description="Saat ini PLN Mobile belum ada Promo yang berjalan untuk Anda.<br/> Tingkatkan transaksi terus ya di PLN Mobile agar dapat mengikuti Event dan Promo di PLN Mobile"
 						/>
 				</VCol>
 			</VRow>

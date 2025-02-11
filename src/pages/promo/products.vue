@@ -2,7 +2,7 @@
 import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
-const route = useRoute('event-products')
+const route = useRoute('promo-products')
 const isAddProductDialogVisible = ref(false)
 const eventData = ref()
 const eventKey = ref('')
@@ -96,9 +96,9 @@ const deleteProduct = async id => {
     // Refetch products
     fetchProducts()
 		let msg = res.message
-    messageStore.setMessage('success', 'Berhasil menghapus produk event')
+    messageStore.setMessage('success', 'Berhasil menghapus produk promo')
   } catch (error) {
-    messageStore.setMessage('error', 'Gagal menghapus produk event')
+    messageStore.setMessage('error', 'Gagal menghapus produk')
     console.error("Error on delete product data:", error)
   }
 }
@@ -112,7 +112,7 @@ const deleteItem = (id, name) => {
 }
 
 const parseDesc = () => {
-	return `Anda sekarang belum memiliki produk untuk event <strong>${ eventName.value }</strong>.<br/>Silahkan pilih produk-produk yang ingin anda tampilkan sebagai Produk Event di toko anda.`
+	return `Anda sekarang belum memiliki produk untuk promo <strong>${ eventName.value }</strong>.<br/>Silahkan pilih produk-produk yang ingin anda tampilkan sebagai Produk Promo di toko anda.`
 }
 </script>
 
@@ -122,7 +122,7 @@ const parseDesc = () => {
     <div class="d-flex flex-wrap flex-column flex-md-row justify-space-between align-start align-md-center gap-y-4 mb-6">
       <div>
         <h4 class="text-h4 font-weight-medium">
-					Produk untuk Event
+					Produk untuk Promo
         </h4>
         <p
           v-if="eventData"
@@ -150,10 +150,10 @@ const parseDesc = () => {
 			<EmptyData
 				:orientation="1"
 				:border="false"
-				title="Event tidak ditemukan"
-				description="Maaf event yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi"
-				btn-text="Kembali Event dan Promosi"
-				@click-button="() => $router.push('/event')"
+				title="Promo tidak ditemukan"
+				description="Maaf promo yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi"
+				btn-text="Kembali Daftar Promo"
+				@click-button="() => $router.push('/promo')"
 				/>
     </VCard>
 
