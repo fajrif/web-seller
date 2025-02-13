@@ -30,7 +30,11 @@ register()
 				v-if="productData"
 				class="d-flex gap-4"
 				>
-        <VBtn variant="outlined">
+				<VBtn
+					variant="outlined"
+					target="_blank"
+					:href="`/produk/preview/${route.params.id}`"
+					>
           <VIcon
             icon="tabler-eye"
             class="me-1"

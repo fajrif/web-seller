@@ -34,6 +34,7 @@ declare module 'vue-router/auto-routes' {
     'pages-terms': RouteRecordInfo<'pages-terms', '/pages/terms', Record<never, never>, Record<never, never>>,
     'produk-tab': RouteRecordInfo<'produk-tab', '/produk/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'produk-edit-id': RouteRecordInfo<'produk-edit-id', '/produk/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'produk-preview-id': RouteRecordInfo<'produk-preview-id', '/produk/preview/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'produk-tambah-tab': RouteRecordInfo<'produk-tambah-tab', '/produk/tambah/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'produk-view-id': RouteRecordInfo<'produk-view-id', '/produk/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'promo': RouteRecordInfo<'promo', '/promo', Record<never, never>, Record<never, never>>,
