@@ -1,6 +1,7 @@
 import { storeToRefs } from 'pinia'
 import { useTheme } from 'vuetify'
 import { cookieRef, useLayoutConfigStore } from '@layouts/stores/config'
+import { isEmpty, isEmptyArray, isNullOrUndefined } from '@core/utils/helpers'
 import { themeConfig } from '@themeConfig'
 
 // SECTION Store
@@ -103,20 +104,48 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
   const products = ref([])
   const filename = ref('')
 
-  function setDataParsed(data, _fname) {
-		products.value = data.map((item, index) => {
-			if(item.id_kategori)
-				item.id_kategori = parseInt(item.id_kategori)
-			if(item.kode_etalase)
-				item.kode_etalase = parseInt(item.kode_etalase)
-
-			return { id: index + 1, ...item, ...validate(item) }
-		})
+  function setFileName(_fname) {
 		filename.value = _fname
+  }
+
+  function setDataParsed(data) {
+		if(isEmpty(data[0])){
+			console.log('Skip data nama_produk kosong:' + data[0])
+		} else {
+			if(isNaN(data[1]) || isEmpty(data[1])){
+			} else {
+				var index = products.value.length + 1
+				var item = {
+					id: index,
+					nama_produk: data[0],
+					id_kategori: parseInt(data[1]),
+					kode_etalase: parseInt(data[2]),
+					kondisi: data[3],
+					harga: parseInt(data[4]) || 0,
+					harga_coret: parseInt(data[5]) || 0,
+					berat: data[6],
+					panjang: data[7],
+					lebar: data[8],
+					tinggi: data[9],
+					minimum_pembelian: data[10],
+					stok: data[11],
+					deskripsi: data[12],
+					image_url: '',
+				}
+				var validatedItem = validate(item)
+				products.value.push({ ...item, ...validatedItem })
+			}
+		}
   }
 
 	function validate(item) {
 		var errors = []
+
+		// gambar
+		var result = requiredValidator(item.image_url)
+		if(typeof result === 'string') {
+			errors.push('image_url: ' + result)
+		}
 
 		// nama_produk
 		var result = requiredValidator(item.nama_produk)
@@ -275,5 +304,10 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 		filename.value = ''
   }
 
-  return { products, filename, setDataParsed, validate, remove, clear }
+  return { products, filename, setDataParsed, validate, remove, clear, setFileName }
+}, {
+  persist: {
+    storage: sessionStorage,
+		key: 'file-upload-products',
+  },
 })

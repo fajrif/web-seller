@@ -26,6 +26,8 @@ const categories = computed(() => sanitizeNullChilds(categoriesData.value.data))
 const showcases = computed(() => showcasesData.value.etalase)
 
 const defaultItem = {
+	id: -1,
+	image_url: '',
 	nama_produk: '',
 	deskripsi: '',
 	id_kategori: '',
@@ -44,15 +46,22 @@ const defaultItem = {
 const productTab = ref('product-tab-1')
 const refForm = ref()
 const editedItem = ref(defaultItem)
+const errorMessage = ref(false)
 
 const onSubmit = () => {
 	// do something here ...
-  refForm.value?.validate().then(({ valid }) => {
+  refForm.value?.validate().then(({ valid, errors }) => {
+		errorMessage.value = !valid
     if (valid) {
-      emit('formSubmitted', props.itemId)
-			productStore.products[props.itemId - 1] = { id: props.itemId, ...editedItem.value, ...productStore.validate(editedItem.value) }
+			// this need to be fixed
+			var id = editedItem.value.id
+			var index = productStore.products.findIndex(p => p.id === id);
+			var item = productStore.products[index]
+			editedItem.value.image_url = item.image_url
+			productStore.products[index] = { ...editedItem.value, ...productStore.validate(editedItem.value) }
+      emit('formSubmitted', id)
 			onReset()
-    }
+		}
   })
 }
 
@@ -61,12 +70,19 @@ const onReset = () => {
 	productTab.value = 'product-tab-1'
 }
 
-watch(() => props.itemId, (newVal, oldVal) => {
-	var item = productStore.products.find(p => p.id === newVal)
+watch(() => props.itemId, (val) => {
+	var item = productStore.products.find(p => p.id === val)
 	if(item && typeof item === 'object'){
 		editedItem.value = { ...item }
+		errorMessage.value = !editedItem.value.status
+		// skip if only image_url blank
+		if(item.errors.length == 1){
+			if(item.errors[0].indexOf('image_url') !== -1){
+				errorMessage.value = !errorMessage.value
+			}
+		}
 	}
-});
+})
 </script>
 
 <template>
@@ -79,8 +95,10 @@ watch(() => props.itemId, (newVal, oldVal) => {
   >
     <!-- Dialog close btn -->
     <DialogCloseBtn @click="onReset" />
-
     <VCard title="Ubah Data">
+			<VAlert v-show="errorMessage" color="error" style="border-radius:0;">
+				Data produk masih ada yang salah harap lakukan perbaikan
+			</VAlert>
 			<VForm
 				ref="refForm"
 				@submit.prevent="onSubmit"
@@ -93,7 +111,7 @@ watch(() => props.itemId, (newVal, oldVal) => {
 			</VTabs>
       <VCardText>
 				<VWindow v-model="productTab">
-					<VWindowItem value="product-tab-1">
+					<VWindowItem value="product-tab-1" :eager="true">
 						<VRow>
 							<VCol cols="12">
 								<AppTextField
@@ -162,31 +180,27 @@ watch(() => props.itemId, (newVal, oldVal) => {
 							</VCol>
 						</VRow>
 					</VWindowItem>
-					<VWindowItem value="product-tab-2">
+					<VWindowItem value="product-tab-2" :eager="true">
 						<VRow>
 							<VCol cols="12">
-								<AppTextField
+								<AppCurrencyInput
 									v-model="editedItem.harga"
-									:rules="[requiredValidator,integerValidator]"
 									label="Harga"
-									type="number"
-									placeholder="Tentukan harga"
-									class="mb-6"
+									:rules="[requiredValidator, minIntegerValidator(editedItem.harga,1)]"
+									placeholder="Masukan harga jual satuan"
 								/>
 							</VCol>
 							<VCol cols="12">
-								<AppTextField
+								<AppCurrencyInput
 									v-model="editedItem.harga_coret"
-									:rules="[requiredValidator,integerValidator]"
 									label="Harga Coret"
-									type="number"
-									placeholder="Tentukan harga coret"
-									class="mb-6"
+									:rules="[requiredValidator, minIntegerValidator(editedItem.harga_coret,editedItem.harga)]"
+									placeholder="Masukan harga coret"
 								/>
 							</VCol>
 						</VRow>
 					</VWindowItem>
-					<VWindowItem value="product-tab-3">
+					<VWindowItem value="product-tab-3" :eager="true">
 						<VRow>
 							<VCol cols="12">
 								<AppTextField
@@ -198,7 +212,6 @@ watch(() => props.itemId, (newVal, oldVal) => {
 									min="1"
 									max="9999"
 									placeholder="Tentukan jumlah stock"
-									class="mb-6"
 								/>
 							</VCol>
 							<VCol cols="12">
@@ -211,12 +224,11 @@ watch(() => props.itemId, (newVal, oldVal) => {
 									max="9999"
 									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.minimum_pembelian,1,9999)]"
 									placeholder="Tentukan pembelian minimum"
-									class="mb-6"
 								/>
 							</VCol>
 						</VRow>
 					</VWindowItem>
-					<VWindowItem value="product-tab-4">
+					<VWindowItem value="product-tab-4" :eager="true">
 						<VRow>
 							<VCol
 								cols="12"
@@ -279,7 +291,6 @@ watch(() => props.itemId, (newVal, oldVal) => {
 					</VWindowItem>
 				</VWindow>
       </VCardText>
-
       <VCardText>
         <div class="self-align-end d-flex gap-4 justify-end">
           <VBtn
@@ -300,5 +311,4 @@ watch(() => props.itemId, (newVal, oldVal) => {
 			</VForm>
     </VCard>
   </VDialog>
-
 </template>

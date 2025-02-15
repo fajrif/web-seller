@@ -1,3 +1,5 @@
+import { isEmpty, isEmptyArray, isNullOrUndefined } from '@core/utils/helpers'
+
 export const productHeaders = [
   {
     id: 1,
@@ -43,17 +45,22 @@ export const headersFileUpload = [
 		sortable: false,
   },
   {
+    title: 'Gambar',
+    key: 'image_url',
+		sortable: false,
+  },
+  {
     title: 'Nama Produk',
     key: 'nama_produk',
 		sortable: false,
   },
   {
-    title: 'Kategori',
+    title: 'Kategori ID',
     key: 'id_kategori',
 		sortable: false,
   },
   {
-    title: 'Etalase',
+    title: 'Etalase ID',
     key: 'kode_etalase',
 		sortable: false,
   },
@@ -199,6 +206,9 @@ export const sortOptions = [
 ]
 
 export const toCurrency = price => {
+	if(isEmpty(price))
+		return ''
+
   var formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -235,4 +245,13 @@ export const normalizerCategories = (node) => {
 		label: node.value,
 		children: node.child,
 	}
+}
+
+export const truncateText = (txt, length=100) => {
+	if(isEmpty(txt))
+		return txt
+	if(txt.length <= length)
+		return txt
+
+	return txt.substring(0,length) + '...'
 }

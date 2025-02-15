@@ -21,16 +21,13 @@ const messageStore = useMessageStore()
 
 const inputFile = ref();
 const file = ref();
+const filename = ref('');
+const errorMessage = ref('');
 const loading = ref(false);
 const uploaded = ref(false);
 const parsed = ref(false);
 const interval = ref()
 const progressValue = ref(0)
-
-// if(productStore.filename !== ''){
-// 	uploaded.value = true
-// 	parsed.value = true
-// }
 
 const uploadAll = () => {
 	var data = productStore.products
@@ -42,15 +39,39 @@ const uploadAll = () => {
 	}
 }
 
-const parseFile = () => {
-	Papa.parse(file.value, {
-		header: true,
-		skipEmptyLines: true,
-		complete: function(results){
-			productStore.setDataParsed(results.data, file.value.name)
-			parsed.value = true;
-		}
-	});
+const parseFile = (_file,_filename) => {
+	try {
+		// set a filename
+		productStore.setFileName(_filename)
+		// parsing csv file into store
+		Papa.parse(_file, {
+			worker: true,
+			header: false,
+			dynamicTyping: true,
+			skipEmptyLines: true,
+			skipFirstNLines: 1,
+			step: function(row) {
+				if(progressValue.value < 100){
+					progressValue.value += 1
+				} else {
+					progressValue.value = 0
+				}
+				productStore.setDataParsed(row.data)
+			},
+			complete: function() {
+				progressValue.value = 100
+				setTimeout(() => {
+					console.log("All done!")
+					progressValue.value = 0
+					loading.value = false
+					parsed.value = true
+				}, 500)
+			}
+		});
+	} catch (error) {
+		errorMessage.value = 'Format data salah. Silahkan upload kembali'
+		loading.value = false
+	}
 }
 
 const handleFileUpload = (event) => {
@@ -59,20 +80,15 @@ const handleFileUpload = (event) => {
 	// Ensure that you have a file before attempting to read it
 	if (files && files[0]) {
 		file.value = files[0];
+		filename.value = files[0].name;
 		uploaded.value = true;
 	}
 }
 
-const uploadingData = () => {
-	interval.value = setInterval(() => {
-		if (progressValue.value === 100){
-			parseFile()
-			clearInterval(interval.value)
-			progressValue.value = 0
-		} else {
-			progressValue.value += 10
-		}
-  }, 500)
+const prosesData = () => {
+	loading.value = true
+	errorMessage.value = ''
+	parseFile(file.value,filename.value)
 }
 
 const downloadTemplate = async () => {
@@ -92,23 +108,12 @@ const downloadTemplate = async () => {
 		console.log(error);
 		messageStore.setMessage('error', 'Tidak dapat unduh template')
 	});
-
-	// let type = 'application/vnd.ms-excel';
-	// let fileUrl = URL.createObjectURL(new Blob([res], { type }));
-
-	// let link = document.createElement('a');
-	// link.href = fileUrl;
-	// link.target = '_blank';
-	// link.download = 'export-template.xls';
-
-	// document.body.appendChild(link);
-	// link.click();
-	// document.body.removeChild(link);
 }
 
 const reset = () => {
 	productStore.clear()
 	file.value = null
+	filename.value = ''
 	uploaded.value = false
 	parsed.value = false
 }
@@ -118,6 +123,16 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 		reset()
 	}
 });
+
+onMounted(() => {
+	var data = productStore.products
+
+	if(data && data.length > 0) {
+		filename.value = productStore.filename
+		uploaded.value = true
+		parsed.value = true
+	}
+})
 </script>
 
 <template>
@@ -134,7 +149,10 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						/>
 				</VAvatar>
 				<div class="d-flex flex-column text-start">
-					<h4 class="mb-2">{{ file.name }}</h4>
+					<h4 class="mb-2">{{ filename }}</h4>
+					<p v-show="errorMessage !== ''" class="text-body-2 text-error">
+						{{ errorMessage }}
+					</p>
 					<p class="text-body-2">
 						Pastikan file Excel (.csv) sudah sesuai dengan yang Anda inginkan.<br/> Produk yang sudah di-upload tidak bisa Anda batalkan.
 					</p>
@@ -182,7 +200,10 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						>
 						{{ progressValue }}
 					</VProgressCircular>
-					<h4 v-if="file !== null" class="mb-2">{{ file.name }}</h4>
+					<h4 class="mb-2">{{ filename }}</h4>
+					<p v-show="errorMessage !== ''" class="text-body-2 text-error">
+						{{ errorMessage }}
+					</p>
 					<p class="text-body-2">
 						Pastikan file Excel (.csv) sudah sesuai dengan yang Anda inginkan.<br/> Produk yang sudah di-upload tidak bisa Anda batalkan.
 					</p>
@@ -190,6 +211,7 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						<VBtn
 							color="primary"
 							variant="outlined"
+							:disabled="loading"
 							prepend-icon="tabler-arrow-back-up"
 							@click="reset"
 							>
@@ -198,9 +220,10 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 						<VBtn
 							color="primary"
 							prepend-icon="tabler-cloud-upload"
-							@click="uploadingData"
+							:loading="loading"
+							@click="prosesData"
 							>
-							Upload Data
+							Proses Data
 						</VBtn>
 					</div>
 				</div>

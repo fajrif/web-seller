@@ -396,6 +396,7 @@
     "containsCommaValidator": true,
     "download": true,
     "minIntegerValidator": true,
-    "lineBreaksValidator": true
+    "lineBreaksValidator": true,
+    "truncateText": true
   }
 }

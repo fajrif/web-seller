@@ -1,4 +1,5 @@
 <script setup>
+import avatar from '@images/misc/img-default.png'
 import { useFileUploadProductStore } from '@core/stores/config'
 import { useMessageStore } from '@core/stores/config'
 
@@ -6,19 +7,28 @@ const userData = useCookie('userData')
 const productStore = useFileUploadProductStore()
 const messageStore = useMessageStore()
 
+var successUpload = []
+var dataUpload = []
 const loading = ref(false)
 const isDeleteDataDialogVisible = ref(false)
 const isSaveDataDialogVisible = ref(false)
 const isEditDataDialogVisible = ref(false)
+const isUploadImageDialogVisible = ref(false)
 const triggerReset = ref(false)
-const itemId = ref(-1)
+const itemId = ref()
+const	imageAttr = {
+	title: "Upload Gambar Produk",
+	description: "Besar file: Maksimum 10 Mb. Ektensi file yang diperbolehkan: JPG, JPEG, PNG",
+	params: {
+		type: 'product'
+	},
+}
 
 const products = computed(() => productStore.products)
 const totalProducts = computed(() => productStore.products.length)
 
 const saveProduct = async (productData, id) => {
   try {
-		console.log(productData)
     const res = await $apiCore('/seller/command/product/create', {
       method: 'POST',
       body: productData,
@@ -35,7 +45,7 @@ const saveProduct = async (productData, id) => {
 		})
   } catch (error) {
 		loading.value = false
-    messageStore.setMessage('error', 'Gagal menyimpan data produk')
+		messageStore.setMessage('error', 'Gagal upload produk, Harap periksa kembali ID Kategori dan Kode Etalase')
     console.error("Error on posting product data:", error)
   }
 }
@@ -58,12 +68,11 @@ const savingProduct = (id) => {
 				strike_price: parseInt(item.harga_coret),
 				amount: parseInt(item.stok),
 				minimum_purchase: parseInt(item.minimum_pembelian),
-				weight: item.berat,
-				height: item.tinggi,
-				width: item.lebar,
-				length: item.panjang,
-				status: 9,
-				url: [],
+				weight: item.berat.toString(),
+				height: item.tinggi.toString(),
+				width: item.lebar.toString(),
+				length: item.panjang.toString(),
+				url: [item.image_url],
 			}, id)
 			/* eslint-enable */
 		} else {
@@ -72,39 +81,100 @@ const savingProduct = (id) => {
 		}
 	} else {
 		loading.value = false
-    messageStore.setMessage('error', 'Gagal menyimpan data produk')
+		messageStore.setMessage('error', 'Gagal upload produk, Harap periksa kembali ID Kategori dan Kode Etalase')
 	}
 }
 
-const uploadAll = (value) => {
-	if(value){
-		var data = productStore.products.map(i => i.id)
-		data.forEach(function (id, index) {
-			savingProduct(id)
-		});
+const checkUploadProducts = (id, status) => {
+	if(status){
+		productStore.remove(id)
+		successUpload.push(id)
+	}
+	if(dataUpload.length === 0){
+		loading.value = false
+		if(successUpload.length > 0) {
+			messageStore.setMessage('success', `Berhasil upload ${successUpload.length} produk`)
+		} else {
+			messageStore.setMessage('error', 'Gagal upload produk, Harap periksa kembali ID Kategori dan Kode Etalase')
+		}
+		successUpload = []
 	} else {
+		simpanProduct(dataUpload[0])
+	}
+}
+
+const simpanProduct = async (id) => {
+  try {
+		dataUpload = dataUpload.filter((i) => i !== id)
+		var item = productStore.products.find(p => p.id === id)
+
+		var productData = {
+			merchant_id: userData.value.id,
+			name: item.nama_produk,
+			description: item.deskripsi,
+			category_id: parseInt(item.id_kategori),
+			etalase_id: parseInt(item.kode_etalase),
+			condition: item.kondisi,
+			price: parseInt(item.harga),
+			strike_price: parseInt(item.harga_coret),
+			amount: parseInt(item.stok),
+			minimum_purchase: parseInt(item.minimum_pembelian),
+			weight: item.berat.toString(),
+			height: item.tinggi.toString(),
+			width: item.lebar.toString(),
+			length: item.panjang.toString(),
+			url: [item.image_url],
+		}
+
+    await $apiCore('/seller/command/product/create', {
+      method: 'POST',
+      body: productData
+    })
+
+    await nextTick(() => {
+			checkUploadProducts(id, true)
+		})
+  } catch (error) {
+    console.error("Error on posting product data:", error)
+		checkUploadProducts(id, false)
+  }
+}
+
+const uploadAll = (value) => {
+	loading.value = true
+	successUpload = []
+	dataUpload = []
+	if(value){
+		dataUpload = productStore.products.filter((i) => i.status === true).map(i => i.id)
+		if(dataUpload.length > 0){
+			simpanProduct(dataUpload[0])
+		} else {
+			loading.value = false
+			messageStore.setMessage('error', 'Data produk masih salah')
+		}
+	} else {
+		loading.value = false
     messageStore.setMessage('error', 'Data Kosong')
 	}
 }
 
-const editDataItem = id => {
+const editDataItem = (id) => {
   itemId.value = id
   isEditDataDialogVisible.value = true
 }
 
 const saveEditItem = (id) => {
 	// do something here ...
-	console.log('save edit item: ' + id)
+	// console.log('save edit item: ' + id)
 }
 
-const deleteItem = id => {
+const deleteItem = (id) => {
   itemId.value = id
   isDeleteDataDialogVisible.value = true
 }
 
-const deleteItemConfirm = id => {
+const deleteItemConfirm = (id) => {
 	loading.value = true
-  itemId.value = -1
 	productStore.remove(id)
 	if(totalProducts.value <= 0) {
 		triggerReset.value = !triggerReset.value
@@ -112,14 +182,35 @@ const deleteItemConfirm = id => {
 	loading.value = false
 }
 
-const saveItem = id => {
+const saveItem = (id) => {
   itemId.value = id
   isSaveDataDialogVisible.value = true
 }
 
-const saveItemConfirm = id => {
-  itemId.value = -1
+const saveItemConfirm = (id) => {
 	savingProduct(id)
+}
+
+const openImageDialog = (id) => {
+  itemId.value = id
+  isUploadImageDialogVisible.value = true
+}
+
+const uploadProductPhoto = async (path) => {
+	if (path !== '') {
+		// add to product urls here...
+		var id = itemId.value
+		var index = productStore.products.findIndex(p => p.id === id);
+		var item = productStore.products[index]
+		if(item){
+			item.image_url = path
+			delete item['status']
+			delete item['errors']
+			productStore.products[index] = { ...item, ...productStore.validate(item) }
+		}
+	} else {
+    messageStore.setMessage('error', 'Gagal upload gambar')
+	}
 }
 
 const computedMoreList = computed(() => {
@@ -147,7 +238,6 @@ const computedMoreList = computed(() => {
     },
   ]
 })
-
 </script>
 
 <template>
@@ -161,17 +251,15 @@ const computedMoreList = computed(() => {
 					</h4>
 				</VCardTitle>
 			</VCardItem>
-
 			<!-- 👉 Upload products -->
 			<VCardText>
 				<FileUploadProductCard
 					:trigger-reset="triggerReset"
 					@upload-all="uploadAll"
 					/>
-
 				<div
 					v-if="products && totalProducts > 0"
-					class="border rounded">
+					class="data-products-table border rounded">
 					<VDataTable
 						:headers="headersFileUpload"
 						:items="products"
@@ -188,7 +276,6 @@ const computedMoreList = computed(() => {
 								color="undefined"
 								class="mx-2"
 								/>
-
 							<VTooltip v-if="item.status == false">
 								<template #activator="{ props }">
 									<VAvatar
@@ -219,9 +306,45 @@ const computedMoreList = computed(() => {
 							</VAvatar>
 						</template>
 
+						<!-- Gambar	-->
+						<template #item.image_url="{ item }">
+							<VAvatar
+								v-if="item.image_url !== ''"
+								size="50"
+								variant="tonal"
+								class="my-2"
+								style="cursor:pointer;"
+								rounded
+								:image="item.image_url"
+								@click="openImageDialog(item.id)"
+								/>
+							<VAvatar v-else
+								size="50"
+								variant="tonal"
+								class="my-2"
+								style="cursor:pointer;"
+								rounded
+								:image="avatar"
+								@click="openImageDialog(item.id)"
+								/>
+						</template>
+
+						<!-- harga -->
+						<template #item.harga="{ item }">
+							<span class="text-body-1 text-high-emphasis">{{ toCurrency(item.harga) }}</span>
+						</template>
+
+						<!-- harga_coret -->
+						<template #item.harga_coret="{ item }">
+							<span class="text-body-1 text-high-emphasis">{{ toCurrency(item.harga_coret) }}</span>
+						</template>
+
+						<!-- deskripsi -->
+						<template #item.deskripsi="{ item }">
+							<span class="text-body-1 text-high-emphasis">{{ truncateText(item.deskripsi, 20) }}</span>
+						</template>
 					</VDataTable>
 				</div>
-
 			</VCardText>
 		</VCard>
     <SaveDataDialog
@@ -239,14 +362,21 @@ const computedMoreList = computed(() => {
       v-model:item-id="itemId"
       @form-submitted="saveEditItem"
     />
+    <UploadCropStencilImageDialog
+      v-model:is-dialog-visible="isUploadImageDialogVisible"
+      v-model:title="imageAttr.title"
+      v-model:description="imageAttr.description"
+      v-model:params="imageAttr.params"
+      @form-submitted="uploadProductPhoto"
+    />
 	</div>
 </template>
 
 <style scoped>
-.v-table__wrapper thead > tr > th:nth-child(2) {
-	min-width: 200px;
+:deep(.data-products-table) > .v-table .v-table__wrapper > table > tbody tr:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, .02);
 }
-.v-table__wrapper thead > tr > th:last-child {
-	min-width: 800px;
+:deep(.data-products-table) > .v-table .v-table__wrapper > table > tbody tr:has(i.tabler-check) {
+  background-color: aliceblue;
 }
 </style>
