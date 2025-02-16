@@ -183,7 +183,7 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
-  const updateCookieUserData: typeof import('./src/utils/merchantHelper.js')['updateCookieUserData']
+  const updateUserDataStore: typeof import('./src/utils/merchantHelper.js')['updateUserDataStore']
   const urlValidator: typeof import('./src/@core/utils/validators.js')['urlValidator']
   const useAbility: typeof import('./src/plugins/casl/composables/useAbility.js')['useAbility']
   const useAbs: typeof import('@vueuse/math')['useAbs']
@@ -569,7 +569,7 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
-    readonly updateCookieUserData: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['updateCookieUserData']>
+    readonly updateUserDataStore: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['updateUserDataStore']>
     readonly urlValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['urlValidator']>
     readonly useAbility: UnwrapRef<typeof import('./src/plugins/casl/composables/useAbility.js')['useAbility']>
     readonly useAbs: UnwrapRef<typeof import('@vueuse/math')['useAbs']>

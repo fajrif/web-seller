@@ -361,8 +361,6 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "$apiRails": true,
-    "useApiRails": true,
     "$apiAuth": true,
     "$apiCore": true,
     "useApiCore": true,
@@ -381,7 +379,6 @@
     "operationalAttrs": true,
     "getInfoAttrs": true,
     "getOperationalAttrs": true,
-    "updateCookieUserData": true,
     "data2blob": true,
     "effectRipple": true,
     "language": true,
@@ -397,6 +394,7 @@
     "download": true,
     "minIntegerValidator": true,
     "lineBreaksValidator": true,
-    "truncateText": true
+    "truncateText": true,
+    "updateUserDataStore": true
   }
 }

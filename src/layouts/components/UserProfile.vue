@@ -1,6 +1,7 @@
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useMessageStore } from '@core/stores/config'
+import { useUserDataStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 
@@ -11,10 +12,10 @@ const loading = ref(false)
 const isNonAktifMerchantDialogVisible = ref(false)
 
 // TODO: Get type from backend
-const userData = useCookie('userData')
+const userData = useUserDataStore()
 
 const statusUser = ref(false)
-if(userData.value?.status == 1){
+if(userData.status == 1){
   statusUser.value = true
 }
 
@@ -23,8 +24,8 @@ const clearCookies = async () => {
   // Remove "accessToken" from cookie
   useCookie('accessToken').value = null
 
-  // Remove "userData" from cookie
-  userData.value = null
+  // Remove "userData" from sessionStorage
+	userData.clear()
 
   // Redirect to login page
   await router.push('/login')
@@ -78,7 +79,7 @@ const nonAktifToko = async (status) => {
 		messageStore.setMessage('success', msg)
 
 		await nextTick(() => {
-			updateCookieUserData(() => {})
+			updateUserDataStore(() => {})
 		})
 	}
 }
@@ -98,7 +99,7 @@ const onChange = async () => {
         variant="tonal"
       >
         <VImg
-					v-if="userData && userData.photo_url"
+					v-if="userData.photo_url !== null && userData.photo_url !== ''"
 					:src="userData.photo_url"
         />
         <VIcon
@@ -106,7 +107,7 @@ const onChange = async () => {
           icon="tabler-user"
         />
       </VAvatar>
-      <h6 v-if="userData && userData.name" class="text-h6 font-weight-medium">
+      <h6 v-if="userData.name !== null && userData.name !== ''" class="text-h6 font-weight-medium">
         {{ userData.name }}
       </h6>
     </div>
@@ -128,7 +129,7 @@ const onChange = async () => {
 								variant="tonal"
 								>
 								<VImg
-									v-if="userData && userData.photo_url"
+									v-if="userData.photo_url !== null && userData.photo_url !== ''"
 									:src="userData.photo_url"
 									/>
 								<VIcon
@@ -136,7 +137,7 @@ const onChange = async () => {
 									icon="tabler-user"
 									/>
 							</VAvatar>
-							<div v-if="userData">
+							<div v-if="userData.id !== null && userData.id !== ''">
 								<h6 class="text-h6 font-weight-medium">
 									{{ userData.name }}
 								</h6>

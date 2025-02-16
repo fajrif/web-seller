@@ -1,9 +1,10 @@
 <script setup>
 import avatar from '@images/misc/img-default.png'
+import { useUserDataStore } from '@core/stores/config'
 import { useFileUploadProductStore } from '@core/stores/config'
 import { useMessageStore } from '@core/stores/config'
 
-const userData = useCookie('userData')
+const userData = useUserDataStore()
 const productStore = useFileUploadProductStore()
 const messageStore = useMessageStore()
 
@@ -59,7 +60,7 @@ const savingProduct = (id) => {
 		if(item.status) {
 			/* eslint-disable camelcase */
 			saveProduct({
-				merchant_id: userData.value.id,
+				merchant_id: userData.id,
 				name: item.nama_produk,
 				description: item.deskripsi,
 				category_id: parseInt(item.id_kategori),
@@ -111,7 +112,7 @@ const simpanProduct = async (id) => {
 		var item = productStore.products.find(p => p.id === id)
 
 		var productData = {
-			merchant_id: userData.value.id,
+			merchant_id: userData.id,
 			name: item.nama_produk,
 			description: item.deskripsi,
 			category_id: parseInt(item.id_kategori),

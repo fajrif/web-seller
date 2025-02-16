@@ -1,3 +1,5 @@
+import { useUserDataStore } from '@core/stores/config'
+
 export const timeOptions = [
   { id: 1, text: "06:00 AM", value: "06:00:00" },
   { id: 2, text: "07:00 AM", value: "07:00:00" },
@@ -66,8 +68,9 @@ export const getInfoAttrs = merchant => {
 	}
 }
 
-export const updateCookieUserData = async (callback) => {
+export const updateUserDataStore = async (callback) => {
   try {
+		const userDataStore = useUserDataStore()
     // GET Data Merchant
     const resCore = await $apiCore('/seller/query/merchant/profile-toko', {
       method: 'GET',
@@ -78,16 +81,7 @@ export const updateCookieUserData = async (callback) => {
 
     const merchant = resCore.data.merchant
 
-    /* eslint-disable camelcase */
-    const userData = {
-      id: merchant.id,
-      name: merchant.name,
-      photo_url: merchant.photo_url,
-      status: merchant.status,
-    }
-    /* eslint-enable */
-
-    useCookie('userData').value = userData
+    userDataStore.setUserData(merchant)
 
     await nextTick(() => {
 			callback()
@@ -95,7 +89,8 @@ export const updateCookieUserData = async (callback) => {
 
   } catch (err) {
 		useCookie('accessToken').value = null
-    useCookie('userData').value = null
+		// remove user-data storage here
+		userDataStore.clear()
     console.error(err)
   }
 }

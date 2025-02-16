@@ -50,14 +50,17 @@ register()
 						>
 							<VImg :src="swiperImg.url" />
 						</swiper-slide>
+						<img
+							v-show="productData.is_featured_product"
+							:src="featuredBadge"
+							class="featured-badge"
+							/>
 					</swiper-container>
 					<div class="swiper-pagination"></div>
-					<img :src="featuredBadge" />
 					<div class="pa-4">
 						<div class="d-flex align-center justify-space-between mb-4">
-							<div class="d-block">
-								<img :src="badge" class="me-2" />
-								<img :src="badgeDiskon" />
+							<div v-show="productData.event_badge_active" class="d-block">
+								<img :src="productData.event_badge_image_url" class="me-2" />
 							</div>
 
 							<IconBtn
@@ -190,5 +193,9 @@ register()
 	top: 10%;
 	left: auto;
 	right: 15px;
+}
+.featured-badge {
+	position: absolute;
+	bottom: 0;
 }
 </style>

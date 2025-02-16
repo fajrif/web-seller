@@ -1,7 +1,8 @@
 <script setup>
+import { useUserDataStore } from '@core/stores/config'
 import { useMessageStore } from '@core/stores/config'
 
-const userData = useCookie('userData')
+const userData = useUserDataStore()
 const messageStore = useMessageStore()
 
 const isAddEtalaseDialogVisible = ref(false)
@@ -23,7 +24,7 @@ const addShowcase = async (id, name) => {
     const res = await $apiCore("/seller/command/etalase/store", {
       method: 'POST',
       body: {
-        merchant_id: userData.value.id,
+        merchant_id: userData.id,
         name: name,
       },
     })

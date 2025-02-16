@@ -1,3 +1,4 @@
+import { useUserDataStore } from '@core/stores/config'
 import { createFetch } from '@vueuse/core'
 import { destr } from 'destr'
 
@@ -26,11 +27,13 @@ export const useApiCore = createFetch({
       try {
         // Invalid or expired JWT
         if(response.status == 401) {
+					var userData = useUserDataStore()
           // Remove "accessToken" from cookie
           useCookie('accessToken').value = null
-          useCookie('userData').value = null
           // Remove "userAbilities" from cookie
           useCookie('userAbilityRules').value = null
+					userData.clear()
+					window.location.href = '/login'
         }
 				return ctx;
       }

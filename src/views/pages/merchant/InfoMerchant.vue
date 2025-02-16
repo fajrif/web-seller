@@ -67,7 +67,7 @@ const saveMerchant = async merchantData => {
 
     await nextTick(() => {
 			loading.value = false
-			updateCookieUserData(() => {
+			updateUserDataStore(() => {
 				let msg = res.message
 				messageStore.setMessage('success', msg)
 			})
@@ -156,7 +156,7 @@ const uploadMerchantPhoto = async (path) => {
     })
 
     await nextTick(() => {
-			updateCookieUserData(() => {})
+			updateUserDataStore(() => {})
     })
 	} else {
     messageStore.setMessage('error', 'Gagal update photo')

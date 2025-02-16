@@ -60,7 +60,7 @@ const login = async () => {
     useCookie('accessToken').value = accessToken
 
     await nextTick(() => {
-			updateCookieUserData(() => {
+			updateUserDataStore(() => {
 				loading.value = false
         messageStore.setMessage('success', "Login berhasil")
 				router.replace(route.query.to ? String(route.query.to) : '/')

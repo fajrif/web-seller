@@ -307,7 +307,34 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
   return { products, filename, setDataParsed, validate, remove, clear, setFileName }
 }, {
   persist: {
-    storage: sessionStorage,
+    storage: localStorage,
 		key: 'file-upload-products',
+  },
+})
+
+// !SECTION
+// userData
+export const useUserDataStore = defineStore('userData', () => {
+  const id = ref()
+  const name = ref()
+  const photo_url = ref()
+  const status = ref()
+
+  function setUserData(merchant) {
+		id.value = merchant.id
+		name.value = merchant.name
+		photo_url.value = merchant.photo_url
+		status.value = merchant.status
+  }
+
+  function clear() {
+		localStorage.removeItem('user-data')
+  }
+
+  return { id, name, photo_url, status, setUserData, clear }
+}, {
+  persist: {
+    storage: localStorage,
+		key: 'user-data',
   },
 })

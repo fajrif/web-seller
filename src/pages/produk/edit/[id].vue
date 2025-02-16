@@ -16,6 +16,7 @@ const	imageAttr = {
 
 const loading = ref(false)
 const refForm = ref()
+const dirtyForm = ref(false)
 const	merchantId = ref(0)
 const	productName = ref('')
 const	productDescription = ref('')
@@ -75,6 +76,7 @@ const saveProduct = async productData => {
 
     await nextTick(() => {
 			loading.value = false
+			dirtyForm.value = false
 			messageStore.setMessage('success', 'Data produk berhasil diubah')
 		})
   } catch (error) {
@@ -130,6 +132,7 @@ const deleteImage = (index) => {
   // Delete from product urls
 	if (index !== -1) {
     productPhotoUrl.value.splice(index, 1)
+		dirtyForm.value = true
 	}
 }
 
@@ -141,10 +144,36 @@ const uploadProductPhoto = async (path) => {
 	if (path !== '') {
 		// add to product urls here...
 		productPhotoUrl.value.push(path)
+		dirtyForm.value = true
 	} else {
     messageStore.setMessage('error', 'URL path gambar kosong')
 	}
 }
+
+const somethingChanged = () => {
+	dirtyForm.value = true
+}
+
+// When the user leave the page in your Vue app
+onBeforeRouteLeave((to, from, next) => {
+	if(dirtyForm.value){
+		const answer = window.confirm('Apakah Anda yakin ingin keluar dari halaman ini? Data yang sudah Anda masukkan akan hilang')
+    if (answer) {
+      return next()
+    } else {
+			// cancel the navigation and stay on the same page
+      return next(false)
+    }
+  }
+  return next()
+});
+
+// When the user refresh/leave the current tab
+useEventListener(window, "beforeunload", (event) => {
+	if(dirtyForm.value){
+		event.preventDefault();
+	}
+});
 </script>
 
 <template>
@@ -159,6 +188,7 @@ const uploadProductPhoto = async (path) => {
     <!-- 👉 Form -->
     <VForm
       ref="refForm"
+			@change="somethingChanged"
       @submit.prevent="onSubmit"
     >
       <VRow>

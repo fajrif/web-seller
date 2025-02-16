@@ -1,9 +1,10 @@
 <script setup>
 import { reactive } from 'vue'
 import { useMessageStore } from '@core/stores/config'
+import { useUserDataStore } from '@core/stores/config'
 import '@cholakovdev/vue3-treeselect/dist/vue3-treeselect.css'
 
-const userData = useCookie('userData')
+const userData = useUserDataStore()
 const messageStore = useMessageStore()
 const router = useRouter()
 
@@ -18,6 +19,7 @@ const	imageAttr = {
 
 const loading = ref(false)
 const refForm = ref()
+const dirtyForm = ref(false)
 const	productName = ref('')
 const	productDescription = ref('')
 const	productCategory = ref()
@@ -66,7 +68,7 @@ const saveProduct = async productData => {
 const savingProduct = () => {
 	/* eslint-disable camelcase */
 	saveProduct({
-		merchant_id: userData.value.id,
+		merchant_id: userData.id,
 		name: productName.value,
 		description: productDescription.value,
 		category_id: productCategory.value,
@@ -109,6 +111,7 @@ const deleteImage = (index) => {
   // Delete from product urls
 	if (index !== -1) {
     productPhotoUrl.value.splice(index, 1)
+		dirtyForm.value = true
 	}
 }
 
@@ -120,11 +123,36 @@ const uploadProductPhoto = async (path) => {
 	if (path !== '') {
 		// add to product urls here...
 		productPhotoUrl.value.push(path)
+		dirtyForm.value = true
 	} else {
     messageStore.setMessage('error', 'URL path gambar kosong')
 	}
 }
 
+const somethingChanged = () => {
+	dirtyForm.value = true
+}
+
+// When the user leave the page in your Vue app
+onBeforeRouteLeave((to, from, next) => {
+	if(dirtyForm.value){
+		const answer = window.confirm('Apakah Anda yakin ingin keluar dari halaman ini? Data yang sudah Anda masukkan akan hilang')
+    if (answer) {
+      return next()
+    } else {
+			// cancel the navigation and stay on the same page
+      return next(false)
+    }
+  }
+  return next()
+});
+
+// When the user refresh/leave the current tab
+useEventListener(window, "beforeunload", (event) => {
+	if(dirtyForm.value){
+		event.preventDefault();
+	}
+});
 </script>
 
 <template>
@@ -132,6 +160,7 @@ const uploadProductPhoto = async (path) => {
     <!-- 👉 Form -->
     <VForm
       ref="refForm"
+			@change="somethingChanged"
       @submit.prevent="onSubmit"
     >
       <VRow>
