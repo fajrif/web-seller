@@ -130,7 +130,7 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 					minimum_pembelian: data[10],
 					stok: data[11],
 					deskripsi: data[12],
-					image_url: '',
+					image_url: data[13],
 				}
 				var validatedItem = validate(item)
 				products.value.push({ ...item, ...validatedItem })

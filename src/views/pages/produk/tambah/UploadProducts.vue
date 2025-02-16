@@ -15,6 +15,7 @@ const isSaveDataDialogVisible = ref(false)
 const isEditDataDialogVisible = ref(false)
 const isUploadImageDialogVisible = ref(false)
 const triggerReset = ref(false)
+const triggerLoading = ref(false)
 const itemId = ref()
 const	imageAttr = {
 	title: "Upload Gambar Produk",
@@ -92,6 +93,7 @@ const checkUploadProducts = (id, status) => {
 	}
 	if(dataUpload.length === 0){
 		loading.value = false
+		triggerLoading.value = !triggerLoading.value
 		if(successUpload.length > 0) {
 			messageStore.setMessage('success', `Berhasil upload ${successUpload.length} produk`)
 		} else {
@@ -150,10 +152,12 @@ const uploadAll = (value) => {
 			simpanProduct(dataUpload[0])
 		} else {
 			loading.value = false
+			triggerLoading.value = !triggerLoading.value
 			messageStore.setMessage('error', 'Data produk masih salah')
 		}
 	} else {
 		loading.value = false
+		triggerLoading.value = !triggerLoading.value
     messageStore.setMessage('error', 'Data Kosong')
 	}
 }
@@ -255,6 +259,7 @@ const computedMoreList = computed(() => {
 			<VCardText>
 				<FileUploadProductCard
 					:trigger-reset="triggerReset"
+					:trigger-loading="triggerLoading"
 					@upload-all="uploadAll"
 					/>
 				<div
@@ -309,7 +314,7 @@ const computedMoreList = computed(() => {
 						<!-- Gambar	-->
 						<template #item.image_url="{ item }">
 							<VAvatar
-								v-if="item.image_url !== ''"
+								v-if="item.image_url !== null && item.image_url !== ''"
 								size="50"
 								variant="tonal"
 								class="my-2"

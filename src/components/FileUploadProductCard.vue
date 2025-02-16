@@ -10,6 +10,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  triggerLoading: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 const emit = defineEmits([
@@ -30,6 +34,7 @@ const interval = ref()
 const progressValue = ref(0)
 
 const uploadAll = () => {
+	loading.value = true
 	var data = productStore.products
 
 	if(data && data.length > 0) {
@@ -124,6 +129,12 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 	}
 });
 
+watch(() => props.triggerLoading, (newVal, oldVal) => {
+	if(newVal !== oldVal){
+		loading.value = false
+	}
+});
+
 onMounted(() => {
 	var data = productStore.products
 
@@ -160,6 +171,7 @@ onMounted(() => {
 						<VBtn
 							color="primary"
 							variant="outlined"
+							:disabled="loading"
 							prepend-icon="tabler-arrow-back-up"
 							@click="reset"
 							>
@@ -167,6 +179,7 @@ onMounted(() => {
 						</VBtn>
 						<VBtn
 							color="primary"
+							:loading="loading"
 							prepend-icon="tabler-cloud-upload"
 							@click="uploadAll"
 							>
