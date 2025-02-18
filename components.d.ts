@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AcceptOrderDialog: typeof import('./src/components/dialogs/AcceptOrderDialog.vue')['default']
     AddEditEtalaseDialog: typeof import('./src/components/dialogs/AddEditEtalaseDialog.vue')['default']
     AddProductFeaturedSelectionDialog: typeof import('./src/components/dialogs/AddProductFeaturedSelectionDialog.vue')['default']
     AddProductSelectionDialog: typeof import('./src/components/dialogs/AddProductSelectionDialog.vue')['default']
@@ -25,6 +26,7 @@ declare module 'vue' {
     AppTextarea: typeof import('./src/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./src/@core/components/app-form-elements/AppTextField.vue')['default']
     AppTreeSelect: typeof import('./src/@core/components/app-form-elements/AppTreeSelect.vue')['default']
+    CancelOrderDialog: typeof import('./src/components/dialogs/CancelOrderDialog.vue')['default']
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
@@ -45,6 +47,7 @@ declare module 'vue' {
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     FileUploadProductCard: typeof import('./src/components/FileUploadProductCard.vue')['default']
     I18n: typeof import('./src/@core/components/I18n.vue')['default']
+    InputResiOrderDialog: typeof import('./src/components/dialogs/InputResiOrderDialog.vue')['default']
     MapLocationPicker: typeof import('./src/components/dialogs/MapLocationPicker.vue')['default']
     MdrDisplay: typeof import('./src/components/MdrDisplay.vue')['default']
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']

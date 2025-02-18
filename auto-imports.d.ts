@@ -64,6 +64,7 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getInfoAttrs: typeof import('./src/utils/merchantHelper.js')['getInfoAttrs']
   const getOperationalAttrs: typeof import('./src/utils/merchantHelper.js')['getOperationalAttrs']
+  const getRespondTime: typeof import('./src/utils/orderHelper.js')['getRespondTime']
   const h: typeof import('vue')['h']
   const headersFileUpload: typeof import('./src/utils/productHelper.js')['headersFileUpload']
   const hexToRgb: typeof import('./src/@core/utils/colorConverter.js')['hexToRgb']
@@ -121,6 +122,7 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const operationalAttrs: typeof import('./src/utils/merchantHelper.js')['operationalAttrs']
+  const orderHeaders: typeof import('./src/utils/orderHelper.js')['orderHeaders']
   const paginationMeta: typeof import('./src/utils/paginationMeta.js')['paginationMeta']
   const passwordValidator: typeof import('./src/@core/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
@@ -148,9 +150,11 @@ declare global {
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
+  const resolveStatusOrder: typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const resolveVuetifyTheme: typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']
   const rgbaToHex: typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']
+  const sampleDataOrders: typeof import('./src/utils/orderHelper.js')['sampleDataOrders']
   const sanitizeNullChilds: typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
@@ -158,6 +162,7 @@ declare global {
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
   const sortOptions: typeof import('./src/utils/productHelper.js')['sortOptions']
+  const statusOrder: typeof import('./src/utils/orderHelper.js')['statusOrder']
   const statusProduct: typeof import('./src/utils/productHelper.js')['statusProduct']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
@@ -168,6 +173,7 @@ declare global {
   const timeOptions: typeof import('./src/utils/merchantHelper.js')['timeOptions']
   const titleize: typeof import('./src/utils/merchantHelper.js')['titleize']
   const toCurrency: typeof import('./src/utils/productHelper.js')['toCurrency']
+  const toLocaleDateTime: typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']
   const toRaw: typeof import('vue')['toRaw']
   const toReactive: typeof import('@vueuse/core')['toReactive']
   const toRef: typeof import('vue')['toRef']
@@ -453,6 +459,7 @@ declare module 'vue' {
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getInfoAttrs: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['getInfoAttrs']>
     readonly getOperationalAttrs: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['getOperationalAttrs']>
+    readonly getRespondTime: UnwrapRef<typeof import('./src/utils/orderHelper.js')['getRespondTime']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly headersFileUpload: UnwrapRef<typeof import('./src/utils/productHelper.js')['headersFileUpload']>
     readonly hexToRgb: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['hexToRgb']>
@@ -507,6 +514,7 @@ declare module 'vue' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
+    readonly orderHeaders: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderHeaders']>
     readonly paginationMeta: UnwrapRef<typeof import('./src/utils/paginationMeta.js')['paginationMeta']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
@@ -534,6 +542,7 @@ declare module 'vue' {
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
+    readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
@@ -544,6 +553,7 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly sortOptions: UnwrapRef<typeof import('./src/utils/productHelper.js')['sortOptions']>
+    readonly statusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['statusOrder']>
     readonly statusProduct: UnwrapRef<typeof import('./src/utils/productHelper.js')['statusProduct']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
@@ -554,6 +564,7 @@ declare module 'vue' {
     readonly timeOptions: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['timeOptions']>
     readonly titleize: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['titleize']>
     readonly toCurrency: UnwrapRef<typeof import('./src/utils/productHelper.js')['toCurrency']>
+    readonly toLocaleDateTime: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>

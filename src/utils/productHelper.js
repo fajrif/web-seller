@@ -206,8 +206,9 @@ export const sortOptions = [
 ]
 
 export const toCurrency = price => {
+	var _price = price
 	if(isEmpty(price))
-		return ''
+		_price = 0
 
   var formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -215,7 +216,7 @@ export const toCurrency = price => {
     maximumFractionDigits: 0,
   })
 
-  return formatter.format(parseInt(price))
+  return formatter.format(parseInt(_price))
 }
 
 export const calculateDiscount = (price, strikePrice) => {

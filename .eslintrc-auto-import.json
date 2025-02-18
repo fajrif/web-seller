@@ -395,6 +395,12 @@
     "minIntegerValidator": true,
     "lineBreaksValidator": true,
     "truncateText": true,
-    "updateUserDataStore": true
+    "updateUserDataStore": true,
+    "orderHeaders": true,
+    "resolveStatusOrder": true,
+    "sampleDataOrders": true,
+    "statusOrder": true,
+    "toLocaleDateTime": true,
+    "getRespondTime": true
   }
 }

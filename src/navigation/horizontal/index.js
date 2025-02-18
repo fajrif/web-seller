@@ -1,10 +1,8 @@
-import apps from './apps'
-import charts from './charts'
 import dashboard from './dashboard'
-import forms from './forms'
-import misc from './misc'
-import pages from './pages'
-import tables from './tables'
-import uiElements from './ui-elements'
+import products from './products'
+import orders from './orders'
+import events from './events'
+import merchant from './merchant'
+import support from './support'
 
-export default [...dashboard, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...charts, ...misc]
+export default [...dashboard, ...products, ...orders, ...events, ...merchant, ...support]

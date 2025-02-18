@@ -61,8 +61,8 @@ const updateHargaProduct = async (id, price) => {
   	fetchProducts()
     messageStore.setMessage('success', 'Harga berhasil diubah')
   } catch (error) {
-  		messageStore.setMessage('error', 'Gagal mengubah harga produk')
-  		console.error("Error on update product data:", error)
+		messageStore.setMessage('error', 'Gagal mengubah harga produk')
+		console.error("Error on update product data:", error)
   }
 }
 

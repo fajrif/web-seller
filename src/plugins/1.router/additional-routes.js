@@ -20,4 +20,9 @@ export const redirects = [
     name: 'produk-tambah',
     redirect: () => ({ name: 'produk-tambah-tab', params: { tab: 'tambah-produk' } }),
   },
+  {
+    path: '/pesanan/semua',
+    name: 'pesanan-semua',
+    redirect: () => ({ name: 'pesanan-tab', params: { tab: 'semua' } }),
+  },
 ]

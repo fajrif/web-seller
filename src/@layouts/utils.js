@@ -58,6 +58,9 @@ export const isNavLinkActive = (link, router) => {
 		if(link.to.name == 'produk-tab' && (router.currentRoute.value.name == 'produk-view-id' || router.currentRoute.value.name == 'produk-edit-id')) {
 			return true
 		}
+		if(link.to.name == 'pesanan-tab' && (router.currentRoute.value.name == 'pesanan-view-id' || router.currentRoute.value.name == 'pesanan-invoice-id')) {
+			return true
+		}
 	}
 
   // Matched routes array of current route
