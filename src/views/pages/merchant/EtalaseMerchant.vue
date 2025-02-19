@@ -17,6 +17,7 @@ const etalaseJmlProduk = ref(0)
 const { data: dataShowcases, execute: fetchShowcases } = await useApiCore("/seller/query/etalase")
 
 const showcasesData = computed(() => dataShowcases.value.etalase)
+const currentEtalase = computed(() => dataShowcases.value.etalase.map(e => e.name))
 
 const addShowcase = async (id, name) => {
   try {
@@ -57,14 +58,18 @@ const updateShowcase = async (id, name) => {
   }
 }
 
-const deleteShowcase = async id => {
+const deleteShowcase = async (id, name, jml) => {
   try {
-    const res = await $apiCore(`/seller/command/etalase/delete/${id}`, { method: 'DELETE' })
+		if(jml <= 0) {
+			const res = await $apiCore(`/seller/command/etalase/delete/${id}`, { method: 'DELETE' })
 
-    // Refetch showcases
-    fetchShowcases()
-    let msg = res.message
-    messageStore.setMessage('success', 'Berhasil menghapus etalase')
+			// Refetch showcases
+			fetchShowcases()
+			let msg = res.message
+			messageStore.setMessage('success', 'Berhasil menghapus etalase')
+		} else {
+			messageStore.setMessage('error', `Terdapat ${jml} produk pada etalase ${name}`)
+		}
   } catch (error) {
 		messageStore.setMessage('error', 'Gagal menghapus etalase.')
     console.error("Error on delete showcase data:", error)
@@ -179,12 +184,14 @@ const deleteItem = (id, name, jml) => {
     <AddEditEtalaseDialog
       v-model:is-dialog-visible="isAddEtalaseDialogVisible"
       v-model:etalase-id="newEtalaseId"
+      v-model:currentEtalase="currentEtalase"
       @form-submitted="addShowcase"
     />
     <AddEditEtalaseDialog
       v-model:is-dialog-visible="isEditEtalaseDialogVisible"
       v-model:etalase-id="etalaseId"
       v-model:etalase-name="etalaseName"
+      v-model:currentEtalase="currentEtalase"
       @form-submitted="updateShowcase"
     />
     <DeleteEtalaseDialog

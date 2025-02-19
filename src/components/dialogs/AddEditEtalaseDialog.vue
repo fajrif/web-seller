@@ -13,6 +13,11 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  currentEtalase: {
+    type: Array,
+    required: false,
+		default: []
+  },
 })
 
 const emit = defineEmits([
@@ -20,7 +25,6 @@ const emit = defineEmits([
   'formSubmitted',
 ])
 
-const isFormValid = ref(false)
 const refForm = ref()
 const newEtalaseName = ref('')
 
@@ -36,6 +40,11 @@ const onSubmit = () => {
       onReset()
     }
   })
+}
+
+// 👉 Unique Validator for Etalase Name
+const uniqueEtalaseName = (value) => {
+  return !props.currentEtalase.includes(String(value).trim()) || 'Nama etalase tidak boleh sama'
 }
 
 watch(() => props.etalaseName, (value) => {
@@ -56,7 +65,6 @@ watch(() => props.etalaseName, (value) => {
     <VCard>
       <VForm
         ref="refForm"
-        v-model="isFormValid"
         @submit.prevent="onSubmit"
       >
         <!-- 👉 Title -->
@@ -84,13 +92,12 @@ watch(() => props.etalaseName, (value) => {
             <VCol cols="12">
               <AppTextField
                 v-model="newEtalaseName"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, uniqueEtalaseName(newEtalaseName)]"
                 placeholder="Masukan nama etalase"
               />
             </VCol>
           </VRow>
         </VCardText>
-
         <VCardText>
           <VBtn
             type="submit"

@@ -20,7 +20,7 @@ register()
 <template>
   <div>
     <!-- 👉 Header  -->
-    <div class="d-flex justify-space-between align-center flex-wrap gap-y-4 mb-6">
+    <div class="d-flex justify-space-between align-center flex-wrap gap-y-4 mb-4">
       <div>
         <h4 class="text-h4 font-weight-medium">
           Produk Detail

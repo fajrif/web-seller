@@ -112,7 +112,7 @@ watch(dateRange, (newVal, oldVal) => {
     <!-- 👉 orders -->
     <VCard>
 			<VCardText>
-				<div class="d-flex flex-wrap gap-4 my-6">
+				<div class="d-flex flex-wrap gap-4 mb-6">
 					<div class="d-flex align-center">
 						<!-- 👉 Search	-->
 						<AppTextField
@@ -356,7 +356,7 @@ watch(dateRange, (newVal, oldVal) => {
 						:orientation="1"
 						:img-src="iconFileBox"
 						:border="true"
-						wrapper-class="ma-0"
+						wrapper-class="pa-8 ma-0"
 						title="Pesanan Tidak Tersedia"
 						description="Anda sekarang belum memiliki pesanan.<br/>Silahkan tingkatkan penjualan anda."
 						/>

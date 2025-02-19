@@ -401,6 +401,7 @@
     "sampleDataOrders": true,
     "statusOrder": true,
     "toLocaleDateTime": true,
-    "getRespondTime": true
+    "getRespondTime": true,
+    "resolveStock": true
   }
 }

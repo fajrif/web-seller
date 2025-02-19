@@ -120,12 +120,12 @@ const onReset = () => {
             :loading="!loading"
             return-item
             show-select
-            class="text-no-wrap"
+            class="text-wrap"
           >
             <!-- Gambar	-->
             <template #item.image="{ item }">
               <VAvatar
-                v-if="item.product_photo[0]"
+                v-if="item.product_photo && item.product_photo[0]"
                 size="50"
                 variant="tonal"
                 class="my-2"
@@ -136,7 +136,9 @@ const onReset = () => {
 
             <!-- Judul -->
             <template #item.name="{ item }">
-              {{ item.name }}
+							<span class="d-block my-2" style="width:200px">
+								{{ item.name }}
+							</span>
             </template>
 
             <!-- Harga -->

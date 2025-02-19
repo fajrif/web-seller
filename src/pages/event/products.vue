@@ -119,7 +119,7 @@ const parseDesc = () => {
 <template>
   <div>
     <!-- 👉 Event Data	-->
-    <div class="d-flex flex-wrap flex-column flex-md-row justify-space-between align-start align-md-center gap-y-4 mb-6">
+    <div class="d-flex flex-wrap flex-column flex-md-row justify-space-between align-start align-md-center gap-y-4 mb-4">
       <div>
         <h4 class="text-h4 font-weight-medium">
 					Produk untuk Event
@@ -191,12 +191,12 @@ const parseDesc = () => {
 					:items="products"
 					:items-length="totalProduct"
 					:loading="!loading"
-					class="text-no-wrap"
+					class="text-wrap"
 					>
 					<!-- Gambar	-->
 					<template #item.image="{ item }">
 						<VAvatar
-							v-if="item.product_photo[0]"
+							v-if="item.product_photo && item.product_photo[0]"
 							size="50"
 							variant="tonal"
 							class="my-2"
@@ -207,7 +207,7 @@ const parseDesc = () => {
 
 					<!-- Judul -->
 					<template #item.name="{ item }">
-						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }">
+						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }" class="d-block my-2" style="width:200px">
 							{{ item.name }}
 						</RouterLink>
 					</template>

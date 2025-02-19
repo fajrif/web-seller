@@ -178,6 +178,14 @@ export const resolveStatus = statusId => {
     }
 }
 
+export const resolveStock = item => {
+	var stock = 0
+	if(item[0])
+		stock = item[0].amount
+
+	return stock
+}
+
 export const sortOptions = [
   {
     title: 'Urutkan',
@@ -216,7 +224,7 @@ export const toCurrency = price => {
     maximumFractionDigits: 0,
   })
 
-  return formatter.format(parseInt(_price))
+  return formatter.format(Math.floor(_price))
 }
 
 export const calculateDiscount = (price, strikePrice) => {

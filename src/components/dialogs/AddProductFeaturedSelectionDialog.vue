@@ -45,7 +45,12 @@ const {
     "filter[status]": "available",
     is_featured_product: false,
   },
-}))
+}), {
+	afterFetch(ctx) {
+		// ctx.data can be null when 5xx response
+		selected.value = props.selectedValue
+	},
+})
 
 const products = computed(() => productsData.value.data.data)
 const totalProduct = computed(() => productsData.value.data.total)
@@ -67,6 +72,7 @@ const onReset = () => {
   emit('update:isDialogVisible', false)
   searchQuery.value = ''
   page.value = 1
+  selected.value = props.selectedValue
 }
 
 watch(selected, (val, oldVal) => {
@@ -75,10 +81,6 @@ watch(selected, (val, oldVal) => {
 			 selected.value = oldVal
 		 })
 	 }
-})
-
-onMounted(() => {
-	selected.value = props.selectedValue
 })
 </script>
 
@@ -136,12 +138,12 @@ onMounted(() => {
             :loading="!loading"
             return-item
             show-select
-            class="text-no-wrap"
+            class="text-wrap"
           >
             <!-- Gambar	-->
             <template #item.image="{ item }">
               <VAvatar
-                v-if="item.product_photo[0]"
+                v-if="item.product_photo && item.product_photo[0]"
                 size="50"
                 variant="tonal"
                 class="my-2"
@@ -152,7 +154,9 @@ onMounted(() => {
 
             <!-- Judul -->
             <template #item.name="{ item }">
-              {{ item.name }}
+							<span class="d-block my-2" style="width:200px">
+								{{ item.name }}
+							</span>
             </template>
 
             <!-- Harga -->

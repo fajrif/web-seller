@@ -45,7 +45,10 @@ if (productDetails.value.success) {
   productCondition.value = productData.condition
   productPrice.value = parseInt(productData.price)
   productStrikePrice.value = parseInt(productData.strike_price)
-  productStock.value = productData.product_stock[0].amount
+  productStock.value = 0
+	if(productData.product_stock[0]) {
+		productStock.value = productData.product_stock[0].amount
+	}
   productMinPurchase.value = productData.minimum_purchase
   productWeight.value = productData.weight
   productHeight.value = productData.height
@@ -178,7 +181,7 @@ useEventListener(window, "beforeunload", (event) => {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
+    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-4">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
           Edit Produk

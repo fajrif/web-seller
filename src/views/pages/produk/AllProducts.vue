@@ -145,7 +145,7 @@ const deleteItem = (id, name) => {
     <!-- 👉 products -->
     <VCard>
 			<VCardText>
-				<div class="d-flex flex-wrap gap-4 my-6">
+				<div class="d-flex flex-wrap gap-4 mb-6">
 					<div class="d-flex align-center">
 						<!-- 👉 Search	-->
 						<AppTextField
@@ -182,12 +182,12 @@ const deleteItem = (id, name) => {
 					:items="products"
 					:items-length="totalProduct"
 					:loading="!loading"
-					class="text-no-wrap"
+					class="text-wrap"
 					>
 					<!-- Gambar	-->
 					<template #item.image="{ item }">
 						<VAvatar
-							v-if="item.product_photo[0]"
+							v-if="item.product_photo && item.product_photo[0]"
 							size="50"
 							variant="tonal"
 							class="my-2"
@@ -198,7 +198,7 @@ const deleteItem = (id, name) => {
 
 					<!-- Judul -->
 					<template #item.name="{ item }">
-						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }">
+						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }" class="d-block my-2" style="width:200px">
 							{{ item.name }}
 						</RouterLink>
 					</template>
@@ -222,7 +222,7 @@ const deleteItem = (id, name) => {
 
 					<!-- Stock -->
 					<template #item.stock="{ item }">
-						<span class="text-body-1 text-high-emphasis">{{ item.product_stock[0].amount }}</span>
+						<span class="text-body-1 text-high-emphasis">{{ resolveStock(item.product_stock) }}</span>
 					</template>
 
 					<!-- status -->
@@ -274,7 +274,7 @@ const deleteItem = (id, name) => {
 										</VListItem>
 										<VListItem
 											value="edit_stock"
-											@click="editStock(item.id, item.name, item.product_stock[0].amount)"
+											@click="editStock(item.id, item.name, resolveStock(item.product_stock))"
 											>
 											Ubah Stock
 										</VListItem>

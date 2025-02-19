@@ -3,11 +3,11 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 const isAddProductFeaturedDialogVisible = ref(false)
-const selected = ref([])
 
 const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/featured?page=1")
 
 const featuredProducts = computed(() => featuredData.value.data.data)
+const selectedProducts = computed(() => featuredData.value.data.data.map(f => f.id))
 
 const addFeatured = async ids => {
   try {
@@ -44,10 +44,7 @@ const deleteFeatured = async id => {
   addFeatured(updateSelectedIds)
 }
 
-
 const addItem = () => {
-  selected.value = featuredProducts.value.map(item => item.id)
-	console.log(featuredData.value)
   isAddProductFeaturedDialogVisible.value = true
 }
 </script>
@@ -77,7 +74,7 @@ const addItem = () => {
           <VCol cols="12">
             <VTable
               v-if="featuredProducts.length > 0"
-              class="text-no-wrap"
+              class="text-wrap"
             >
               <thead>
                 <tr>
@@ -100,7 +97,7 @@ const addItem = () => {
                   <td>
                     <div class="d-flex align-center">
                       <VAvatar
-												v-if="product.product_photo[0]"
+												v-if="product.product_photo && product.product_photo[0]"
                         size="50"
                         variant="tonal"
                         class="my-2 me-2"
@@ -108,14 +105,9 @@ const addItem = () => {
                         :image="product.product_photo[0].url"
                       />
                       <div class="d-flex flex-column">
-                        <h4 class="fw-500">
-                          <RouterLink :to="{ name: 'produk-view-id', params: { id: product.id } }">
-                            {{ product.name }}
-                          </RouterLink>
-                        </h4>
-                        <p class="text-body-2 mb-0">
-                          {{ product.condition }}
-                        </p>
+												<RouterLink :to="{ name: 'produk-view-id', params: { id: product.id } }" class="d-block my-2" style="width:200px">
+													{{ product.name }}
+												</RouterLink>
                       </div>
                     </div>
                   </td>
@@ -162,7 +154,7 @@ const addItem = () => {
     </VCard>
     <AddProductFeaturedSelectionDialog
       v-model:is-dialog-visible="isAddProductFeaturedDialogVisible"
-			:selected-value="selected"
+      v-model:selected-value="selectedProducts"
       @form-submitted="addFeatured"
     />
   </div>

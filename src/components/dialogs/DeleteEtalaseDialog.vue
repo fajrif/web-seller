@@ -32,7 +32,7 @@ const onReset = () => {
 }
 
 const onSubmit = () => {
-  emit('formSubmitted', props.etalaseId)
+  emit('formSubmitted', props.etalaseId, props.etalaseName, props.etalaseJmlProduk)
   emit('update:isDialogVisible', false)
 }
 </script>
