@@ -37,7 +37,7 @@ register()
         max-width="460"
 				style="background-color:#8e8e8e;"
       >
-        <VCardText class="bg-white pa-0 mb-3">
+        <VCardText class="bg-white pa-0" style="margin-bottom:1px;">
 					<VImg :src="phoneTopbar" />
 					<swiper-container
 						:modules="modules"

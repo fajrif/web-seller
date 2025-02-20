@@ -41,6 +41,10 @@ export const betweenValidator = (value, min, max) => {
 export const integerValidator = value => {
   if (isEmpty(value))
     return true
+
+	if(/^0/.test(String(value)))
+		return 'Tidak boleh diawali dengan 0'
+
   if (Array.isArray(value))
     return value.every(val => /^-?\d+$/.test(String(val))) || 'Harus menggunakan angka (tanpa titik koma)'
 

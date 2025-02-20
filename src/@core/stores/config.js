@@ -248,6 +248,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.stok)
 			if(typeof result === 'string') {
 				errors.push('stok: ' + result)
+			} else {
+				result = betweenValidator(item.stok,1,9999)
+				if(typeof result === 'string') {
+					errors.push('stok: ' + result)
+				}
 			}
 		}
 
@@ -371,6 +376,7 @@ export const useUserDataStore = defineStore('userData', () => {
 
   function clear() {
 		localStorage.removeItem('user-data')
+		localStorage.removeItem('file-upload-products')
   }
 
   return { id, name, photo_url, status, setUserData, clear }

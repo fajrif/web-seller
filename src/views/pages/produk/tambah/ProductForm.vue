@@ -351,7 +351,7 @@ useEventListener(window, "beforeunload", (event) => {
 										type="number"
 										min="10"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan berat produk"
 										/>
 								</VCol>
 								<VCol
@@ -365,7 +365,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan lebar produk"
 										/>
 								</VCol>
 
@@ -380,7 +380,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan panjang produk"
 										/>
 								</VCol>
 								<VCol
@@ -394,7 +394,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan tinggi produk"
 										/>
 								</VCol>
 							</VRow>

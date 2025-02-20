@@ -33,6 +33,7 @@ const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
 const	productPhotoUrl = ref([])
+var	tmpProductFeatured = false
 
 const { data: productDetails } = await useApiCore(`/seller/query/product/detail/${ route.params.id }`)
 if (productDetails.value.success) {
@@ -55,6 +56,7 @@ if (productDetails.value.success) {
   productWidth.value = productData.width
   productLength.value = productData.length
   productFeatured.value = productData.is_featured_product
+  tmpProductFeatured = productData.is_featured_product
   if(productData.product_photo && Array.isArray(productData.product_photo)) {
     productPhotoUrl.value = productData.product_photo.map(item => item.url)
   }
@@ -158,7 +160,7 @@ const uploadProductPhoto = async (path) => {
 
 const onChangeFeatured = async () => {
 	loading.value = true
-	if(productFeatured.value === true) {
+	if(productFeatured.value === true && tmpProductFeatured === false) {
 		if(totalFeatured.value >= 5) {
 			messageStore.setMessage('error', 'Produk Unggulan sudah mencapai batas max:5')
 			productFeatured.value = false
@@ -381,7 +383,7 @@ useEventListener(window, "beforeunload", (event) => {
 										type="number"
 										min="10"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan berat produk"
 										/>
 								</VCol>
 								<VCol
@@ -395,7 +397,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan lebar produk"
 										/>
 								</VCol>
 
@@ -410,7 +412,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan panjang produk"
 										/>
 								</VCol>
 								<VCol
@@ -424,7 +426,7 @@ useEventListener(window, "beforeunload", (event) => {
 										suffix="cm"
 										type="number"
 										max="999999999"
-										placeholder="0"
+										placeholder="Masukan tinggi produk"
 										/>
 								</VCol>
 							</VRow>

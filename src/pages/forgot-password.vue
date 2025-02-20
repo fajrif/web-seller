@@ -40,9 +40,7 @@ const sendResetPassword = async () => {
     await nextTick(() => {
 			loading.value = false
 			messageStore.setMessage('success', "Berhasil reset kata sandi")
-			var url = router.resolve({ name: 'verification', query: { email: email.value }});
-      var fullPath = url.href;
-      router.push(fullPath)
+			router.push({ name: 'verification', query: { email: email.value } })
     })
   } catch (err) {
 		loading.value = false

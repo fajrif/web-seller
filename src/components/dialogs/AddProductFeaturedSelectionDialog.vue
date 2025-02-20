@@ -84,6 +84,12 @@ watch(selected, (val, oldVal) => {
 		 })
 	 }
 })
+
+watch(() => props.selectedValue, (newVal,oldVal) => {
+	if(newVal !== oldVal){
+		selected.value = props.selectedValue
+	}
+})
 </script>
 
 <template>

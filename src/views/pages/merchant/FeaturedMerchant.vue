@@ -3,11 +3,11 @@ import { useMessageStore } from '@core/stores/config'
 
 const messageStore = useMessageStore()
 const isAddProductFeaturedDialogVisible = ref(false)
+const selected = ref([])
 
 const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/featured?page=1")
 
 const featuredProducts = computed(() => featuredData.value.data.data)
-const selectedProducts = computed(() => featuredData.value.data.data.map(f => f.id))
 
 const addFeatured = async ids => {
   try {
@@ -45,6 +45,7 @@ const deleteFeatured = async id => {
 }
 
 const addItem = () => {
+	selected.value = featuredData.value.data.data.map(f => f.id)
   isAddProductFeaturedDialogVisible.value = true
 }
 </script>
@@ -154,7 +155,7 @@ const addItem = () => {
     </VCard>
     <AddProductFeaturedSelectionDialog
       v-model:is-dialog-visible="isAddProductFeaturedDialogVisible"
-      v-model:selected-value="selectedProducts"
+      v-model:selected-value="selected"
       @form-submitted="addFeatured"
     />
   </div>

@@ -100,6 +100,8 @@ declare global {
   const minIntegerValidator: typeof import('./src/@core/utils/validators.js')['minIntegerValidator']
   const minLengthValidator: typeof import('./src/@core/utils/validators.js')['minLengthValidator']
   const nextTick: typeof import('vue')['nextTick']
+  const noZeroLeftPadding: typeof import('./src/utils/productHelper.js')['noZeroLeftPadding']
+  const nonStartZero: typeof import('./src/utils/productHelper.js')['nonStartZero']
   const normalizerCategories: typeof import('./src/utils/productHelper.js')['normalizerCategories']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
