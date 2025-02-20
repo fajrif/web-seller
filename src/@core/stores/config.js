@@ -151,6 +151,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 		var result = requiredValidator(item.nama_produk)
 		if(typeof result === 'string') {
 			errors.push('nama_produk: ' + result)
+		} else {
+			result = alphaDashValidator(item.nama_produk)
+			if(typeof result === 'string') {
+				errors.push('nama_produk: ' + result)
+			}
 		}
 
 		// deskripsi

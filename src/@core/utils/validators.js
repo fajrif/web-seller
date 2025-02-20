@@ -107,7 +107,7 @@ export const alphaDashValidator = value => {
     return true
   const valueAsString = String(value)
 
-  return /^[\w-]*$/.test(valueAsString) || 'Semua karakter tidak valid'
+  return /^[a-zA-Z0-9- ]+$/.test(valueAsString) || 'Terdapat karakter tidak valid'
 }
 
 // 👉 Line-breaks Validator

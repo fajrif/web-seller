@@ -220,7 +220,7 @@ useEventListener(window, "beforeunload", (event) => {
                 <VCol cols="12">
                   <AppTextField
                     v-model="productName"
-                    :rules="[requiredValidator]"
+                    :rules="[requiredValidator,alphaDashValidator]"
                     label="Nama Produk"
                     placeholder="Masukan nama barang anda"
                   />
