@@ -116,7 +116,7 @@ watch(() => props.itemId, (val) => {
 							<VCol cols="12">
 								<AppTextField
 									v-model="editedItem.nama_produk"
-									:rules="[requiredValidator]"
+									:rules="[requiredValidator,alphaDashValidator]"
 									label="Nama Produk"
 									placeholder="Masukan nama barang anda"
 									/>
