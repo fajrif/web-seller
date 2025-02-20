@@ -322,7 +322,7 @@ useEventListener(window, "beforeunload", (event) => {
               <AppCurrencyInput
                 v-model="productStrikePrice"
                 label="Harga Coret"
-                :rules="[requiredValidator, minIntegerValidator(productStrikePrice,productPrice)]"
+                :rules="[requiredValidator, minIntegerValidator(productStrikePrice,productPrice+1)]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
               />
@@ -375,11 +375,12 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productWeight"
-										:rules="[requiredValidator,integerValidator,minIntegerValidator(productWeight,10)]"
+										:rules="[requiredValidator,integerValidator,betweenValidator(productWeight,10,999999999)]"
 										label="Berat"
 										suffix="gr"
 										type="number"
 										min="10"
+										max="999999999"
 										placeholder="0"
 										/>
 								</VCol>
@@ -389,11 +390,11 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productWidth"
-										:rules="[requiredValidator,integerValidator,minIntegerValidator(productWidth,10)]"
+										:rules="[requiredValidator,integerValidator,betweenValidator(productWidth,10,999999999)]"
 										label="Lebar"
 										suffix="cm"
 										type="number"
-										min="10"
+										max="999999999"
 										placeholder="0"
 										/>
 								</VCol>
@@ -404,11 +405,11 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productLength"
-										:rules="[requiredValidator,integerValidator,minIntegerValidator(productLength,10)]"
+										:rules="[requiredValidator,integerValidator,betweenValidator(productLength,10,999999999)]"
 										label="Panjang"
 										suffix="cm"
 										type="number"
-										min="10"
+										max="999999999"
 										placeholder="0"
 										/>
 								</VCol>
@@ -418,11 +419,11 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productHeight"
-										:rules="[requiredValidator,integerValidator,minIntegerValidator(productHeight,10)]"
+										:rules="[requiredValidator,integerValidator,betweenValidator(productHeight,10,999999999)]"
 										label="Tinggi"
 										suffix="cm"
 										type="number"
-										min="10"
+										max="999999999"
 										placeholder="0"
 										/>
 								</VCol>

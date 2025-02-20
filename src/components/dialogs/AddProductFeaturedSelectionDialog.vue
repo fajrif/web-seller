@@ -64,7 +64,9 @@ const onSubmit = () => {
     }
   })
   emit('formSubmitted', selectedData)
-  onReset()
+  emit('update:isDialogVisible', false)
+  searchQuery.value = ''
+  page.value = 1
 }
 /* eslint-enable */
 

@@ -87,6 +87,11 @@ const nonAktifToko = async (status) => {
 const onChange = async () => {
 	isNonAktifMerchantDialogVisible.value = true
 }
+
+onMounted(() => {
+	console.log('load user data')
+	updateUserDataStore(() => {})
+})
 </script>
 
 <template>

@@ -19,6 +19,8 @@ const isOtpError = ref(false)
 const email = ref()
 if(route.query.email){
   email.value = route.query.email
+	console.log(route.query)
+	console.log(email.value)
 }
 
 const replaceEmailSent = () => {

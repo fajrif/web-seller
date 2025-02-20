@@ -163,9 +163,14 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 		if(typeof result === 'string') {
 			errors.push('deskripsi: ' + result)
 		} else {
-			result = minLengthValidator(item.deskripsi,100)
+			result = lineBreaksValidator(item.deskripsi)
 			if(typeof result === 'string') {
 				errors.push('deskripsi: ' + result)
+			} else {
+				result = minLengthValidator(item.deskripsi,100)
+				if(typeof result === 'string') {
+					errors.push('deskripsi: ' + result)
+				}
 			}
 		}
 
@@ -209,6 +214,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.harga)
 			if(typeof result === 'string') {
 				errors.push('harga: ' + result)
+			} else {
+				result = minIntegerValidator(item.harga,1)
+				if(typeof result === 'string') {
+					errors.push('harga: ' + result)
+				}
 			}
 		}
 
@@ -220,6 +230,13 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.harga_coret)
 			if(typeof result === 'string') {
 				errors.push('harga_coret: ' + result)
+			} else {
+				if(item.harga !== '' && item.harga !== null) {
+					result = minIntegerValidator(item.harga_coret,Math.floor(item.harga) + 1)
+					if(typeof result === 'string') {
+						errors.push('harga_coret: ' + result)
+					}
+				}
 			}
 		}
 
@@ -258,6 +275,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.berat)
 			if(typeof result === 'string') {
 				errors.push('berat: ' + result)
+			} else {
+				result = betweenValidator(item.berat,10,999999999)
+				if(typeof result === 'string') {
+					errors.push('berat: ' + result)
+				}
 			}
 		}
 
@@ -269,6 +291,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.panjang)
 			if(typeof result === 'string') {
 				errors.push('panjang: ' + result)
+			} else {
+				result = betweenValidator(item.panjang,10,999999999)
+				if(typeof result === 'string') {
+					errors.push('panjang: ' + result)
+				}
 			}
 		}
 
@@ -280,6 +307,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.lebar)
 			if(typeof result === 'string') {
 				errors.push('lebar: ' + result)
+			} else {
+				result = betweenValidator(item.lebar,10,999999999)
+				if(typeof result === 'string') {
+					errors.push('lebar: ' + result)
+				}
 			}
 		}
 
@@ -291,6 +323,11 @@ export const useFileUploadProductStore = defineStore('fileUploadProducts', () =>
 			result = integerValidator(item.tinggi)
 			if(typeof result === 'string') {
 				errors.push('tinggi: ' + result)
+			} else {
+				result = betweenValidator(item.tinggi,10,999999999)
+				if(typeof result === 'string') {
+					errors.push('tinggi: ' + result)
+				}
 			}
 		}
 

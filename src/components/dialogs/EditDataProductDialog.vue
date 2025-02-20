@@ -194,7 +194,7 @@ watch(() => props.itemId, (val) => {
 								<AppCurrencyInput
 									v-model="editedItem.harga_coret"
 									label="Harga Coret"
-									:rules="[requiredValidator, minIntegerValidator(editedItem.harga_coret,editedItem.harga)]"
+									:rules="[requiredValidator, minIntegerValidator(editedItem.harga_coret,editedItem.harga+1)]"
 									placeholder="Masukan harga coret"
 								/>
 							</VCol>
@@ -236,11 +236,12 @@ watch(() => props.itemId, (val) => {
 								>
 								<AppTextField
 									v-model="editedItem.berat"
-									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.berat,10)]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.berat,10,999999999)]"
 									label="Berat"
 									suffix="gr"
 									type="number"
 									min="10"
+									max="999999999"
 									placeholder="0"
 									/>
 							</VCol>
@@ -250,11 +251,12 @@ watch(() => props.itemId, (val) => {
 								>
 								<AppTextField
 									v-model="editedItem.lebar"
-									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.lebar,10)]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.lebar,10,999999999)]"
 									label="Lebar"
 									suffix="cm"
 									type="number"
 									min="10"
+									max="999999999"
 									placeholder="0"
 									/>
 							</VCol>
@@ -265,11 +267,12 @@ watch(() => props.itemId, (val) => {
 								>
 								<AppTextField
 									v-model="editedItem.panjang"
-									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.panjang,10)]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.panjang,10,999999999)]"
 									label="Panjang"
 									suffix="cm"
 									type="number"
 									min="10"
+									max="999999999"
 									placeholder="0"
 									/>
 							</VCol>
@@ -279,11 +282,12 @@ watch(() => props.itemId, (val) => {
 								>
 								<AppTextField
 									v-model="editedItem.tinggi"
-									:rules="[requiredValidator,integerValidator,minIntegerValidator(editedItem.tinggi,10)]"
+									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.tinggi,10,999999999)]"
 									label="Tinggi"
 									suffix="cm"
 									type="number"
 									min="10"
+									max="999999999"
 									placeholder="0"
 									/>
 							</VCol>
