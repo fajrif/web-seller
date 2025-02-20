@@ -62,9 +62,11 @@ if (productDetails.value.success) {
 
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
 const { data: showcasesData, execute: fetchShowcases } = await useApiCore(createUrl('/seller/query/etalase'))
+const { data: featuredData, execute: fetchFeatured } = await useApiCore("/seller/query/product/featured?page=1")
 
 const categories = computed(() => sanitizeNullChilds(categoriesData.value.data))
 const showcases = computed(() => showcasesData.value.etalase)
+const totalFeatured = computed(() => featuredData.value.data.total)
 
 const saveProduct = async productData => {
   try {
@@ -116,6 +118,7 @@ const onSubmit = () => {
 	loading.value = true
 	refForm.value?.validate().then(({ valid }) => {
 		if (valid) {
+			dirtyForm.value = false
 			if(productPhotoUrl.value.length >= 1) {
 				setTimeout(() => {
 					savingProduct()
@@ -152,6 +155,18 @@ const uploadProductPhoto = async (path) => {
     messageStore.setMessage('error', 'URL path gambar kosong')
 	}
 }
+
+const onChangeFeatured = async () => {
+	loading.value = true
+	if(productFeatured.value === true) {
+		if(totalFeatured.value >= 5) {
+			messageStore.setMessage('error', 'Produk Unggulan sudah mencapai batas max:5')
+			productFeatured.value = false
+		}
+	}
+	loading.value = false
+}
+
 
 const somethingChanged = () => {
 	dirtyForm.value = true
@@ -265,7 +280,9 @@ useEventListener(window, "beforeunload", (event) => {
 										<span class="fw-700 me-4">Produk Unggulan</span>
 										<VSwitch
 											v-model="productFeatured"
+											:loading="loading"
 											density="compact"
+											@update:model-value="onChangeFeatured"
 											/>
 									</div>
                 </VCol>
@@ -323,7 +340,7 @@ useEventListener(window, "beforeunload", (event) => {
             <VCardText>
               <AppTextField
                 v-model="productStock"
-                :rules="[requiredValidator,betweenValidator(productStock,1,9999)]"
+                :rules="[requiredValidator,integerValidator,betweenValidator(productStock,1,9999)]"
                 label="Stock"
                 suffix="Buah"
                 type="number"
@@ -358,7 +375,7 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productWeight"
-										:rules="[requiredValidator,minIntegerValidator(productWeight,10)]"
+										:rules="[requiredValidator,integerValidator,minIntegerValidator(productWeight,10)]"
 										label="Berat"
 										suffix="gr"
 										type="number"
@@ -372,7 +389,7 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productWidth"
-										:rules="[requiredValidator,minIntegerValidator(productWidth,10)]"
+										:rules="[requiredValidator,integerValidator,minIntegerValidator(productWidth,10)]"
 										label="Lebar"
 										suffix="cm"
 										type="number"
@@ -387,7 +404,7 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productLength"
-										:rules="[requiredValidator,minIntegerValidator(productLength,10)]"
+										:rules="[requiredValidator,integerValidator,minIntegerValidator(productLength,10)]"
 										label="Panjang"
 										suffix="cm"
 										type="number"
@@ -401,7 +418,7 @@ useEventListener(window, "beforeunload", (event) => {
 									>
 									<AppTextField
 										v-model="productHeight"
-										:rules="[requiredValidator,minIntegerValidator(productHeight,10)]"
+										:rules="[requiredValidator,integerValidator,minIntegerValidator(productHeight,10)]"
 										label="Tinggi"
 										suffix="cm"
 										type="number"
