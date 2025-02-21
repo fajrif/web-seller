@@ -102,6 +102,7 @@ declare global {
   const nextTick: typeof import('vue')['nextTick']
   const noZeroLeftPadding: typeof import('./src/utils/productHelper.js')['noZeroLeftPadding']
   const nonStartZero: typeof import('./src/utils/productHelper.js')['nonStartZero']
+  const nonZeroStartNumber: typeof import('./src/utils/productHelper.js')['nonZeroStartNumber']
   const normalizerCategories: typeof import('./src/utils/productHelper.js')['normalizerCategories']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
@@ -496,6 +497,7 @@ declare module 'vue' {
     readonly minIntegerValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minIntegerValidator']>
     readonly minLengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minLengthValidator']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
+    readonly nonZeroStartNumber: UnwrapRef<typeof import('./src/utils/productHelper.js')['nonZeroStartNumber']>
     readonly normalizerCategories: UnwrapRef<typeof import('./src/utils/productHelper.js')['normalizerCategories']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>

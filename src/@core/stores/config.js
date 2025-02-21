@@ -377,6 +377,15 @@ export const useUserDataStore = defineStore('userData', () => {
   function clear() {
 		localStorage.removeItem('user-data')
 		localStorage.removeItem('file-upload-products')
+		getActivePinia()._s.forEach(store => {
+			if(store.$id == "fileUploadProducts") {
+				 store.clear()
+			}
+			id.value = null
+			name.value = null
+			photo_url.value = null
+			status.value = null
+		});
   }
 
   return { id, name, photo_url, status, setUserData, clear }

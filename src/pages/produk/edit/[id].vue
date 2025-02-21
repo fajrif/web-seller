@@ -105,11 +105,11 @@ const savingProduct = () => {
 		price: parseInt(productPrice.value),
 		strike_price: parseInt(productStrikePrice.value),
 		amount: parseInt(productStock.value),
-		minimum_purchase: productMinPurchase.value,
-		weight: productWeight.value,
-		height: productHeight.value,
-		width: productWidth.value,
-		length: productLength.value,
+		minimum_purchase: parseInt(productMinPurchase.value).toString(),
+		weight: parseInt(productWeight.value).toString(),
+		height: parseInt(productHeight.value).toString(),
+		width: parseInt(productWidth.value).toString(),
+		length: parseInt(productLength.value).toString(),
 		is_featured_product: productFeatured.value,
 		url: productPhotoUrl.value,
 	})
@@ -168,7 +168,6 @@ const onChangeFeatured = async () => {
 	}
 	loading.value = false
 }
-
 
 const somethingChanged = () => {
 	dirtyForm.value = true
@@ -317,6 +316,7 @@ useEventListener(window, "beforeunload", (event) => {
                 :rules="[requiredValidator, minIntegerValidator(productPrice,1)]"
                 placeholder="Masukan harga jual"
                 class="mb-6"
+								@keyup="nonZeroStartNumber"
               />
 							<!-- 👉 MDR Component -->
               <MdrDisplay v-model="productPrice" />
@@ -327,6 +327,7 @@ useEventListener(window, "beforeunload", (event) => {
                 :rules="[requiredValidator, minIntegerValidator(productStrikePrice,productPrice+1)]"
                 placeholder="Masukan harga coret"
                 class="mb-6"
+								@keyup="nonZeroStartNumber"
               />
             </VCardText>
           </VCard>
@@ -349,6 +350,7 @@ useEventListener(window, "beforeunload", (event) => {
 								min="1"
                 placeholder="Tentukan jumlah stock"
                 class="mb-6"
+								@keyup="nonZeroStartNumber"
               />
               <AppTextField
                 v-model="productMinPurchase"
@@ -360,6 +362,7 @@ useEventListener(window, "beforeunload", (event) => {
 								:rules="[requiredValidator,integerValidator,betweenValidator(productMinPurchase,1,9999)]"
                 placeholder="Tentukan pembelian minimum"
                 class="mb-6"
+								@keyup="nonZeroStartNumber"
               />
             </VCardText>
           </VCard>
@@ -384,6 +387,7 @@ useEventListener(window, "beforeunload", (event) => {
 										min="10"
 										max="999999999"
 										placeholder="Masukan berat produk"
+										@keyup="nonZeroStartNumber"
 										/>
 								</VCol>
 								<VCol
@@ -398,6 +402,7 @@ useEventListener(window, "beforeunload", (event) => {
 										type="number"
 										max="999999999"
 										placeholder="Masukan lebar produk"
+										@keyup="nonZeroStartNumber"
 										/>
 								</VCol>
 
@@ -413,6 +418,7 @@ useEventListener(window, "beforeunload", (event) => {
 										type="number"
 										max="999999999"
 										placeholder="Masukan panjang produk"
+										@keyup="nonZeroStartNumber"
 										/>
 								</VCol>
 								<VCol
@@ -427,6 +433,7 @@ useEventListener(window, "beforeunload", (event) => {
 										type="number"
 										max="999999999"
 										placeholder="Masukan tinggi produk"
+										@keyup="nonZeroStartNumber"
 										/>
 								</VCol>
 							</VRow>

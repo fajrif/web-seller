@@ -404,6 +404,7 @@
     "getRespondTime": true,
     "resolveStock": true,
     "noZeroLeftPadding": true,
-    "nonStartZero": true
+    "nonStartZero": true,
+    "nonZeroStartNumber": true
   }
 }

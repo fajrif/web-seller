@@ -70,10 +70,10 @@ const savingProduct = (id) => {
 				strike_price: parseInt(item.harga_coret),
 				amount: parseInt(item.stok),
 				minimum_purchase: parseInt(item.minimum_pembelian),
-				weight: item.berat.toString(),
-				height: item.tinggi.toString(),
-				width: item.lebar.toString(),
-				length: item.panjang.toString(),
+				weight: parseInt(item.berat).toString(),
+				height: parseInt(item.tinggi).toString(),
+				width: parseInt(item.lebar).toString(),
+				length: parseInt(item.panjang).toString(),
 				url: [item.image_url],
 			}, id)
 			/* eslint-enable */
@@ -122,10 +122,10 @@ const simpanProduct = async (id) => {
 			strike_price: parseInt(item.harga_coret),
 			amount: parseInt(item.stok),
 			minimum_purchase: parseInt(item.minimum_pembelian),
-			weight: item.berat.toString(),
-			height: item.tinggi.toString(),
-			width: item.lebar.toString(),
-			length: item.panjang.toString(),
+			weight: parseInt(item.berat).toString(),
+			height: parseInt(item.tinggi).toString(),
+			width: parseInt(item.lebar).toString(),
+			length: parseInt(item.panjang).toString(),
 			url: [item.image_url],
 		}
 

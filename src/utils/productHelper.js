@@ -264,3 +264,17 @@ export const truncateText = (txt, length=100) => {
 
 	return txt.substring(0,length) + '...'
 }
+
+export const nonZeroStartNumber = (e) => {
+	e.target.value = parseInt(e.target.value)
+	// if(value) {
+	// 	if(/^0/.test(String(value))) {
+	// 		e.stopPropagation();
+	// 		e.preventDefault();
+	// 		e.returnValue = false;
+	// 		e.cancelBubble = true;
+	// 		return false;
+	// 	}
+	// }
+}
+

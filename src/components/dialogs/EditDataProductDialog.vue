@@ -212,6 +212,7 @@ watch(() => props.itemId, (val) => {
 									min="1"
 									max="9999"
 									placeholder="Tentukan jumlah stock"
+									@keyup="nonZeroStartNumber"
 								/>
 							</VCol>
 							<VCol cols="12">
@@ -224,6 +225,7 @@ watch(() => props.itemId, (val) => {
 									max="9999"
 									:rules="[requiredValidator,integerValidator,betweenValidator(editedItem.minimum_pembelian,1,9999)]"
 									placeholder="Tentukan pembelian minimum"
+									@keyup="nonZeroStartNumber"
 								/>
 							</VCol>
 						</VRow>
@@ -242,7 +244,7 @@ watch(() => props.itemId, (val) => {
 									type="number"
 									min="10"
 									max="999999999"
-									placeholder="0"
+									@keyup="nonZeroStartNumber"
 									/>
 							</VCol>
 							<VCol
@@ -257,7 +259,7 @@ watch(() => props.itemId, (val) => {
 									type="number"
 									min="10"
 									max="999999999"
-									placeholder="0"
+									@keyup="nonZeroStartNumber"
 									/>
 							</VCol>
 
@@ -273,7 +275,7 @@ watch(() => props.itemId, (val) => {
 									type="number"
 									min="10"
 									max="999999999"
-									placeholder="0"
+									@keyup="nonZeroStartNumber"
 									/>
 							</VCol>
 							<VCol
@@ -288,7 +290,7 @@ watch(() => props.itemId, (val) => {
 									type="number"
 									min="10"
 									max="999999999"
-									placeholder="0"
+									@keyup="nonZeroStartNumber"
 									/>
 							</VCol>
 						</VRow>
