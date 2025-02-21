@@ -94,7 +94,7 @@ export const lengthValidator = (value, length) => {
   if (isEmpty(value))
     return true
 
-  return String(value).length === length || `"Panjang karakter harus ${length} karakter"`
+  return String(value).length === length || `Panjang karakter harus ${length} karakter`
 }
 
 // 👉 Minimum Length Validator
@@ -102,7 +102,7 @@ export const minLengthValidator = (value, length) => {
   if (isEmpty(value))
     return true
 
-	return String(value).length >= length || `"Panjang karakter minimum ${length} karakter"`
+	return String(value).length >= length || `Panjang karakter minimum ${length} karakter`
 }
 
 // 👉 Alpha-dash Validator

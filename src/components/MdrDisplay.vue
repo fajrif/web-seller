@@ -49,10 +49,15 @@ const getTaxPercentage = () => {
 	return mdrData.ppn_value.toString() + '%';
 }
 
+// perhitungan PPn adalah 12% * DPP
+// DPP = 11/12 * MDR
 const getTaxCost = computed(() => {
 	taxCost.value = 0;
 	if(mdrData.ppn_type !== null && props.modelValue > MIN_CALCULATE) {
-		taxCost.value = (mdrData.ppn_value * props.modelValue) / 100;
+		var _dpp = 0;
+		var _mdr_cost = getMdrCost.value;
+		_dpp = (11/12) * _mdr_cost;
+		taxCost.value = (mdrData.ppn_value * _dpp) / 100;
 	}
 	return taxCost.value;
 })
