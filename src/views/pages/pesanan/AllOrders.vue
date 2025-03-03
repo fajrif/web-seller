@@ -16,18 +16,11 @@ const page = ref(1)
 const startDate = ref('')
 const endDate = ref('')
 
-const searchTrigger = computed(() => {
-	if (searchQuery.value.length > 3) {
-		 return searchQuery.value
-	}
-})
-
 const {
   data: ordersData,
   execute: fetchOrders, isFinished: loading,
 } = await useApiCore(createUrl('/seller/query/transaction', {
   query: {
-    keyword: searchTrigger,
     "filter[status]": props.selectedStatus,
     "filter[start_date]": startDate,
     "filter[end_date]": endDate,
