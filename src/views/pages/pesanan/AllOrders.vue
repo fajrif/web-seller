@@ -1,6 +1,5 @@
 <script setup>
 import iconFileBox from '@images/icons/ic-file-box.png'
-import { useMessageStore } from '@core/stores/config'
 
 const props = defineProps({
   selectedStatus: {
@@ -8,18 +7,11 @@ const props = defineProps({
   },
 })
 
-const messageStore = useMessageStore()
-const router = useRouter()
-
-const isAcceptOrderDialogVisible = ref(false)
-const isCancelOrderDialogVisible = ref(false)
 const dateRange = ref('')
 const searchQuery = ref('')
-const orderId = ref(0)
-const orderInvoice = ref('')
 
 // Data table options
-const itemsPerPage = ref(PAGINATION_PER_PAGE)
+const itemsPerPage = ref(5)
 const page = ref(1)
 const startDate = ref('')
 const endDate = ref('')
@@ -47,63 +39,23 @@ const {
 const orders = computed(() => ordersData.value.data.data)
 const totalOrder = computed(() => ordersData.value.data.total)
 
-const acceptOrder = async (id) => {
-  try {
-		const res = await $apiCore('/seller/command/order/accept/', {
-  		method: 'POST',
-  		body: { id: [id] },
-		})
-  	// Refetch orders
-  	fetchOrders()
-  	messageStore.setMessage('success', res.message)
-  } catch (error) {
-  		messageStore.setMessage('error', 'Gagal terima pesanan')
-  		console.error("Error on accepts order data:", error)
-  }
-}
-
-const cancelOrder = async (id,notes) => {
-  try {
-		const res = await $apiCore(`/seller/command/order/reject/${id}`, {
-  		method: 'POST',
-  		body: { notes: notes },
-		})
-  	// Refetch orders
-  	fetchOrders()
-  	messageStore.setMessage('success', res.message)
-  } catch (error) {
-  		messageStore.setMessage('error', 'Gagal membatalkan pesanan')
-  		console.error("Error on cancel order data:", error)
-  }
-}
-
-const acceptOrderItem = (id, invoiceNo) => {
-  orderId.value = id
-  orderInvoice.value = invoiceNo
-  isAcceptOrderDialogVisible.value = true
-}
-
-const cancelOrderItem = (id, invoiceNo) => {
-  orderId.value = id
-  orderInvoice.value = invoiceNo
-  isCancelOrderDialogVisible.value = true
-}
-
-const viewOrderItem = (id) => {
-  orderId.value = id
-	router.push('/pesanan/view/' + id)
+const callbackOrderStatusButton = () => {
+  fetchOrders()
 }
 
 watch(dateRange, (newVal, oldVal) => {
   if (newVal !== null && newVal !== oldVal) {
-		var arr = dateRange.value.split(' to ')
+		var arr = newVal.split(' to ')
 		startDate.value = arr[0]
-		endDate.value = startDate
+		endDate.value = arr[0]
 		if(arr.length > 1){
 			endDate.value = arr[1]
 		}
-		fetchOrders()
+  } else {
+    startDate.value = ''
+    endDate.value = ''
   }
+  fetchOrders()
 })
 </script>
 
@@ -207,7 +159,7 @@ watch(dateRange, (newVal, oldVal) => {
 													>
 													<span class="text-body-2 font-weight-bold">Kurir:</span>
 													<p class="text-body-2 my-1">
-														{{ slotProps.item.delivery.delivery_method }}
+														{{ slotProps.item.delivery.courier }}
 													</p>
 												</VCol>
 											</VRow>
@@ -235,37 +187,16 @@ watch(dateRange, (newVal, oldVal) => {
 											md="6"
 											class="px-0"
 											>
-											<div
-												class="d-flex justify-end gap-4"
-												>
-												<template v-if="slotProps.item.progress_active.status_code == '01'">
-													<VBtn
-														color="error"
-														variant="tonal"
-														class="me-1"
-														size="small"
-														@click="cancelOrderItem(slotProps.item.id, slotProps.item.trx_no)"
-														>
-														Tolak Pesanan
-													</VBtn>
-													<VBtn
-														color="primary"
-														size="small"
-														@click="acceptOrderItem(slotProps.item.id, slotProps.item.trx_no)"
-														>
-														Terima Pesanan
-													</VBtn>
-												</template>
-												<template v-else>
-													<VBtn
-														color="primary"
-														size="small"
-														@click="viewOrderItem(slotProps.item.id)"
-														>
-														Lihat Detail
-													</VBtn>
-												</template>
-											</div>
+                      <!-- place component here ... -->
+                      <OrderStatusButton
+                        v-model:order-id="slotProps.item.id"
+                        v-model:invoice-no="slotProps.item.trx_no"
+                        v-model:status-code="slotProps.item.progress_active.status_code"
+                        v-model:delivery-setting="slotProps.item.delivery.delivery_setting"
+                        v-model:shipping-type="slotProps.item.delivery.shipping_type"
+                        size="small"
+                        @callback-button="callbackOrderStatusButton"
+                      />
 										</VCol>
 									</VRow>
 								</td>
@@ -322,21 +253,6 @@ watch(dateRange, (newVal, oldVal) => {
 								/>
 								Transaksi Dibatalkan
 							</VChip>
-							<span
-								v-else
-								class="text-body-2 font-weight-medium"
-								>
-								Respond Sebelum
-								<VChip
-									color="item.progress_active.status_code == '01' ? 'error' : 'secondary'"
-									class="mx-2">
-									<VIcon
-										start
-										icon="tabler-clock"
-									/>
-								{{ getRespondTime(item.order_date) }}
-								</VChip>
-							</span>
 						</template>
 
 						<!-- pagination -->
@@ -363,19 +279,6 @@ watch(dateRange, (newVal, oldVal) => {
 				</template>
 			</VCardText>
     </VCard>
-		<!-- place dialog here -->
-    <AcceptOrderDialog
-      v-model:is-dialog-visible="isAcceptOrderDialogVisible"
-      v-model:order-id="orderId"
-      v-model:invoice-no="orderInvoice"
-      @form-submitted="acceptOrder"
-    />
-    <CancelOrderDialog
-      v-model:is-dialog-visible="isCancelOrderDialogVisible"
-      v-model:order-id="orderId"
-      v-model:invoice-no="orderInvoice"
-      @form-submitted="cancelOrder"
-    />
   </div>
 </template>
 

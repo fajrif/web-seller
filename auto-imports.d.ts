@@ -149,6 +149,7 @@ declare global {
   const regexValidator: typeof import('./src/@core/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/@core/utils/plugins.js')['registerPlugins']
   const requiredValidator: typeof import('./src/@core/utils/validators.js')['requiredValidator']
+  const resolveCompleteAddress: typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
@@ -175,6 +176,7 @@ declare global {
   const throttledRef: typeof import('@vueuse/core')['throttledRef']
   const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
   const timeOptions: typeof import('./src/utils/merchantHelper.js')['timeOptions']
+  const timeOptionsJemput: typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']
   const titleize: typeof import('./src/utils/merchantHelper.js')['titleize']
   const toCurrency: typeof import('./src/utils/productHelper.js')['toCurrency']
   const toLocaleDateTime: typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']
@@ -543,6 +545,7 @@ declare module 'vue' {
     readonly regexValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./src/@core/utils/plugins.js')['registerPlugins']>
     readonly requiredValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['requiredValidator']>
+    readonly resolveCompleteAddress: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
@@ -568,6 +571,7 @@ declare module 'vue' {
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
     readonly timeOptions: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['timeOptions']>
+    readonly timeOptionsJemput: UnwrapRef<typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']>
     readonly titleize: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['titleize']>
     readonly toCurrency: UnwrapRef<typeof import('./src/utils/productHelper.js')['toCurrency']>
     readonly toLocaleDateTime: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']>

@@ -1,6 +1,7 @@
 <script setup>
 import AllOrders from '@/views/pages/pesanan/AllOrders.vue'
 
+const isExportOrderDataDialogVisible = ref(false)
 const route = useRoute('pesanan-tab')
 
 const activeTab = computed({
@@ -48,6 +49,10 @@ const tabs = [
   },
 ]
 
+const openExportDataDialog = () => {
+  isExportOrderDataDialogVisible.value = true
+}
+
 definePage({ meta: { navActiveLink: 'pesanan-tab' } })
 </script>
 
@@ -59,6 +64,19 @@ definePage({ meta: { navActiveLink: 'pesanan-tab' } })
           Kelola Pesanan
         </h4>
       </div>
+			<div
+				class="d-flex gap-4"
+				>
+				<VBtn
+					color="primary"
+					style="width:fit-content"
+          size="small"
+					prepend-icon="tabler-download"
+          @click="openExportDataDialog"
+					>
+					Export Pesanan
+				</VBtn>
+			</div>
     </div>
 
     <VTabs
@@ -74,7 +92,6 @@ definePage({ meta: { navActiveLink: 'pesanan-tab' } })
         {{ item.title }}
       </VTab>
     </VTabs>
-
     <VWindow
       v-model="activeTab"
       class="mt-6 disable-tab-transition"
@@ -89,5 +106,8 @@ definePage({ meta: { navActiveLink: 'pesanan-tab' } })
         <AllOrders :selected-status="item.status" />
       </VWindowItem>
     </VWindow>
+    <ExportOrderDataDialog
+      v-model:is-dialog-visible="isExportOrderDataDialogVisible"
+    />
   </div>
 </template>

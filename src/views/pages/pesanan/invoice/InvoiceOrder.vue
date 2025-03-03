@@ -10,7 +10,7 @@ var subTotalProduct = 0
 const { data: orderDetails } = await useApiCore(`/seller/query/transaction/detail/${ route.params.id }`)
 if (orderDetails.value.status == 200) {
   orderData.value = orderDetails.value.data
-	orderData.value.detail.forEach((x, i) => subTotalProduct += x.total_price);
+	orderData.value.detail.forEach((x, i) => subTotalProduct += x.total_amount);
 }
 
 </script>
@@ -24,7 +24,7 @@ if (orderDetails.value.status == 200) {
 					:style="{ backgroundImage: 'url(' + logoLunas + ')' }"
 					>
 					<!-- SECTION Header -->
-					<div class="invoice-header-preview pa-6 mb-6">
+					<div class="invoice-header-preview pa-6 mb-0">
 						<div class="d-flex flex-wrap justify-space-between gap-6">
 							<!-- 👉 Left Content -->
 							<div>
@@ -36,7 +36,7 @@ if (orderDetails.value.status == 200) {
 										/>
 									<div class="d-flex flex-column">
 										<span class="text-body-2 font-weight-regular text-high-emphasis">Diterbitkan pada</span>
-										<span class="text-body-1 font-weight-bold text-high-emphasis">{{ toLocaleDateTime(orderData.order_date) }}</span>
+										<span class="text-body-1 font-weight-bold text-high-emphasis">{{ toLocaleDateTime(orderData.created_at) }}</span>
 									</div>
 								</div>
 							</div>
@@ -64,8 +64,7 @@ if (orderDetails.value.status == 200) {
 									<h6 class="text-h6 font-weight-body">
 										{{ orderData.merchant.name }} ( {{ orderData.merchant.phone_office }} )
 									</h6>
-									<p class="text-body-1 font-weight-regular mb-0">
-										{{ orderData.merchant.address }}
+									<p v-html="resolveCompleteAddress(orderData.merchant)" class="text-body-1 font-weight-regular mb-0">
 									</p>
 								</div>
 							</div>
@@ -78,8 +77,7 @@ if (orderDetails.value.status == 200) {
 									<h6 class="text-h6 font-weight-body">
 										{{ orderData.buyer.full_name }} ( {{ orderData.buyer.phone }} )
 									</h6>
-									<p class="text-body-1 font-weight-regular mb-0">
-										{{ orderData.delivery.address }}
+									<p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-1 font-weight-regular mb-0 text-end">
 									</p>
 								</div>
 							</div>
@@ -140,7 +138,7 @@ if (orderDetails.value.status == 200) {
 									{{ toCurrency(item.price) }}
 								</td>
 								<td class="text-end">
-									{{ toCurrency(item.total_price) }}
+									{{ toCurrency(item.total_amount) }}
 								</td>
 							</tr>
 						</tbody>

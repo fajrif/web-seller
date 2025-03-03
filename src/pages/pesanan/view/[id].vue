@@ -4,69 +4,18 @@ import { useMessageStore } from '@core/stores/config'
 const route = useRoute('pesanan-view-id')
 const orderData = ref()
 
-const isAcceptOrderDialogVisible = ref(false)
-const isCancelOrderDialogVisible = ref(false)
-const isInputResiOrderDialogVisible = ref(false)
-const orderId = ref(0)
-const orderInvoice = ref('')
+var subTotalProduct = 0
 
 const { data: orderDetails, execute: fetchOrder, isFinished: loading } = await useApiCore(`/seller/query/transaction/detail/${ route.params.id }`)
 if (orderDetails.value.status == 200) {
   orderData.value = orderDetails.value.data
+	orderData.value.detail.forEach((x, i) => subTotalProduct += x.total_amount);
 }
 
-const acceptOrder = async (id) => {
-  try {
-		const res = await $apiCore('/seller/command/order/accept/', {
-  		method: 'POST',
-  		body: { id: [id] },
-		})
-  	// Refetch orders
-  	fetchOrder()
-  	messageStore.setMessage('success', res.message)
-  } catch (error) {
-		messageStore.setMessage('error', 'Gagal terima pesanan')
-		console.error("Error on accepts order data:", error)
-  }
+const callbackOrderStatusButton = () => {
+  fetchOrder()
 }
 
-const cancelOrder = async (id,notes) => {
-  try {
-		const res = await $apiCore(`/seller/command/order/reject/${id}`, {
-  		method: 'POST',
-  		body: { notes: notes },
-		})
-  	// Refetch orders
-  	fetchOrder()
-  	messageStore.setMessage('success', res.message)
-  } catch (error) {
-		messageStore.setMessage('error', 'Gagal membatalkan pesanan')
-		console.error("Error on cancel order data:", error)
-  }
-}
-
-const shipmentOrder = async (id, resi) => {
-	console(id)
-	console(resi)
-}
-
-const acceptOrderItem = (id, invoiceNo) => {
-  orderId.value = id
-  orderInvoice.value = invoiceNo
-  isAcceptOrderDialogVisible.value = true
-}
-
-const cancelOrderItem = (id, invoiceNo) => {
-  orderId.value = id
-  orderInvoice.value = invoiceNo
-  isCancelOrderDialogVisible.value = true
-}
-
-const inputResiOrderItem = (id, invoiceNo) => {
-  orderId.value = id
-  orderInvoice.value = invoiceNo
-  isInputResiOrderDialogVisible.value = true
-}
 </script>
 
 <template>
@@ -85,43 +34,16 @@ const inputResiOrderItem = (id, invoiceNo) => {
         </p>
       </div>
 			<template v-if="orderData">
-				<div v-if="orderData.progress_active.status_code == '01'"
-					class="d-flex gap-4"
-					>
-					<VBtn
-						color="error"
-						variant="tonal"
-						class="me-1"
-						@click="cancelOrderItem(orderData.id, orderData.trx_no)"
-						>
-						Tolak Pesanan
-					</VBtn>
-					<VBtn
-						color="primary"
-						@click="acceptOrderItem(orderData.id, orderData.trx_no)"
-						>
-						Terima Pesanan
-					</VBtn>
-				</div>
-				<div v-if="orderData.progress_active.status_code == '02'"
-					class="d-flex gap-4"
-					>
-					<VBtn
-						color="primary"
-						@click="inputResiOrderItem(orderData.id, orderData.trx_no)"
-						>
-						Masukkan Resi
-					</VBtn>
-				</div>
-				<div v-if="orderData.progress_active.status_code == '03'"
-					class="d-flex gap-4"
-					>
-					<VBtn
-						color="primary"
-						>
-						Lacak Pengiriman
-					</VBtn>
-				</div>
+        <!-- place component here ... -->
+        <OrderStatusButton
+          v-model:order-id="orderData.id"
+          v-model:invoice-no="orderData.trx_no"
+          v-model:status-code="orderData.progress_active.status_code"
+          v-model:delivery-setting="orderData.delivery.delivery_setting"
+          v-model:shipping-type="orderData.delivery.shipping_type"
+          :display-detail="false"
+          @callback-button="callbackOrderStatusButton"
+        />
 			</template>
     </div>
 
@@ -227,7 +149,7 @@ const inputResiOrderItem = (id, invoiceNo) => {
 									{{ item.total_weight }} gr
 								</td>
 								<td class="text-center">
-									{{ toCurrency(item.total_price) }}
+									{{ toCurrency(item.total_amount) }}
 								</td>
 							</tr>
 						</tbody>
@@ -250,8 +172,7 @@ const inputResiOrderItem = (id, invoiceNo) => {
 									Alamat
 								</h6>
 								<span class="font-weight-bold">{{ orderData.delivery.receiver_name }} ({{ orderData.delivery.receiver_phone }})</span>
-								<p class="text-body-1 mb-0" style="max-width:300px;">
-									{{ orderData.delivery.address }}
+								<p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-1 mb-0" style="max-width:300px;">
 								</p>
 							</div>
 						</VCol>
@@ -306,7 +227,7 @@ const inputResiOrderItem = (id, invoiceNo) => {
 								{{ orderData.payment.payment_method || '-' }}
 							</p>
 							<p class="mb-4">
-								{{ toCurrency(orderData.total_amount) }}
+								{{ toCurrency(subTotalProduct) }}
 							</p>
 							<p class="mb-4">
 								{{ toCurrency(orderData.delivery.delivery_fee) }}
@@ -336,24 +257,5 @@ const inputResiOrderItem = (id, invoiceNo) => {
 				@click-button="() => $router.push('/pesanan/semua')"
 				/>
 		</VCard>
-		<!-- place dialog here -->
-    <AcceptOrderDialog
-      v-model:is-dialog-visible="isAcceptOrderDialogVisible"
-      v-model:order-id="orderId"
-      v-model:invoice-no="orderInvoice"
-      @form-submitted="acceptOrder"
-    />
-    <CancelOrderDialog
-      v-model:is-dialog-visible="isCancelOrderDialogVisible"
-      v-model:order-id="orderId"
-      v-model:invoice-no="orderInvoice"
-      @form-submitted="cancelOrder"
-    />
-    <InputResiOrderDialog
-      v-model:is-dialog-visible="isInputResiOrderDialogVisible"
-      v-model:order-id="orderId"
-      v-model:invoice-no="orderInvoice"
-      @form-submitted="shipmentOrder"
-    />
   </div>
 </template>

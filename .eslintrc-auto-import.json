@@ -405,6 +405,8 @@
     "resolveStock": true,
     "noZeroLeftPadding": true,
     "nonStartZero": true,
-    "nonZeroStartNumber": true
+    "nonZeroStartNumber": true,
+    "resolveCompleteAddress": true,
+    "timeOptionsJemput": true
   }
 }

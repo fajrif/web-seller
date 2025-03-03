@@ -83,13 +83,41 @@ export const resolveStatusOrder = statusId => {
     }
 }
 
-export const toLocaleDateTime = date => {
+export const resolveCompleteAddress = (delivery, isHtml=true) => {
+  var _completeAddress = ''
+	if(isEmpty(delivery))
+    return _completeAddress
+
+  if(isHtml) {
+    _completeAddress = delivery.address + ' <br/>' +
+                       delivery.district?.name + ' ' +
+                       delivery.subdistrict?.name + ' <br/>' +
+                       delivery.city?.name + ' ' +
+                       delivery.province?.name + ' <br/>' +
+                       delivery.postal_code
+  } else {
+    _completeAddress = delivery.address + ' ' +
+                       delivery.district?.name + ' ' +
+                       delivery.subdistrict?.name + ' ' +
+                       delivery.city?.name + ' ' +
+                       delivery.province?.name + ' ' +
+                       delivery.postal_code
+  }
+  return _completeAddress
+}
+
+export const timeOptionsJemput = [
+  '08:00 - 12:00',
+  '12:00 - 16:00',
+]
+
+export const toLocaleDateTime = (date,format='DD MMM YYYY HH:mm') => {
 	if(isEmpty(date))
 		return ''
 
 	var _date = new Date(date)
 
-	return useDateFormat(_date, 'DD MMM YYYY HH:mm')
+	return useDateFormat(_date, format)
 }
 
 export const getRespondTime = date => {

@@ -15,6 +15,15 @@ import InvoiceOrder from '@/views/pages/pesanan/invoice/InvoiceOrder.vue'
 				>
 				<VBtn
 					color="primary"
+          variant="tonal"
+					style="width:fit-content"
+					prepend-icon="tabler-chevron-left"
+          @click="() => { $router.go(-1) }"
+					>
+					Kembali
+				</VBtn>
+				<VBtn
+					color="primary"
 					style="width:fit-content"
 					prepend-icon="tabler-download"
 					>

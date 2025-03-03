@@ -32,7 +32,7 @@ const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       // or this one
-      emit('formSubmitted', props.invoiceNo, nomorResi.value)
+      emit('formSubmitted', props.orderId, nomorResi.value)
       onReset()
     }
   })
