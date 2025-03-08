@@ -1,9 +1,14 @@
 <script setup>
+import { useClipboard } from '@vueuse/core'
+
 const route = useRoute('pesanan-view-id')
+const awbNumber = ref('')
+const { text, copy, copied, isSupported } = useClipboard({ awbNumber })
 
 const { data: orderDetails, execute: fetchOrder, isFinished: loading } = await useApiCore(`/seller/query/transaction/detail/${ route.params.id }`)
 
 const orderData = computed(() => orderDetails.value?.data)
+
 const subTotalProduct = computed(() => {
   let _subTotal = 0;
   orderDetails.value?.data?.detail.forEach((x, i) => _subTotal += x.total_amount);
@@ -188,7 +193,19 @@ const callbackOrderStatusButton = async () => {
 								<h6 class="text-h6">
 									No.Resi
 								</h6>
-								<span v-if="orderData.delivery.awb_number">{{ orderData.delivery.awb_number }}</span>
+                <div v-if="orderData.delivery.awb_number" class="d-flex flex-wrap gap-2">
+                  <span>{{ orderData.delivery.awb_number }}</span>
+                  <span v-if="isSupported" style="font-size:smaller;">
+                    <button @click="copy(orderData.delivery.awb_number)">
+                      <!-- by default, `copied` will be reset in 1.5s -->
+                      <span v-if="!copied" class="text-primary">Copy</span>
+                      <span v-else class="text-primary">Copied!</span>
+                    </button>
+                  </span>
+                  <span v-else class="text-error">
+                    browser anda tidak support Clipboard API
+                  </span>
+                </div>
 								<span v-else>-</span>
 							</div>
 						</VCol>

@@ -70,11 +70,13 @@ declare module 'vue' {
     Stencil: typeof import('./src/components/dialogs/vue-advanced-cropper/Stencil.vue')['default']
     SwiperDialog: typeof import('./src/components/dialogs/SwiperDialog.vue')['default']
     TablePagination: typeof import('./src/@core/components/TablePagination.vue')['default']
+    TableResiOrder: typeof import('./src/components/TableResiOrder.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./src/@core/components/TiptapEditor.vue')['default']
     UpdateHargaDialog: typeof import('./src/components/dialogs/UpdateHargaDialog.vue')['default']
     UpdateStatusDialog: typeof import('./src/components/dialogs/UpdateStatusDialog.vue')['default']
     UpdateStockDialog: typeof import('./src/components/dialogs/UpdateStockDialog.vue')['default']
     UploadCropStencilImageDialog: typeof import('./src/components/dialogs/UploadCropStencilImageDialog.vue')['default']
+    ViewResiOrderDialog: typeof import('./src/components/dialogs/ViewResiOrderDialog.vue')['default']
   }
 }

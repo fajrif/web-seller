@@ -47,6 +47,7 @@ const isCancelOrderDialogVisible = ref(false)
 const isRequestPickUpDialogVisible = ref(false)
 const isGenerateResiOtomatisDialogVisible = ref(false)
 const isInputResiOrderDialogVisible = ref(false)
+const isViewResiOrderDialogVisible = ref(false)
 const isLoadingVisible = ref(false)
 
 const acceptOrder = async (id) => {
@@ -158,6 +159,10 @@ const inputResiOrderItem = () => {
   isInputResiOrderDialogVisible.value = true
 }
 
+const viewResiOrderItem = () => {
+  isViewResiOrderDialogVisible.value = true
+}
+
 const viewOrderItem = () => {
 	router.push('/pesanan/view/' + props.orderId)
 }
@@ -213,6 +218,15 @@ const viewOrderItem = () => {
     </template>
     <template v-else>
       <VBtn
+        v-if="props.statusCode == '03' || props.statusCode == '88'"
+        color="primary"
+        variant="outlined"
+        :size="props.size"
+        @click="viewResiOrderItem"
+        >
+        Lihat Resi
+      </VBtn>
+      <VBtn
         v-if="props.displayDetail"
         color="primary"
         :size="props.size"
@@ -252,6 +266,10 @@ const viewOrderItem = () => {
     v-model:order-id="props.orderId"
     v-model:shipping-type="props.shippingType"
     @form-submitted="generateResiOrder"
+  />
+  <ViewResiOrderDialog
+    v-model:is-dialog-visible="isViewResiOrderDialogVisible"
+    v-model:order-id="props.orderId"
   />
   <OrderLoadingDialog
     v-model:is-dialog-visible="isLoadingVisible"
