@@ -1,18 +1,16 @@
 <script setup>
-import { useMessageStore } from '@core/stores/config'
-
 const route = useRoute('pesanan-view-id')
-const orderData = ref()
-
-var subTotalProduct = 0
 
 const { data: orderDetails, execute: fetchOrder, isFinished: loading } = await useApiCore(`/seller/query/transaction/detail/${ route.params.id }`)
-if (orderDetails.value.status == 200) {
-  orderData.value = orderDetails.value.data
-	orderData.value.detail.forEach((x, i) => subTotalProduct += x.total_amount);
-}
 
-const callbackOrderStatusButton = () => {
+const orderData = computed(() => orderDetails.value?.data)
+const subTotalProduct = computed(() => {
+  let _subTotal = 0;
+  orderDetails.value?.data?.detail.forEach((x, i) => _subTotal += x.total_amount);
+  return _subTotal;
+})
+
+const callbackOrderStatusButton = async () => {
   fetchOrder()
 }
 
@@ -20,6 +18,11 @@ const callbackOrderStatusButton = () => {
 
 <template>
   <div>
+    <OrderLoadingDialog
+      :is-dialog-visible="!loading"
+      :is-progress-linear="true"
+      message-text="Memuat pesanan..."
+    />
     <!-- 👉 Header  -->
     <div class="d-flex justify-space-between align-center flex-wrap gap-y-4 mb-4">
       <div>
@@ -185,7 +188,8 @@ const callbackOrderStatusButton = () => {
 								<h6 class="text-h6">
 									No.Resi
 								</h6>
-								<span>-</span>
+								<span v-if="orderData.delivery.awb_number">{{ orderData.delivery.awb_number }}</span>
+								<span v-else>-</span>
 							</div>
 						</VCol>
 					</VRow>

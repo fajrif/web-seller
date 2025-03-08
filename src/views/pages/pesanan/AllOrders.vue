@@ -21,6 +21,7 @@ const {
   execute: fetchOrders, isFinished: loading,
 } = await useApiCore(createUrl('/seller/query/transaction', {
   query: {
+    keyword: searchQuery.value,
     "filter[status]": props.selectedStatus,
     "filter[start_date]": startDate,
     "filter[end_date]": endDate,
@@ -34,6 +35,12 @@ const totalOrder = computed(() => ordersData.value.data.total)
 
 const callbackOrderStatusButton = () => {
   fetchOrders()
+}
+
+const searchInvoiceNo = () => {
+  if(!isEmpty(searchQuery.value)) {
+    fetchOrders()
+  }
 }
 
 watch(dateRange, (newVal, oldVal) => {
@@ -63,9 +70,15 @@ watch(dateRange, (newVal, oldVal) => {
 						<AppTextField
 							v-model="searchQuery"
 							placeholder="Cari berdasarkan invoice"
+              clearable
+              clear-icon="tabler-circle-x"
 							append-inner-icon="tabler-search"
 							style="inline-size: 400px;"
 							class="me-3"
+              :disabled="!loading"
+              @click:clear="fetchOrders"
+              @click:append-inner="searchInvoiceNo"
+              @keyup.enter="searchInvoiceNo"
 							/>
 					</div>
 
@@ -74,16 +87,24 @@ watch(dateRange, (newVal, oldVal) => {
 						<AppSelect
 							v-model="itemsPerPage"
 							:items="[5, 10, 20, 25, 50]"
+              :disabled="!loading"
 							/>
 						<AppDateTimePicker
 							v-model="dateRange"
 							placeholder="Pilih Tanggal"
 							style="inline-size: 200px;"
+              :disabled="!loading"
 							:config="{ mode: 'range' }"
 						/>
 					</div>
 				</div>
-
+        <VProgressLinear
+          v-if="!loading"
+          height="3"
+          color="secondary"
+          :rounded="false"
+          indeterminate
+        />
 				<div
 					v-if="orders && totalOrder > 0"
 					class="data-orders-table border rounded">

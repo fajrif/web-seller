@@ -58,7 +58,7 @@ const onSubmit = () => {
         <VCardItem class="pb-2">
           <VCardTitle>
             <h4 class="text-h4 mb-4">
-              Masukkan Resi
+              Masukkan Resi (Order ID: #{{ props.orderId }})
             </h4>
           </VCardTitle>
           <p class="text-body-1 font-weight-bold mb-2">

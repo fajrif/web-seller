@@ -206,45 +206,6 @@ if (orderDetails.value.status == 200) {
 						</div>
 					</div>
 
-					<!-- 👉 promo Table -->
-					<VTable class="invoice-preview-table text-high-emphasis overflow-hidden mb-2">
-						<thead>
-							<tr>
-								<th scope="col">
-									Promo
-								</th>
-								<th
-									scope="col"
-									class="text-end"
-									>
-									Subtotal
-								</th>
-							</tr>
-						</thead>
-						<tbody class="text-base">
-							<tr>
-								<td class="text-no-wrap">
-									Potongan Promo
-								</td>
-								<td class="text-end">
-									Rp.0
-								</td>
-							</tr>
-						</tbody>
-					</VTable>
-					<div class="d-flex justify-center bg-pink py-2 px-6 mb-6">
-						<div class="me-auto">
-							<p class="font-weight-medium mb-0">
-								Subtotal Promo
-							</p>
-						</div>
-
-						<div class="ms-auto text-end">
-							<p class="font-weight-medium mb-0">
-								Rp.0
-							</p>
-						</div>
-					</div>
 					<div class="d-flex justify-center py-2 px-6 mb-6">
 						<div class="me-auto">
 							<p class="font-weight-medium mb-0">

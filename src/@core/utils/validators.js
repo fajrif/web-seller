@@ -119,3 +119,11 @@ export const lineBreaksValidator = value => {
 
   return (valueAsString.match(/\n/g)||[]).length === 0 || 'Tidak boleh menggunakan line break'
 }
+
+// 👉 Date-Less-Than Validator
+export const dateMoreThanValidator = (datetimeStart, datetimeEnd) => {
+  if (isEmpty(datetimeStart) || isEmpty(datetimeEnd))
+    return true
+
+  return (Date.parse(datetimeStart) < Date.parse(datetimeEnd)) || 'Tanggal akhir harus lebih besar dari awal'
+}

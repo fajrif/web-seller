@@ -56,31 +56,37 @@ export const statusOrder = [
 ]
 
 export const resolveStatusOrder = statusId => {
-  if (statusId === '01')
+  if (statusId === '01') {
     return {
       text: 'Pesanan Baru',
       color: 'error',
     }
-  if (statusId === '02')
+  } else if (statusId === '02') {
     return {
       text: 'Siap dikirim',
       color: 'warning',
     }
-  if (statusId === '03')
+  } else if (statusId === '03') {
     return {
       text: 'Dalam Pengiriman',
       color: 'info',
     }
-  if (statusId === '88')
+  } else if (statusId === '88') {
     return {
       text: 'Berhasil',
       color: 'success',
     }
-  if (statusId === '09')
+  } else if (statusId === '09') {
     return {
       text: 'Dibatalkan',
       color: 'secondary',
     }
+  } else {
+    return {
+      text: statusId,
+      color: 'error',
+    }
+  }
 }
 
 export const resolveCompleteAddress = (delivery, isHtml=true) => {
@@ -107,8 +113,8 @@ export const resolveCompleteAddress = (delivery, isHtml=true) => {
 }
 
 export const timeOptionsJemput = [
-  '08:00 - 12:00',
-  '12:00 - 16:00',
+  { value: '08:00', label: '08:00 - 12:00' },
+  { value: '12:00', label: '12:00 - 16:00' },
 ]
 
 export const toLocaleDateTime = (date,format='DD MMM YYYY HH:mm') => {

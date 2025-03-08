@@ -44,6 +44,7 @@ declare global {
   const createUrl: typeof import('./src/@core/composable/createUrl.js')['createUrl']
   const customRef: typeof import('vue')['customRef']
   const data2blob: typeof import('./src/utils/data2blob.js')['default']
+  const dateMoreThanValidator: typeof import('./src/@core/utils/validators.js')['dateMoreThanValidator']
   const debouncedRef: typeof import('@vueuse/core')['debouncedRef']
   const debouncedWatch: typeof import('@vueuse/core')['debouncedWatch']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
@@ -447,6 +448,7 @@ declare module 'vue' {
     readonly createUnrefFn: UnwrapRef<typeof import('@vueuse/core')['createUnrefFn']>
     readonly createUrl: UnwrapRef<typeof import('./src/@core/composable/createUrl.js')['createUrl']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
+    readonly dateMoreThanValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['dateMoreThanValidator']>
     readonly debouncedRef: UnwrapRef<typeof import('@vueuse/core')['debouncedRef']>
     readonly debouncedWatch: UnwrapRef<typeof import('@vueuse/core')['debouncedWatch']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>

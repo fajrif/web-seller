@@ -407,6 +407,7 @@
     "nonStartZero": true,
     "nonZeroStartNumber": true,
     "resolveCompleteAddress": true,
-    "timeOptionsJemput": true
+    "timeOptionsJemput": true,
+    "dateMoreThanValidator": true
   }
 }

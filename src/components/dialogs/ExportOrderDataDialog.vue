@@ -98,6 +98,7 @@ watch(() => props.isDialogVisible, async (visible) => {
 									/>
                 <div class="d-flex flex-wrap gap-4 my-2">
                   <AppDateTimePicker
+                    v-model="startDate"
                     label="Tanggal Awal"
                     width="210px"
                     prepend-inner-icon="tabler-calendar"
@@ -110,7 +111,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                     label="Tanggal Akhir"
                     width="210px"
                     prepend-inner-icon="tabler-calendar"
-                    :rules="[requiredValidator]"
+                    :rules="[requiredValidator, dateMoreThanValidator(startDate, endDate)]"
                     placeholder="Pilih tanggal akhir"
                     :config="{ enableTime: false, dateFormat: 'Y-m-d' }"
                     />

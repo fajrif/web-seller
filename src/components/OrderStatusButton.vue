@@ -44,11 +44,13 @@ const router = useRouter()
 const messageStore = useMessageStore()
 const isAcceptOrderDialogVisible = ref(false)
 const isCancelOrderDialogVisible = ref(false)
-const isShipmentOrderSettingsDialogVisible = ref(false)
-const isGenerateResiOrderDialogVisible = ref(false)
+const isRequestPickUpDialogVisible = ref(false)
+const isGenerateResiOtomatisDialogVisible = ref(false)
 const isInputResiOrderDialogVisible = ref(false)
+const isLoadingVisible = ref(false)
 
 const acceptOrder = async (id) => {
+  isLoadingVisible.value = true
   try {
 		const res = await $apiCore('/seller/command/order/accept/', {
   		method: 'POST',
@@ -56,13 +58,16 @@ const acceptOrder = async (id) => {
 		})
     emit('callbackButton')
   	messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
   } catch (error) {
     messageStore.setMessage('error', 'Gagal terima pesanan')
     console.error("Error on accepts order data:", error)
+    isLoadingVisible.value = false
   }
 }
 
 const cancelOrder = async (id,notes) => {
+  isLoadingVisible.value = true
   try {
 		const res = await $apiCore(`/seller/command/order/reject/${id}`, {
   		method: 'POST',
@@ -70,22 +75,66 @@ const cancelOrder = async (id,notes) => {
 		})
     emit('callbackButton')
   	messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
   } catch (error) {
     messageStore.setMessage('error', 'Gagal membatalkan pesanan')
     console.error("Error on cancel order data:", error)
+    isLoadingVisible.value = false
   }
 }
 
 const inputResiOrder = async (id,resi) => {
+  isLoadingVisible.value = true
   try {
     const res = await $apiCore(`/seller/command/order/awb-number/${id}/${resi}`, {
   		method: 'POST',
 		})
     emit('callbackButton')
   	messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
   } catch (error) {
     messageStore.setMessage('error', 'Gagal masukkan resi pesanan')
     console.error("Error on inputResi order data:", error)
+    isLoadingVisible.value = false
+  }
+}
+
+const requestPickUpOrder = async (id,selectedDateTime) => {
+  isLoadingVisible.value = true
+  try {
+		const res = await $apiCore('/seller/command/order/generate-resi', {
+  		method: 'POST',
+      body: {
+        order_ids: [parseInt(id)],
+        expect_time: selectedDateTime
+      },
+		})
+    emit('callbackButton')
+    messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal request pick-up pesanan')
+    console.error("Error on requestPickUp order data:", error)
+    isLoadingVisible.value = false
+  }
+}
+
+const generateResiOrder = async (id) => {
+  isLoadingVisible.value = true
+  try {
+		const res = await $apiCore('/seller/command/order/generate-resi', {
+  		method: 'POST',
+      body: {
+        order_ids: [parseInt(id)],
+      },
+		})
+    emit('callbackButton')
+  	messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal generate resi pesanan')
+    console.error("Error on generateResi order data:", error)
+    isLoadingVisible.value = false
   }
 }
 
@@ -97,12 +146,12 @@ const cancelOrderItem = () => {
   isCancelOrderDialogVisible.value = true
 }
 
-const shipmentSettingsOrderItem = () => {
-  isShipmentOrderSettingsDialogVisible.value = true
+const requestPickUpOrderItem = () => {
+  isRequestPickUpDialogVisible.value = true
 }
 
 const generateResiOrderItem = () => {
-  isGenerateResiOrderDialogVisible.value = true
+  isGenerateResiOtomatisDialogVisible.value = true
 }
 
 const inputResiOrderItem = () => {
@@ -141,7 +190,7 @@ const viewOrderItem = () => {
         v-if="props.deliverySetting == 'shipper'"
         color="primary"
         :size="props.size"
-        @click="shipmentSettingsOrderItem"
+        @click="requestPickUpOrderItem"
         >
         Atur Pengiriman
       </VBtn>
@@ -192,9 +241,21 @@ const viewOrderItem = () => {
     v-model:invoice-no="props.invoiceNo"
     @form-submitted="inputResiOrder"
   />
-  <ShipmentOrderSettingsDialog
-    v-model:is-dialog-visible="isShipmentOrderSettingsDialogVisible"
+  <RequestPickUpDialog
+    v-model:is-dialog-visible="isRequestPickUpDialogVisible"
     v-model:order-id="props.orderId"
     v-model:shipping-type="props.shippingType"
+    @form-submitted="requestPickUpOrder"
+  />
+  <GenerateResiOtomatisDialog
+    v-model:is-dialog-visible="isGenerateResiOtomatisDialogVisible"
+    v-model:order-id="props.orderId"
+    v-model:shipping-type="props.shippingType"
+    @form-submitted="generateResiOrder"
+  />
+  <OrderLoadingDialog
+    v-model:is-dialog-visible="isLoadingVisible"
+    :is-progress-linear="true"
+    message-text="Pesanan di proses, harap tunggu..."
   />
 </template>
