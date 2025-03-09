@@ -127,6 +127,7 @@ declare global {
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const operationalAttrs: typeof import('./src/utils/merchantHelper.js')['operationalAttrs']
   const orderHeaders: typeof import('./src/utils/orderHelper.js')['orderHeaders']
+  const orderIsShipped: typeof import('./src/utils/orderHelper.js')['orderIsShipped']
   const paginationMeta: typeof import('./src/utils/paginationMeta.js')['paginationMeta']
   const passwordValidator: typeof import('./src/@core/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
@@ -152,8 +153,10 @@ declare global {
   const requiredValidator: typeof import('./src/@core/utils/validators.js')['requiredValidator']
   const resolveCompleteAddress: typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']
   const resolveComponent: typeof import('vue')['resolveComponent']
+  const resolveCustomShipment: typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
+  const resolveStateShipment: typeof import('./src/utils/orderHelper.js')['resolveStateShipment']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
   const resolveStatusOrder: typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']
   const resolveStock: typeof import('./src/utils/productHelper.js')['resolveStock']
@@ -524,6 +527,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly orderHeaders: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderHeaders']>
+    readonly orderIsShipped: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderIsShipped']>
     readonly paginationMeta: UnwrapRef<typeof import('./src/utils/paginationMeta.js')['paginationMeta']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
@@ -549,8 +553,10 @@ declare module 'vue' {
     readonly requiredValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['requiredValidator']>
     readonly resolveCompleteAddress: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
+    readonly resolveCustomShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']>
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
+    readonly resolveStateShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStateShipment']>
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveStock: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStock']>

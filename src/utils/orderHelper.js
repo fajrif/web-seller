@@ -89,6 +89,65 @@ export const resolveStatusOrder = statusId => {
   }
 }
 
+export const resolveStateShipment = status => {
+  var state = 0;
+  switch (status) {
+    case "1":
+      state = 1
+      break;
+    case "2":
+      state = 2
+      break;
+    case "3":
+      state = 2
+      break;
+    case "4":
+      state = 3
+      break;
+    case "5":
+      state = 4
+      break;
+    case "6":
+      state = 2
+      break;
+  }
+  return state;
+}
+
+export const resolveCustomShipment = statusCode => {
+  if (statusCode === '02') {
+    return {
+      title: 'Siap dikirim',
+      description: 'Pesanan dikonfirmasi seller',
+      state: 1,
+    }
+  } else if (statusCode === '03') {
+    return {
+      title: 'Dalam Pengiriman',
+      description: 'Paket dalam pengiriman oleh seller',
+      state: 3,
+    }
+  } else if (statusCode === '08') {
+    return {
+      title: 'Telah Sampai',
+      description: 'Paket Telah sampai, mohon konfirmasi pesanan anda',
+      state: 4,
+    }
+  } else if (statusCode === '88') {
+    return {
+      title: 'Selesai',
+      description: 'Pesanan Telah dikonfirmasi Pembeli',
+      state: 4,
+    }
+  } else {
+    return {
+      title: 'Dalam Pengiriman',
+      description: 'Paket dalam pengiriman oleh Seller',
+      state: 2,
+    }
+  }
+}
+
 export const resolveCompleteAddress = (delivery, isHtml=true) => {
   var _completeAddress = ''
 	if(isEmpty(delivery))
@@ -112,6 +171,10 @@ export const resolveCompleteAddress = (delivery, isHtml=true) => {
   return _completeAddress
 }
 
+export const orderIsShipped = statusId => {
+  return (statusId === '03' || statusId === '88')
+}
+
 export const timeOptionsJemput = [
   { value: '08:00', label: '08:00 - 12:00' },
   { value: '12:00', label: '12:00 - 16:00' },
@@ -126,12 +189,12 @@ export const toLocaleDateTime = (date,format='DD MMM YYYY HH:mm') => {
 	return useDateFormat(_date, format)
 }
 
-export const getRespondTime = date => {
+export const getRespondTime = (date, num=3) => {
 	if(isEmpty(date))
 		return ''
 
 	var _date = new Date(date)
-	_date.setDate(_date.getDate() + 3);
+	_date.setDate(_date.getDate() + num);
 
-	return useDateFormat(_date, 'DD MMM YYYY HH:mm')
+	return useDateFormat(_date, 'DD MMM YYYY')
 }

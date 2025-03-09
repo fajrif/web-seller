@@ -408,6 +408,9 @@
     "nonZeroStartNumber": true,
     "resolveCompleteAddress": true,
     "timeOptionsJemput": true,
-    "dateMoreThanValidator": true
+    "dateMoreThanValidator": true,
+    "orderIsShipped": true,
+    "resolveCustomShipment": true,
+    "resolveStateShipment": true
   }
 }

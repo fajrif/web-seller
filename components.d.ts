@@ -73,6 +73,7 @@ declare module 'vue' {
     TableResiOrder: typeof import('./src/components/TableResiOrder.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./src/@core/components/TiptapEditor.vue')['default']
+    TrackingOrderDialog: typeof import('./src/components/dialogs/TrackingOrderDialog.vue')['default']
     UpdateHargaDialog: typeof import('./src/components/dialogs/UpdateHargaDialog.vue')['default']
     UpdateStatusDialog: typeof import('./src/components/dialogs/UpdateStatusDialog.vue')['default']
     UpdateStockDialog: typeof import('./src/components/dialogs/UpdateStockDialog.vue')['default']

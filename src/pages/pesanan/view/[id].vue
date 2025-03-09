@@ -2,6 +2,7 @@
 import { useClipboard } from '@vueuse/core'
 
 const route = useRoute('pesanan-view-id')
+const isTrackingOrderDialogVisible = ref(false)
 const awbNumber = ref('')
 const { text, copy, copied, isSupported } = useClipboard({ awbNumber })
 
@@ -17,6 +18,10 @@ const subTotalProduct = computed(() => {
 
 const callbackOrderStatusButton = async () => {
   fetchOrder()
+}
+
+const trackOrderItem = () => {
+  isTrackingOrderDialogVisible.value = true
 }
 
 </script>
@@ -189,7 +194,14 @@ const callbackOrderStatusButton = async () => {
 								<h6 class="text-h6">
 									Kurir
 								</h6>
-								<span class="mb-2">{{ orderData.delivery.delivery_method }}</span>
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="mb-2">{{ orderData.delivery.delivery_method }}</span>
+                  <span v-if="orderIsShipped(orderData.progress_active.status_code)" style="font-size:smaller;">
+                    <button @click="trackOrderItem">
+                      <span class="text-primary">Lacak</span>
+                    </button>
+                  </span>
+                </div>
 								<h6 class="text-h6">
 									No.Resi
 								</h6>
@@ -273,10 +285,15 @@ const callbackOrderStatusButton = async () => {
 				:orientation="1"
 				:border="false"
 				title="Pesanan tidak ditemukan"
-				description="Maaf pesanana yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi."
+				description="Maaf pesanan yang anda cari tidak ditemukan.<br/>Silahkan coba beberapa saat lagi."
 				btn-text="Kelola Pesanan"
 				@click-button="() => $router.push('/pesanan/semua')"
 				/>
 		</VCard>
+    <TrackingOrderDialog
+      v-model:is-dialog-visible="isTrackingOrderDialogVisible"
+      v-model:order-id="orderData.id"
+      v-model:shipping-type="orderData.delivery.shipping_type"
+    />
   </div>
 </template>
