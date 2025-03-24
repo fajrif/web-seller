@@ -1,7 +1,7 @@
 <script setup>
 import DashboardBanner from '@/views/dashboards/analytics/DashboardBanner.vue'
 import ShippingOptions from '@/views/dashboards/analytics/ShippingOptions.vue'
-import CurrentBalance from '@/views/dashboards/analytics/CurrentBalance.vue'
+import CurrentBalance from '@/views/pages/iconcash/CurrentBalance.vue'
 import OrderActivity from '@/views/dashboards/analytics/OrderActivity.vue'
 import StockStatus from '@/views/dashboards/analytics/StockStatus.vue'
 import PopularProducts from '@/views/dashboards/analytics/PopularProducts.vue'

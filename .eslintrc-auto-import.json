@@ -411,6 +411,12 @@
     "dateMoreThanValidator": true,
     "orderIsShipped": true,
     "resolveCustomShipment": true,
-    "resolveStateShipment": true
+    "resolveStateShipment": true,
+    "resolveBalanceStatus": true,
+    "resolveBalanceType": true,
+    "sampleBanks": true,
+    "sampleTransactions": true,
+    "toTitleCase": true,
+    "resolveTransactionAmount": true
   }
 }

@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AcceptOrderDialog: typeof import('./src/components/dialogs/AcceptOrderDialog.vue')['default']
+    AddEditBankAccountDialog: typeof import('./src/components/dialogs/AddEditBankAccountDialog.vue')['default']
     AddEditEtalaseDialog: typeof import('./src/components/dialogs/AddEditEtalaseDialog.vue')['default']
     AddProductFeaturedSelectionDialog: typeof import('./src/components/dialogs/AddProductFeaturedSelectionDialog.vue')['default']
     AddProductSelectionDialog: typeof import('./src/components/dialogs/AddProductSelectionDialog.vue')['default']
@@ -37,6 +38,7 @@ declare module 'vue' {
     CustomRadios: typeof import('./src/@core/components/app-form-elements/CustomRadios.vue')['default']
     CustomRadiosWithIcon: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithIcon.vue')['default']
     CustomRadiosWithImage: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithImage.vue')['default']
+    DeleteBankAccountDialog: typeof import('./src/components/dialogs/DeleteBankAccountDialog.vue')['default']
     DeleteDataDialog: typeof import('./src/components/dialogs/DeleteDataDialog.vue')['default']
     DeleteEtalaseDialog: typeof import('./src/components/dialogs/DeleteEtalaseDialog.vue')['default']
     DeleteProductDialog: typeof import('./src/components/dialogs/DeleteProductDialog.vue')['default']
@@ -59,7 +61,6 @@ declare module 'vue' {
     OrderStatusButton: typeof import('./src/components/OrderStatusButton.vue')['default']
     ProductDescriptionEditor: typeof import('./src/@core/components/ProductDescriptionEditor.vue')['default']
     RequestPickUpDialog: typeof import('./src/components/dialogs/RequestPickUpDialog.vue')['default']
-    ResiOrderViewDialog: typeof import('./src/components/dialogs/ResiOrderViewDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SaveDataDialog: typeof import('./src/components/dialogs/SaveDataDialog.vue')['default']
@@ -70,7 +71,6 @@ declare module 'vue' {
     Stencil: typeof import('./src/components/dialogs/vue-advanced-cropper/Stencil.vue')['default']
     SwiperDialog: typeof import('./src/components/dialogs/SwiperDialog.vue')['default']
     TablePagination: typeof import('./src/@core/components/TablePagination.vue')['default']
-    TableResiOrder: typeof import('./src/components/TableResiOrder.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./src/@core/components/TiptapEditor.vue')['default']
     TrackingOrderDialog: typeof import('./src/components/dialogs/TrackingOrderDialog.vue')['default']

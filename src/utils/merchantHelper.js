@@ -69,8 +69,8 @@ export const getInfoAttrs = merchant => {
 }
 
 export const updateUserDataStore = async (callback) => {
+  const userDataStore = useUserDataStore()
   try {
-		const userDataStore = useUserDataStore()
     // GET Data Merchant
     const resCore = await $apiCore('/seller/query/merchant/profile-toko', {
       method: 'GET',
@@ -79,18 +79,18 @@ export const updateUserDataStore = async (callback) => {
       },
     })
 
-    const merchant = resCore.data.merchant
+    const data = resCore.data
 
-    userDataStore.setUserData(merchant)
+    userDataStore.setUserData(data)
 
     await nextTick(() => {
 			callback()
     })
 
   } catch (err) {
-		useCookie('accessToken').value = null
-		// remove user-data storage here
-		userDataStore.clear()
+    useCookie('accessToken').value = null
+    // remove user-data storage here
+    userDataStore.clear()
     console.error(err)
   }
 }

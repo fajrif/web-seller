@@ -366,12 +366,14 @@ export const useUserDataStore = defineStore('userData', () => {
   const name = ref()
   const photo_url = ref()
   const status = ref()
+  const phone = ref()
 
-  function setUserData(merchant) {
-		id.value = merchant.id
-		name.value = merchant.name
-		photo_url.value = merchant.photo_url
-		status.value = merchant.status
+  function setUserData(data) {
+		id.value = data.merchant.id
+		name.value = data.merchant.name
+		photo_url.value = data.merchant.photo_url
+		status.value = data.merchant.status
+		phone.value = data.user.phone
   }
 
   function clear() {
@@ -385,10 +387,11 @@ export const useUserDataStore = defineStore('userData', () => {
 			name.value = null
 			photo_url.value = null
 			status.value = null
+			phone.value = null
 		});
   }
 
-  return { id, name, photo_url, status, setUserData, clear }
+  return { id, name, photo_url, status, phone, setUserData, clear }
 }, {
   persist: {
     storage: localStorage,

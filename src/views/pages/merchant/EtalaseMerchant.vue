@@ -128,7 +128,7 @@ const deleteItem = (id, name, jml) => {
                   <th class="text-center">
                     Jumlah Produk
                   </th>
-                  <th/>
+                  <th><th/>
                 </tr>
               </thead>
               <tbody>

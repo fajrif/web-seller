@@ -151,6 +151,8 @@ declare global {
   const regexValidator: typeof import('./src/@core/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/@core/utils/plugins.js')['registerPlugins']
   const requiredValidator: typeof import('./src/@core/utils/validators.js')['requiredValidator']
+  const resolveBalanceStatus: typeof import('./src/utils/iconCashHelper.js')['resolveBalanceStatus']
+  const resolveBalanceType: typeof import('./src/utils/iconCashHelper.js')['resolveBalanceType']
   const resolveCompleteAddress: typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveCustomShipment: typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']
@@ -160,10 +162,13 @@ declare global {
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
   const resolveStatusOrder: typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']
   const resolveStock: typeof import('./src/utils/productHelper.js')['resolveStock']
+  const resolveTransactionAmount: typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const resolveVuetifyTheme: typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']
   const rgbaToHex: typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']
+  const sampleBanks: typeof import('./src/utils/iconCashHelper.js')['sampleBanks']
   const sampleDataOrders: typeof import('./src/utils/orderHelper.js')['sampleDataOrders']
+  const sampleTransactions: typeof import('./src/utils/iconCashHelper.js')['sampleTransactions']
   const sanitizeNullChilds: typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
@@ -188,6 +193,7 @@ declare global {
   const toReactive: typeof import('@vueuse/core')['toReactive']
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
+  const toTitleCase: typeof import('./src/utils/iconCashHelper.js')['toTitleCase']
   const toValue: typeof import('vue')['toValue']
   const triggerRef: typeof import('vue')['triggerRef']
   const truncateText: typeof import('./src/utils/productHelper.js')['truncateText']
@@ -551,6 +557,8 @@ declare module 'vue' {
     readonly regexValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./src/@core/utils/plugins.js')['registerPlugins']>
     readonly requiredValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['requiredValidator']>
+    readonly resolveBalanceStatus: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveBalanceStatus']>
+    readonly resolveBalanceType: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveBalanceType']>
     readonly resolveCompleteAddress: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveCustomShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']>
@@ -560,9 +568,11 @@ declare module 'vue' {
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveStock: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStock']>
+    readonly resolveTransactionAmount: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
+    readonly sampleBanks: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['sampleBanks']>
     readonly sanitizeNullChilds: UnwrapRef<typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
@@ -587,6 +597,7 @@ declare module 'vue' {
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
+    readonly toTitleCase: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['toTitleCase']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly truncateText: UnwrapRef<typeof import('./src/utils/productHelper.js')['truncateText']>

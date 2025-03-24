@@ -160,6 +160,50 @@ $card-spacer-content: 16px;
   }
 }
 
+.carousel-delimiter-bottom-end {
+  .v-carousel__controls {
+    justify-content: end;
+    block-size: 40px;
+    padding-inline: 1rem;
+
+    .v-btn--icon.v-btn--density-default {
+      block-size: calc(var(--v-btn-height) + -10px);
+      inline-size: calc(var(--v-btn-height) + -8px);
+
+      &.v-btn--active {
+        color: #bbb;
+      }
+
+      .v-btn__overlay {
+        opacity: 0;
+      }
+
+      .v-ripple__container {
+        display: none;
+      }
+
+      .v-btn__content {
+        .v-icon {
+          block-size: 8px !important;
+          font-size: 8px !important;
+          inline-size: 8px !important;
+        }
+      }
+    }
+  }
+
+  @each $color-name in variables.$theme-colors-name {
+
+    &.dots-active-#{$color-name} {
+      .v-carousel__controls {
+        .v-btn--active {
+          color: rgb(var(--v-theme-#{$color-name})) !important;
+        }
+      }
+    }
+  }
+}
+
 .v-timeline-item {
   .app-timeline-title {
     color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));

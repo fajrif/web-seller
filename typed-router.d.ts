@@ -24,6 +24,8 @@ declare module 'vue-router/auto-routes' {
     'event': RouteRecordInfo<'event', '/event', Record<never, never>, Record<never, never>>,
     'event-products': RouteRecordInfo<'event-products', '/event/products', Record<never, never>, Record<never, never>>,
     'forgot-password': RouteRecordInfo<'forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
+    'iconcash-balance': RouteRecordInfo<'iconcash-balance', '/iconcash/balance', Record<never, never>, Record<never, never>>,
+    'iconcash-bank': RouteRecordInfo<'iconcash-bank', '/iconcash/bank', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'merchant-tab': RouteRecordInfo<'merchant-tab', '/merchant/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'not-authorized': RouteRecordInfo<'not-authorized', '/not-authorized', Record<never, never>, Record<never, never>>,
