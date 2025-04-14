@@ -1,4 +1,6 @@
 <script setup>
+import bgBanks from '@images/illustrations/bg-banks.png'
+
 const props = defineProps({
   isDialogVisible: {
     type: Boolean,
@@ -14,6 +16,10 @@ const props = defineProps({
     required: false,
   },
   accountNo: {
+    type: String,
+    required: false,
+  },
+  accountName: {
     type: String,
     required: false,
   },
@@ -94,6 +100,7 @@ const onSubmit = () => {
 watch(() => props.itemId, (value) => {
 	bankId.value = props.bankId
 	accountNo.value = props.accountNo
+	accountName.value = props.accountName
 });
 </script>
 
@@ -202,8 +209,26 @@ watch(() => props.itemId, (value) => {
                 <span class="tex-body-1 font-weight-regular text-error">{{ errMessage }}</span>
               </template>
               <template v-if="validBankAccount">
-                <h6 class="text-h6">Atas Nama Rekening:</h6>
-                <span class="tex-body-1 font-weight-bold">{{ accountName }}</span>
+                <v-card
+                  class="banks-background"
+                  :style="{ backgroundImage: 'url(' + bgBanks + ')' }"
+                >
+                  <div class="d-flex flex-column align-start justify-start w-100 py-2 px-4">
+                    <div class="d-flex justify-space-between mb-2">
+                      <VImg
+                        :src="resolveBankLogo(bankId)"
+                        width="100"
+                        height="50"
+                        />
+                    </div>
+                    <h6 class="text-h6 pt-2 mb-1">
+                      {{ accountNo }}
+                    </h6>
+                    <h6 class="text-h6 font-weight-bold mb-0">
+                      {{ accountName }}
+                    </h6>
+                  </div>
+                </v-card>
               </template>
             </VCol>
           </VRow>
@@ -220,6 +245,4 @@ watch(() => props.itemId, (value) => {
       </VForm>
     </VCard>
   </VDialog>
-
-
 </template>

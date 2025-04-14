@@ -1,23 +1,32 @@
 <script setup>
-import { useUserDataStore } from '@core/stores/config'
+import logoIconCash from '@images/logos/iconcash-logo.png'
 import { useMessageStore } from '@core/stores/config'
 
-const userData = useUserDataStore()
+const router = useRouter()
 const messageStore = useMessageStore()
 
+const isLoggedInIconCash = ref(false)
 const isAddBankAccountDialogVisible = ref(false)
 const isEditBankAccountDialogVisible = ref(false)
 const isDeleteBankAccountDialogVisible = ref(false)
+const isSuccessConfirmationDialogVisible = ref(false)
 
 const newItemId = ref()
 const itemId = ref(0)
 const itemBankId = ref(0)
 const itemBankName = ref('')
 const itemAccountNo = ref('')
+const itemAccountName = ref('')
+const confirmTitle = ref('')
+const confirmMessage = ref('')
 
 const { data: dataBankAccounts, execute: fetchBankAccounts } = await useApiCore("/iconcash/query/customerbank/search")
 
 const bankAccountsData = computed(() => dataBankAccounts.value.data)
+
+if(dataBankAccounts.value.status && dataBankAccounts.value.status == 200) {
+  isLoggedInIconCash.value = true
+}
 
 const addBankAccount = async (id, bank_id, account_name, account_no) => {
   try {
@@ -34,8 +43,9 @@ const addBankAccount = async (id, bank_id, account_name, account_no) => {
 
     // Refetch showcases
     fetchBankAccounts()
-    let msg = res.message
-    messageStore.setMessage('success', msg)
+    confirmTitle.value = "Selamat"
+    confirmMessage.value = "Akun bank berhasil ditambahkan"
+    isSuccessConfirmationDialogVisible.value = true
   } catch (error) {
     messageStore.setMessage('error', 'Gagal menambahkan akun bank')
     console.error("Error on add bank account merchant:", error)
@@ -57,8 +67,9 @@ const updateBankAccount = async (id, bank_id, account_name, account_no) => {
 
     // Refetch showcases
     fetchBankAccounts()
-    let msg = res.message
-    messageStore.setMessage('success', msg)
+    confirmTitle.value = "Selamat"
+    confirmMessage.value = "Akun bank berhasil diubah"
+    isSuccessConfirmationDialogVisible.value = true
   } catch (error) {
     messageStore.setMessage('error', 'Gagal update akun bank')
     console.error("Error on add bank account merchant:", error)
@@ -80,13 +91,18 @@ const deleteBankAccount = async (id) => {
 }
 
 const addItem = () => {
+  confirmTitle.value = ''
+  confirmMessage.value = ''
   isAddBankAccountDialogVisible.value = true
 }
 
-const editItem = (id, bank_id, account_no) => {
+const editItem = (id, bank_id, account_no, account_name) => {
+  confirmTitle.value = ''
+  confirmMessage.value = ''
   itemId.value = id
   itemBankId.value = bank_id
   itemAccountNo.value = account_no
+  itemAccountName.value = account_name
   isEditBankAccountDialogVisible.value = true
 }
 
@@ -96,12 +112,23 @@ const deleteItem = (id, bank_name, account_no) => {
   itemAccountNo.value = account_no
   isDeleteBankAccountDialogVisible.value = true
 }
+
+const goBack = () => {
+  router.go(-1)
+}
 </script>
 
 <template>
   <div>
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-4">
-      <div class="d-flex flex-column justify-center">
+      <div class="d-flex justify-center">
+        <VBtn
+          icon="tabler-arrow-narrow-left"
+          variant="text"
+          color="black"
+          class="me-1"
+          @click="goBack()"
+        />
         <h4 class="text-h4 font-weight-medium">
           Kelola Akun Bank
         </h4>
@@ -109,14 +136,7 @@ const deleteItem = (id, bank_name, account_no) => {
 
       <div class="d-flex gap-4 align-center flex-wrap">
         <VBtn
-          color="primary"
-          variant="tonal"
-          style="width:fit-content"
-          @click="$router.push('/iconcash/balance')"
-        >
-          Lihat Balance
-        </VBtn>
-        <VBtn
+          v-if="isLoggedInIconCash"
           color="primary"
           style="width:fit-content"
           prepend-icon="tabler-plus"
@@ -130,9 +150,12 @@ const deleteItem = (id, bank_name, account_no) => {
       <VCardText>
         <VRow>
           <!-- 👉 Bank Account list data	-->
-          <VCol cols="12">
+          <VCol
+            v-if="isLoggedInIconCash"
+            cols="12"
+            >
             <VTable
-              v-if="bankAccountsData.length > 0"
+              v-if="!isEmpty(bankAccountsData)"
               class="text-no-wrap"
             >
               <thead>
@@ -156,9 +179,9 @@ const deleteItem = (id, bank_name, account_no) => {
                 >
                   <td>
                     <div class="d-flex align-center py-2 gap-x-4 mb-0">
-                      <div class="me-2">
+                      <div class="ma-2">
                         <VImg
-                          :src="item.bank.logoUrl"
+                          :src="resolveBankLogo(item.bank.id)"
                           width="100"
                         />
                       </div>
@@ -179,7 +202,7 @@ const deleteItem = (id, bank_name, account_no) => {
                         size="small"
                         variant="tonal"
                         color="secondary"
-                        @click="editItem(item.id, item.bank.id, item.account_number)"
+                        @click="editItem(item.id, item.bank.id, item.account_number, item.account_name)"
                       >
                         <VIcon icon="tabler-pencil" />
                       </VBtn>
@@ -206,6 +229,18 @@ const deleteItem = (id, bank_name, account_no) => {
 								/>
 						</template>
           </VCol>
+          <VCol
+            v-else
+            cols="12"
+            >
+            <EmptyData
+              description="Anda belum melakukan aktivasi iconcash anda.<br/>Silahkan lakukan aktivasi terlebih dahulu"
+              wrapper-class="px-10 py-15"
+              :img-src="logoIconCash"
+              btn-text="Kembali"
+              @click-button="goBack"
+              />
+          </VCol>
         </VRow>
       </VCardText>
     </VCard>
@@ -219,6 +254,7 @@ const deleteItem = (id, bank_name, account_no) => {
       v-model:item-id="itemId"
       v-model:bank-id="itemBankId"
       v-model:account-no="itemAccountNo"
+      v-model:account-name="itemAccountName"
       @form-submitted="updateBankAccount"
     />
     <DeleteBankAccountDialog
@@ -227,6 +263,11 @@ const deleteItem = (id, bank_name, account_no) => {
       v-model:bank-name="itemBankName"
       v-model:account-no="itemAccountNo"
       @form-submitted="deleteBankAccount"
+    />
+    <SuccessConfirmationDialog
+      v-model:is-dialog-visible="isSuccessConfirmationDialogVisible"
+      v-model:title="confirmTitle"
+      v-model:message="confirmMessage"
     />
   </div>
 </template>

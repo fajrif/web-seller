@@ -38,7 +38,7 @@ const shippingOptions = [
 
 <template>
   <VCard>
-    <VCardItem class="py-3">
+    <VCardItem class="py-6">
       <VCardTitle>Jasa Logistik</VCardTitle>
       <template #append>
         <div>

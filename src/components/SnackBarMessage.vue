@@ -24,9 +24,9 @@ const snackbar = useMessageStore()
 					:icon="snackbar.icon"
 					class="me-2 mt-1"
 				/>
-				<div class="d-flex flex-column text-black">
+				<div class="d-flex flex-column">
 					<h2 class="text-black" style="font-size:1.3em;">{{ snackbar.title }}</h2>
-					<p class="text-body-1 fw-500 mb-0">
+					<p class="text-body-1 text-black fw-500 mb-0">
 						{{ snackbar.text }}
 					</p>
 				</div>

@@ -33,6 +33,8 @@ declare global {
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createGenericProjection: typeof import('@vueuse/math')['createGenericProjection']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
+  const createHash: typeof import('./src/utils/iconCashHelper.js')['createHash']
+  const createHashPin: typeof import('./src/utils/iconCashHelper.js')['createHashPin']
   const createInjectionState: typeof import('@vueuse/core')['createInjectionState']
   const createPinia: typeof import('pinia')['createPinia']
   const createProjection: typeof import('@vueuse/math')['createProjection']
@@ -153,6 +155,7 @@ declare global {
   const requiredValidator: typeof import('./src/@core/utils/validators.js')['requiredValidator']
   const resolveBalanceStatus: typeof import('./src/utils/iconCashHelper.js')['resolveBalanceStatus']
   const resolveBalanceType: typeof import('./src/utils/iconCashHelper.js')['resolveBalanceType']
+  const resolveBankLogo: typeof import('./src/utils/iconCashHelper.js')['resolveBankLogo']
   const resolveCompleteAddress: typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveCustomShipment: typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']
@@ -447,6 +450,7 @@ declare module 'vue' {
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGenericProjection: UnwrapRef<typeof import('@vueuse/math')['createGenericProjection']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
+    readonly createHash: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['createHash']>
     readonly createInjectionState: UnwrapRef<typeof import('@vueuse/core')['createInjectionState']>
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
     readonly createProjection: UnwrapRef<typeof import('@vueuse/math')['createProjection']>
@@ -559,6 +563,7 @@ declare module 'vue' {
     readonly requiredValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['requiredValidator']>
     readonly resolveBalanceStatus: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveBalanceStatus']>
     readonly resolveBalanceType: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveBalanceType']>
+    readonly resolveBankLogo: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveBankLogo']>
     readonly resolveCompleteAddress: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveCustomShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']>
@@ -572,7 +577,6 @@ declare module 'vue' {
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
-    readonly sampleBanks: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['sampleBanks']>
     readonly sanitizeNullChilds: UnwrapRef<typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>

@@ -24,6 +24,7 @@ export const useApiCore = createFetch({
     },
 		onFetchError(ctx) {
       const { data, response } = ctx
+      let parsedData = null
       try {
         // Invalid or expired JWT
         if(response.status == 401) {
@@ -35,11 +36,12 @@ export const useApiCore = createFetch({
 					userData.clear()
 					window.location.href = '/login'
         }
-				return ctx;
+        parsedData = destr(data)
       }
       catch (error) {
         console.error(error)
       }
+      return { data: parsedData, response }
     },
     afterFetch(ctx) {
       const { data, response } = ctx

@@ -1,34 +1,45 @@
 import bca from '@images/logos/banks/bca.png'
 import mandiri from '@images/logos/banks/mandiri.png'
 import bni from '@images/logos/banks/bni.png'
+import bri from '@images/logos/banks/bri.png'
+import mandiri_syariah from '@images/logos/banks/mandiri_syariah.png'
+import btn from '@images/logos/banks/btn.png'
+import bank_jateng from '@images/logos/banks/bank_jateng.png'
+import bank_sumut from '@images/logos/banks/bank_sumut.png'
 
-export const sampleBanks = [
-  {
-    id: 380,
-    bank: {
-      name: 'Bank BCA',
-      logoUrl: bca,
-    },
-    account_name: 'floyd miles',
-    account_number: '127 000 2323',
-  }, {
-    id: 381,
-    bank: {
-      name: 'Bank Mandiri',
-      logoUrl: mandiri,
-    },
-    account_name: 'floyd miles',
-    account_number: '127 2323 2323',
-  }, {
-    id: 382,
-    bank: {
-      name: 'Bank BNI',
-      logoUrl: bni,
-    },
-    account_name: 'floyd miles',
-    account_number: '127 111 7777',
-  },
-]
+export const resolveBankLogo = (bankId) => {
+  var logoUrl = ""
+
+  switch(bankId) {
+    case 1:
+      logoUrl = bca;
+      break;
+    case 2:
+      logoUrl = mandiri;
+      break;
+    case 3:
+      logoUrl = bni;
+      break;
+    case 5:
+      logoUrl = bri;
+      break;
+    case 6:
+      logoUrl = mandiri_syariah;
+      break;
+    case 13:
+      logoUrl = btn;
+      break;
+    case 30:
+      logoUrl = bank_jateng;
+      break;
+    case 34:
+      logoUrl = bank_sumut;
+      break;
+    default:
+      logoUrl = ""
+  }
+  return logoUrl
+}
 
 export const resolveBalanceStatus = {
   SUCCESS: 'success',
@@ -80,3 +91,14 @@ export const toTitleCase = str => {
     text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
   );
 }
+
+export const createHash = async (text) => {
+  const utf8 = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((bytes) => bytes.toString(16).padStart(2, '0'))
+    .join('');
+  return hashHex;
+}
+

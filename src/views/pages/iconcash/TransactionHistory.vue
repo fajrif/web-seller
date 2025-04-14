@@ -1,16 +1,41 @@
 <script setup>
+const props = defineProps({
+  triggerReset: {
+    type: Boolean,
+    required: true,
+  },
+})
 
-const { data: dataBalances, execute: fetchBalances, isFinished: loading } = await useApiCore("/iconcash/history/saldo-pendapatan")
+const isLoggedInIconCash = ref(false)
 
-const transactions = computed(() => dataBalances.value.data.filter((t) => t.source_account_type === "Saldo Pendapatan"))
+const { data: dataBalances, execute: fetchBalances, isFinished: loading } = await useApiCore("/iconcash/history/saldo-pendapatan?page=1")
+
+const transactions = computed(() => {
+  var _data = []
+  if(dataBalances.value?.data) {
+    isLoggedInIconCash.value = true
+    _data = dataBalances.value.data.filter((t) => t.source_account_type === "Saldo Pendapatan")
+  } else {
+    isLoggedInIconCash.value = false
+  }
+  return _data
+})
 
 const getPaddingStyle = index => index ? 'padding-block-end: 1.5rem;' : 'padding-block: 1.5rem;'
+
+watch(() => props.triggerReset, (newVal, oldVal) => {
+	if(newVal !== oldVal){
+		fetchBalances()
+	}
+});
 </script>
 
 <template>
   <VCard title="History Transaksi">
-    <VCardText>
-      <VTable class="text-no-wrap transaction-table">
+    <VCardText v-if="transactions && isLoggedInIconCash">
+      <VTable
+        v-if="!isEmpty(transactions)"
+        class="text-no-wrap transaction-table">
         <thead>
           <tr>
             <th>TRANSAKSI</th>
@@ -70,6 +95,24 @@ const getPaddingStyle = index => index ? 'padding-block-end: 1.5rem;' : 'padding
                 {{ resolveTransactionAmount(transaction.transaction_type_name, transaction.amount_fee).text }}
               </div>
             </td>
+          </tr>
+        </tbody>
+      </VTable>
+      <!-- 👉 Empty Transaction History -->
+      <template v-else>
+        <EmptyData
+          description="Anda belum memiliki transaksi history<br/>Silahkan lakukan transaksi pada iconcash anda."
+          wrapper-class="px-10 py-15"
+          />
+      </template>
+    </VCardText>
+    <VCardText v-else>
+      <VTable class="text-no-wrap transaction-table">
+        <tbody>
+          <tr>
+            <td><v-skeleton-loader type="list-item-avatar"></v-skeleton-loader></td>
+            <td><v-skeleton-loader type="paragraph"></v-skeleton-loader></td>
+            <td><v-skeleton-loader type="paragraph"></v-skeleton-loader></td>
           </tr>
         </tbody>
       </VTable>

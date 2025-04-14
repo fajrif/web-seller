@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AcceptOrderDialog: typeof import('./src/components/dialogs/AcceptOrderDialog.vue')['default']
+    ActivationIconCashDialog: typeof import('./src/components/dialogs/ActivationIconCashDialog.vue')['default']
     AddEditBankAccountDialog: typeof import('./src/components/dialogs/AddEditBankAccountDialog.vue')['default']
     AddEditEtalaseDialog: typeof import('./src/components/dialogs/AddEditEtalaseDialog.vue')['default']
     AddProductFeaturedSelectionDialog: typeof import('./src/components/dialogs/AddProductFeaturedSelectionDialog.vue')['default']
@@ -31,6 +32,9 @@ declare module 'vue' {
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
+    ChangeIconCashDialog: typeof import('./src/components/ChangeIconCashDialog.vue')['default']
+    ChangeIconCashPinDialog: typeof import('./src/components/dialogs/ChangeIconCashPinDialog.vue')['default']
+    ConfirmationWithdrawDialog: typeof import('./src/components/dialogs/ConfirmationWithdrawDialog.vue')['default']
     CustomCheckboxes: typeof import('./src/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
     CustomCheckboxesWithIcon: typeof import('./src/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']
     CustomCheckboxesWithImage: typeof import('./src/@core/components/app-form-elements/CustomCheckboxesWithImage.vue')['default']
@@ -69,6 +73,8 @@ declare module 'vue' {
     Shortcuts: typeof import('./src/@core/components/Shortcuts.vue')['default']
     SnackBarMessage: typeof import('./src/components/SnackBarMessage.vue')['default']
     Stencil: typeof import('./src/components/dialogs/vue-advanced-cropper/Stencil.vue')['default']
+    SuccessConfirmationDialog: typeof import('./src/components/dialogs/SuccessConfirmationDialog.vue')['default']
+    SuccessWithdrawDialog: typeof import('./src/components/dialogs/SuccessWithdrawDialog.vue')['default']
     SwiperDialog: typeof import('./src/components/dialogs/SwiperDialog.vue')['default']
     TablePagination: typeof import('./src/@core/components/TablePagination.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']

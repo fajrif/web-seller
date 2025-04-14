@@ -30,6 +30,7 @@ const elementId = computed(() => {
 const label = computed(() => useAttrs().label)
 const rules = computed(() => useAttrs().rules)
 const placeholder = computed(() => useAttrs().placeholder)
+const disabled = computed(() => useAttrs().disabled)
 
 watch(() => props.modelValue,
   (value) => {
@@ -55,6 +56,7 @@ watch(() => props.modelValue,
 			prefix="Rp"
 			:rules="rules"
 			:placeholder="placeholder"
+			:disabled="disabled"
       :id="elementId"
 			ref="inputRef"
     >
