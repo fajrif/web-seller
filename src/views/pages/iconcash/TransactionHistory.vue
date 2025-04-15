@@ -8,96 +8,171 @@ const props = defineProps({
 
 const isLoggedInIconCash = ref(false)
 
-const { data: dataBalances, execute: fetchBalances, isFinished: loading } = await useApiCore("/iconcash/history/saldo-pendapatan?page=1")
+// Data table options
+const page = ref(1)
+const dateRange = ref('')
+const startDate = ref('')
+const endDate = ref('')
+
+const {
+  data: dataBalances,
+  execute: fetchBalances, isFinished: loading,
+} = await useApiCore(createUrl('/iconcash/history/saldo-pendapatanv2', {
+  query: {
+    start_date: startDate,
+    end_date: endDate,
+    page,
+    sync_data: true
+  },
+}))
 
 const transactions = computed(() => {
   var _data = []
-  if(dataBalances.value?.data) {
+  if(dataBalances.value?.data?.data) {
     isLoggedInIconCash.value = true
-    _data = dataBalances.value.data.filter((t) => t.source_account_type === "Saldo Pendapatan")
+    _data = dataBalances.value.data.data
   } else {
     isLoggedInIconCash.value = false
   }
   return _data
 })
-
-const getPaddingStyle = index => index ? 'padding-block-end: 1.5rem;' : 'padding-block: 1.5rem;'
+const totalTransaction = computed(() => dataBalances.value.data.total)
 
 watch(() => props.triggerReset, (newVal, oldVal) => {
 	if(newVal !== oldVal){
 		fetchBalances()
 	}
 });
+
+watch(dateRange, (newVal, oldVal) => {
+  if (newVal !== null && newVal !== oldVal) {
+		var arr = newVal.split(' to ')
+		startDate.value = arr[0]
+		endDate.value = arr[0]
+		if(arr.length > 1){
+			endDate.value = arr[1]
+		}
+  } else {
+    startDate.value = ''
+    endDate.value = ''
+  }
+  fetchBalances()
+})
+
+const headersTransaction = [
+  {
+    title: 'TRANSAKSI',
+    sortable: false,
+    key: 'transaksi',
+  },
+  {
+    title: 'TANGGAL',
+    sortable: false,
+    key: 'tanggal',
+  },
+  {
+    title: 'STATUS',
+    sortable: false,
+    key: 'status',
+  },
+  {
+    title: 'NOMINAL',
+    sortable: false,
+    key: 'nominal',
+  },
+]
 </script>
 
 <template>
-  <VCard title="History Transaksi">
+  <VCard>
     <VCardText v-if="transactions && isLoggedInIconCash">
-      <VTable
+      <div class="d-flex flex-wrap gap-4 mb-6">
+        <div class="d-flex align-center">
+          <h4 class="text-h4 font-weight-medium">History Transaksi</h4>
+        </div>
+        <VSpacer />
+        <div class="d-flex gap-4 flex-wrap align-center">
+          <AppDateTimePicker
+            v-model="dateRange"
+            placeholder="Pilih Tanggal"
+            style="inline-size: 200px;"
+            :disabled="!loading"
+            :config="{ mode: 'range' }"
+            />
+        </div>
+      </div>
+      <VProgressLinear
+        v-if="!loading"
+        height="3"
+        color="secondary"
+        :rounded="false"
+        indeterminate
+        />
+      <VDataTable
         v-if="!isEmpty(transactions)"
-        class="text-no-wrap transaction-table">
-        <thead>
-          <tr>
-            <th>TRANSAKSI</th>
-            <th>TANGGAL</th>
-            <th>STATUS</th>
-            <th>NOMINAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(transaction, index) in transactions"
-            :key="index"
-            >
-            <td :style="getPaddingStyle(index)">
-              <div class="d-flex align-center">
-                <VAvatar
-                  color="primary"
-                  variant="tonal"
-                  rounded
-                  size="38"
-                  class="me-4"
-                  >
-                  <VIcon
-                    :icon="resolveBalanceType(transaction.transaction_type_name).icon"
-                    size="26"
-                    />
-                </VAvatar>
-                <div>
-                  <p class="font-weight-medium text-base mb-0 text-high-emphasis">
-                    {{ resolveBalanceType(transaction.transaction_type_name).text }}
-                  </p>
-                  <p class="text-sm mb-0">
-                    {{ transaction.client_ref }}
-                  </p>
-                </div>
-              </div>
-            </td>
-            <td :style="getPaddingStyle(index)">
-              <p class="text-high-emphasis text-body-2 mb-0">
-                {{ toLocaleDateTime(transaction.transaction_date) }}
+        :headers="headersTransaction"
+        :items="transactions"
+        :items-per-page="10"
+      >
+        <!-- Transaksi -->
+        <template #item.transaksi="{ item }">
+          <div class="d-flex align-center my-3">
+            <VAvatar
+              color="primary"
+              variant="tonal"
+              rounded
+              size="38"
+              class="me-4"
+              >
+              <VIcon
+                :icon="resolveBalanceType(item.transaction_type_name).icon"
+                size="26"
+                />
+            </VAvatar>
+            <div>
+              <p class="font-weight-medium text-base mb-0 text-high-emphasis">
+                {{ resolveBalanceType(item.transaction_type_name).text }}
               </p>
-            </td>
-            <td :style="getPaddingStyle(index)">
-              <VChip
-                label
-                :color="resolveBalanceStatus[transaction.status]"
-                size="small"
-                >
-                {{ toTitleCase(transaction.status) }}
-              </VChip>
-            </td>
-            <td :style="getPaddingStyle(index)">
-              <div
-                class="text-high-emphasis font-weight-bold"
-                :class="resolveTransactionAmount(transaction.transaction_type_name, transaction.amount_fee).color"
-                >
-                {{ resolveTransactionAmount(transaction.transaction_type_name, transaction.amount_fee).text }}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </VTable>
+              <p class="text-sm mb-0">
+                {{ item.client_ref }}
+              </p>
+            </div>
+          </div>
+        </template>
+        <!-- Tanggal -->
+        <template #item.tanggal="{ item }">
+          <span class="text-high-emphasis text-body-2 mb-0">
+            {{ toLocaleDateTime(item.transaction_date) }}
+          </span>
+        </template>
+        <!-- Status -->
+        <template #item.status="{ item }">
+          <VChip
+            label
+            :color="resolveBalanceStatus[item.status]"
+            size="small"
+            >
+            {{ toTitleCase(item.status) }}
+          </VChip>
+        </template>
+        <!-- Status -->
+        <template #item.nominal="{ item }">
+          <div
+            class="text-high-emphasis font-weight-bold"
+            :class="resolveTransactionAmount(item.transaction_type_name, item.amount_fee).color"
+            >
+            {{ resolveTransactionAmount(item.transaction_type_name, item.amount_fee).text }}
+          </div>
+        </template>
+        <!-- pagination -->
+        <template #bottom>
+          <TablePagination
+            v-model:page="page"
+            :items-per-page="10"
+            :total-items="totalTransaction"
+            />
+        </template>
+      </VDataTable>
       <!-- 👉 Empty Transaction History -->
       <template v-else>
         <EmptyData
