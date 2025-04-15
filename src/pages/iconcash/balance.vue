@@ -17,12 +17,6 @@ const reloadCards = () => {
     <VRow>
       <VCol cols="12" class="pb-0">
         <div class="d-flex flex-wrap align-center">
-          <div class="me-4">
-            <VImg
-              :src="logoIconCash"
-              width="50"
-              />
-          </div>
           <h4 class="text-h4 font-weight-medium">
             ICON Cash Dashboard
           </h4>

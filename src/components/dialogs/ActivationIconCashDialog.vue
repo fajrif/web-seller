@@ -376,6 +376,8 @@ const openForgotPinDialog = () => {
                 <VBtn
                   color="primary"
                   class="w-100"
+                  :loading="loading"
+                  :disabled="loading"
                   @click="onRequestOTP"
                   >
                   Kirim Kode OTP
@@ -403,17 +405,21 @@ const openForgotPinDialog = () => {
                   <VBtn
                     color="primary"
                     class="w-100"
+                    :loading="loading"
+                    :disabled="loading"
                     @click="onRequestOTP"
                     >
                     Kirim Kode OTP
                   </VBtn>
-                  <a
-                    href="#"
+                  <VBtn
+                    color="primary"
+                    variant="plain"
                     class="text-h6 text-medium-emphasis text-primary"
+                    :disabled="loading"
                     @click="openForgotPinDialog"
                     >
                     Lupa PIN
-                  </a>
+                  </VBtn>
                 </div>
               </div>
             </VCol>
