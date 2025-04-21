@@ -33,10 +33,12 @@ const props = defineProps({
 
 const emit = defineEmits([
   'update:isDialogVisible',
+  'closeWindow',
 ])
 
 const onClose = () => {
   emit('update:isDialogVisible', false)
+  emit('closeWindow')
 }
 </script>
 

@@ -373,7 +373,7 @@ export const useUserDataStore = defineStore('userData', () => {
 		name.value = data.merchant.name
 		photo_url.value = data.merchant.photo_url
 		status.value = data.merchant.status
-		phone.value = data.user.phone
+		phone.value = data.merchant.phone_office
   }
 
   function clear() {

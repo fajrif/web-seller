@@ -29,7 +29,6 @@ const totalAmount = ref(0)
 const title = ref('')
 const message = ref('')
 
-
 const { data: dataBanks, execute: fetchBanks } = await useApiCore("/iconcash/query/customerbank/search")
 
 const banks = computed(() => dataBanks.value.data)
@@ -152,6 +151,10 @@ const onSubmit = () => {
       }
     }
   })
+}
+
+const displayForgotPassword = () => {
+  refCardBalance.value?.$.exposed.openForgotPinDialog()
 }
 
 watch(isLoggedInIconCash, (val, oldVal) => {
@@ -336,6 +339,7 @@ watch(isLoggedInIconCash, (val, oldVal) => {
       v-model:admin-fee="adminFee"
       v-model:total-amount="totalAmount"
       @form-submitted="displayWithdrawSuccess"
+      @display-forgot-password="displayForgotPassword"
     />
     <SuccessWithdrawDialog
       v-model:is-dialog-visible="isSuccessWithdrawDialogVisible"

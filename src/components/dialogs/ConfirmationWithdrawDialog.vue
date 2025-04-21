@@ -51,6 +51,7 @@ const props = defineProps({
 const emit = defineEmits([
   'update:isDialogVisible',
   'formSubmitted',
+  'displayForgotPassword',
 ])
 
 const isInputPin = ref(false)
@@ -114,6 +115,11 @@ const onSubmit = () => {
     });
   }
 }
+
+const forgotPin = () => {
+  emit('displayForgotPassword')
+  onReset()
+}
 </script>
 
 <template>
@@ -144,9 +150,20 @@ const onSubmit = () => {
                   PIN Transaksi
                 </h4>
               </div>
-              <h6 class="text-body-1 mb-4">
-                Masukkan 6 digit PIN Anda
-              </h6>
+              <div class="d-flex justify-space-between">
+                <h6 class="text-body-1 mb-4">
+                  Masukkan 6 digit PIN Anda
+                </h6>
+                <div class="text-end">
+                  <a
+                    href="#"
+                    class="text-h6 text-medium-emphasis text-primary"
+                    @click="forgotPin"
+                    >
+                    Lupa Pin
+                  </a>
+                </div>
+              </div>
               <VOtpInput
                 v-model="pin"
                 :disabled="isPinInserted"

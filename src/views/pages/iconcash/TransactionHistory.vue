@@ -14,6 +14,10 @@ const dateRange = ref('')
 const startDate = ref('')
 const endDate = ref('')
 
+const getSyncData = computed(() => {
+  return page.value == 1
+})
+
 const {
   data: dataBalances,
   execute: fetchBalances, isFinished: loading,
@@ -22,7 +26,7 @@ const {
     start_date: startDate,
     end_date: endDate,
     page,
-    sync_data: true
+    sync_data: getSyncData
   },
 }))
 
@@ -40,11 +44,13 @@ const totalTransaction = computed(() => dataBalances.value.data.total)
 
 watch(() => props.triggerReset, (newVal, oldVal) => {
 	if(newVal !== oldVal){
+    page.value = 1
 		fetchBalances()
 	}
 });
 
 watch(dateRange, (newVal, oldVal) => {
+  page.value = 1
   if (newVal !== null && newVal !== oldVal) {
 		var arr = newVal.split(' to ')
 		startDate.value = arr[0]
@@ -101,18 +107,12 @@ const headersTransaction = [
             />
         </div>
       </div>
-      <VProgressLinear
-        v-if="!loading"
-        height="3"
-        color="secondary"
-        :rounded="false"
-        indeterminate
-        />
       <VDataTable
         v-if="!isEmpty(transactions)"
         :headers="headersTransaction"
         :items="transactions"
         :items-per-page="10"
+        :loading="!loading"
       >
         <!-- Transaksi -->
         <template #item.transaksi="{ item }">

@@ -12,18 +12,25 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  openForgotPin: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
   'update:isDialogVisible',
   'formActivationSubmitted',
   'formForgotSubmitted',
+  'formRegisterSubmitted',
 ])
 
 const messageStore = useMessageStore()
 
 const loading = ref(false)
 const isForgotHome = ref(false)
+const isNotRegistered = ref(false)
 const isInputOtp = ref(false)
 const isInputPin = ref(false)
 const isOtpError = ref(false)
@@ -46,6 +53,7 @@ const clearStateVariables = (state) => {
   confirmPin.value = ''
   isOtpError.value = false
   isPinError.value = false
+  isNotRegistered.value = false
 
   switch(state) {
     case 'home':
@@ -69,6 +77,12 @@ const clearStateVariables = (state) => {
       isInputOtp.value = false
       isInputPin.value = true
       break;
+    case 'pin-register':
+      isForgotHome.value = false
+      isNotRegistered.value = true
+      isInputOtp.value = false
+      isInputPin.value = true
+      break;
   }
   loading.value = false
 }
@@ -87,6 +101,8 @@ const onRequestOTP = async () => {
       if(res.code === 5006) {
         clearStateVariables('otp')
         errorMessageOtp.value = res.message
+      } else if(res.code === 5000) {
+        clearStateVariables('pin-register')
       } else {
         throw res.message
       }
@@ -152,6 +168,30 @@ const submitChangePin = async (_otp, new_pin, confirm_new_pin) => {
   }
 }
 
+const submitRegisterPin = async (new_pin) => {
+  try {
+    const res = await $apiCore('/iconcash/command/register_customer', {
+      method: 'POST',
+      body: {
+        pin: new_pin,
+      },
+      ignoreResponseError: true
+    })
+
+    if(res.status_code == 200) {
+      emit('formRegisterSubmitted')
+      onReset()
+    } else {
+      throw res.message
+    }
+  } catch (error) {
+    loading.value = false
+    console.error("Error on submit forgot PIN:", error)
+    errorMessagePin.value = error
+    isPinError.value = true
+  }
+}
+
 const onChangePin = () => {
   loading.value = true
   try {
@@ -175,6 +215,30 @@ const onChangePin = () => {
   } catch (error) {
     loading.value = false
     console.error("Error on change forgot PIN:", error)
+    errorMessagePin.value = error
+    isPinError.value = true
+  }
+}
+
+const onRegisterPin = () => {
+  loading.value = true
+  try {
+    if(pin.value.length < 6 || confirmPin.value.length < 6) {
+      throw 'Harap masukkan semua 6 digit PIN'
+    } else {
+      if(pin.value !== confirmPin.value) {
+        throw '6 digit PIN baru anda tidak sama'
+      } else {
+        var newPinString = props.phone + pin.value
+        createHash(newPinString).then((hashedNewPin) => {
+          newPinString = hashedNewPin
+          submitRegisterPin(newPinString)
+        });
+      }
+    }
+  } catch (error) {
+    loading.value = false
+    console.error("Error on register PIN:", error)
     errorMessagePin.value = error
     isPinError.value = true
   }
@@ -226,13 +290,19 @@ const submitActivation = async (_otp, _pin) => {
 const onSubmitPin = () => {
   if(isForgotHome.value === true) {
     onChangePin()
+  } else if(isNotRegistered.value === true) {
+    onRegisterPin()
   } else {
     onActivation()
   }
 }
 
 const onBackToOtp = () => {
-  clearStateVariables('otp')
+  if(isNotRegistered.value === true) {
+    clearStateVariables('home')
+  } else {
+    clearStateVariables('otp')
+  }
 }
 
 const onBackToHome = () => {
@@ -242,6 +312,34 @@ const onBackToHome = () => {
 const openForgotPinDialog = () => {
   isForgotHome.value = true
 }
+
+const resolvePinText = () => {
+  if(isForgotHome.value === true) {
+    return {
+			title: 'Buat PIN Baru',
+      textPin: 'Masukkan 6 digit PIN baru anda',
+      textConfirmPin: 'Konfirmasi PIN Baru Anda',
+    }
+  } else if (isNotRegistered.value === true) {
+    return {
+			title: 'Pendaftaran ICON Cash',
+      textPin: 'Masukkan 6 digit PIN ICON Cash anda',
+      textConfirmPin: 'Konfirmasi PIN ICON Cash Anda',
+    }
+	} else {
+    return {
+			title: 'PIN Transaksi',
+      textPin: 'Masukkan 6 digit PIN ICON Cash anda',
+      textConfirmPin: '',
+    }
+	}
+}
+
+watch(() => props.openForgotPin, (newVal, oldVal) => {
+	if(newVal !== oldVal){
+    isForgotHome.value = newVal
+	}
+});
 
 </script>
 
@@ -313,7 +411,7 @@ const openForgotPinDialog = () => {
                   @click="onBackToOtp"
                   />
                 <h4 class="text-h4 font-weight-medium">
-                  {{ isForgotHome ? 'Buat PIN Baru' : 'PIN Transaksi' }}
+                  {{ resolvePinText().title }}
                 </h4>
               </div>
               <p v-if="!isEmpty(errorMessagePin)"
@@ -323,7 +421,7 @@ const openForgotPinDialog = () => {
               </p>
               <div>
                 <h6 class="text-body-1 mb-4">
-                  {{ `Masukkan 6 digit PIN ${isForgotHome ? 'baru' : 'ICON Cash'} anda` }}
+                  {{ resolvePinText().textPin }}
                 </h6>
                 <VOtpInput
                   v-model="pin"
@@ -334,9 +432,9 @@ const openForgotPinDialog = () => {
                   class="pa-0 mb-4"
                   />
               </div>
-              <div v-if="isForgotHome">
+              <div v-if="isForgotHome || isNotRegistered">
                 <h6 class="text-body-1 mb-1">
-                  Konfirmasi PIN Baru Anda
+                  {{ resolvePinText().textConfirmPin }}
                 </h6>
                 <VOtpInput
                   v-model="confirmPin"

@@ -36,16 +36,22 @@ const isSuccessConfirmationDialogVisible = ref(false)
 
 const currentSaldoPendapatan = ref(0)
 const sourceAccountId = ref(null)
+const forgotPin = ref(false)
 const phone = ref('')
 const title = ref('')
 const message = ref('')
 const imgWidth = 70
 
-
-const loadingState = computed(() => !loading)
 const activeCursor = computed(() => isLoggedInIconCash.value === true ? 'pointer' : 'initial')
 
 const openActivationDialog = () => {
+  forgotPin.value = false
+  phone.value = userData.phone
+  isActivationIconCashDialogVisible.value = true
+}
+
+const openForgotPinDialog = () => {
+  forgotPin.value = true
   phone.value = userData.phone
   isActivationIconCashDialogVisible.value = true
 }
@@ -58,18 +64,25 @@ const openChangePinDialog = () => {
 }
 
 const finishActivation = async () => {
-  reloadCardBalance();
   title.value = "Aktivasi Berhasil"
   message.value = "Selamat Anda telah berhasil mengaktifkan ICON Cash Anda."
   isSuccessConfirmationDialogVisible.value = true
-  emit('finishUpdated')
 }
 
 const finishChangePin = async () => {
-  reloadCardBalance();
   title.value = "Ganti PIN Berhasil"
   message.value = "Selamat PIN Anda telah berhasil diperbarui."
   isSuccessConfirmationDialogVisible.value = true
+}
+
+const finishRegisterPin = async () => {
+  title.value = "Registrasi ICON Cash Berhasil"
+  message.value = "Selamat PIN Anda telah berhasil didaftarkan."
+  isSuccessConfirmationDialogVisible.value = true
+}
+
+const confirmationClose = async () => {
+  reloadCardBalance();
   emit('finishUpdated')
 }
 
@@ -91,6 +104,9 @@ const reloadCardBalance = async () => {
     sourceAccountId.value = null
     currentSaldoPendapatan.value = 0
   }
+  if(isLoggedInIconCash.value === false) {
+    openActivationDialog()
+  }
   loading.value = false
 }
 
@@ -98,6 +114,7 @@ defineExpose({
   isLoggedInIconCash,
   currentSaldoPendapatan,
   sourceAccountId,
+  openForgotPinDialog,
 })
 
 reloadCardBalance();
@@ -239,22 +256,14 @@ reloadCardBalance();
           </VCol>
         </VRow>
       </VCardText>
-      <!-- 👉 Overlay -->
-      <VOverlay
-        v-model="loadingState"
-        contained
-        persistent
-        scroll-strategy="none"
-        class="align-center justify-center"
-      >
-        <VProgressCircular indeterminate />
-      </VOverlay>
     </VCard>
     <ActivationIconCashDialog
       v-model:is-dialog-visible="isActivationIconCashDialogVisible"
       v-model:phone="phone"
+      v-model:open-forgot-pin="forgotPin"
       @form-activation-submitted="finishActivation"
       @form-forgot-submitted="finishChangePin"
+      @form-register-submitted="finishRegisterPin"
     />
     <ChangeIconCashPinDialog
       v-model:is-dialog-visible="isChangeIconCashPinDialogVisible"
@@ -267,6 +276,7 @@ reloadCardBalance();
       v-model:message="message"
       :img-src="logoSuccessBlue"
       :img-width="imgWidth"
+      @close-window="confirmationClose"
     />
   </div>
 </template>
