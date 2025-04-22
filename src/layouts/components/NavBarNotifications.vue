@@ -1,4 +1,9 @@
 <script setup>
+import { useNotificationStore } from '@core/stores/config'
+
+const notifData = useNotificationStore()
+
+const router = useRouter()
 const notifications = ref([])
 
 const { data: notificationsData } = await useApiCore(createUrl('/seller/query/notification/list/2', {
@@ -7,58 +12,56 @@ const { data: notificationsData } = await useApiCore(createUrl('/seller/query/no
   },
 }))
 
-if (notificationsData.value.success) {
+if (notificationsData.value?.success) {
   let tmpNotif = notificationsData.value.data.data
   notifications.value = tmpNotif.map(item => {
     return {
 			id: item.id,
+      order_id: resolveNotifOrderId(item.url_path),
 			icon: resolveIconType(item.title).icon,
 			title: item.title,
 			subtitle: item.message,
 			time: item.created_at,
 			color: resolveIconType(item.title).color,
-			isSeen: false,
+			isSeen: item.status === 1,
     }
   });
 }
 
-const removeNotification = notificationId => {
-  notifications.value.forEach((item, index) => {
-    if (notificationId === item.id)
-      notifications.value.splice(index, 1)
-  })
-}
-
-const markRead = notificationId => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = true
+const readNotification = async (id, orderId) => {
+  try {
+    const res = await $apiCore(`/seller/command/notification/read/${id}`, {
+      method: 'POST',
+      ignoreResponseError: true
     })
-  })
-}
-
-const markUnRead = notificationId => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = false
-    })
-  })
+    redirectToOrderPage(orderId)
+  } catch (error) {
+    console.error("Error on read notification:", error)
+  }
 }
 
 const handleNotificationClick = notification => {
-  if (!notification.isSeen)
-    markRead([notification.id])
+  if (!notification.isSeen) {
+    readNotification(notification.id, notification.order_id)
+  } else {
+    redirectToOrderPage(notification.order_id)
+  }
 }
+
+const redirectToOrderPage = orderId => {
+  if(!isEmpty(orderId)) {
+    window.location.href = `/pesanan/view/${orderId}`
+  }
+}
+
+notifData.getTotalUnread()
 </script>
 
 <template>
   <Notifications
+    class="me-3"
     :notifications="notifications"
-    @remove="removeNotification"
-    @read="markRead"
-    @unread="markUnRead"
+    :total-unread="notifData.totalUnread"
     @click:notification="handleNotificationClick"
   />
 </template>

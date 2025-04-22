@@ -160,6 +160,7 @@ declare global {
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveCustomShipment: typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
+  const resolveNotifOrderId: typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveStateShipment: typeof import('./src/utils/orderHelper.js')['resolveStateShipment']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
@@ -568,6 +569,7 @@ declare module 'vue' {
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveCustomShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']>
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
+    readonly resolveNotifOrderId: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveStateShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStateShipment']>
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>

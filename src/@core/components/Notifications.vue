@@ -6,6 +6,11 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  totalUnread: {
+    type: Number,
+    required: true,
+    default: 40,
+  },
   badgeProps: {
     type: Object,
     required: false,
@@ -19,46 +24,22 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'read',
-  'unread',
-  'remove',
   'click:notification',
 ])
 
-const isAllMarkRead = computed(() => {
-  return props.notifications.some(item => item.isSeen === false)
-})
-
-const markAllReadOrUnread = () => {
-  const allNotificationsIds = props.notifications.map(item => item.id)
-  if (!isAllMarkRead.value)
-    emit('unread', allNotificationsIds)
-  else
-    emit('read', allNotificationsIds)
-}
-
-const totalUnseenNotifications = computed(() => {
-  return props.notifications.filter(item => item.isSeen === false).length
-})
-
-const toggleReadUnread = (isSeen, Id) => {
-  if (isSeen)
-    emit('unread', [Id])
-  else
-    emit('read', [Id])
-}
 </script>
 
 <template>
   <IconBtn id="notification-btn">
     <VBadge
       v-bind="props.badgeProps"
-      :model-value="props.notifications.some(n => !n.isSeen)"
+      :model-value="props.totalUnread > 0"
       color="error"
-      dot
+      :content="props.totalUnread"
+      location="end top"
       offset-x="2"
       offset-y="3"
-    >
+      >
       <VIcon icon="tabler-bell" />
     </VBadge>
 
@@ -73,36 +54,18 @@ const toggleReadUnread = (isSeen, Id) => {
         <!-- 👉 Header -->
         <VCardItem class="notification-section">
           <VCardTitle class="text-h6">
-            Notifications
+            Notifikasi
           </VCardTitle>
 
           <template #append>
             <VChip
-              v-show="props.notifications.some(n => !n.isSeen)"
+              v-show="props.totalUnread > 0"
               size="small"
               color="primary"
               class="me-2"
             >
-              {{ totalUnseenNotifications }} New
+              {{ props.totalUnread }} Unread
             </VChip>
-            <IconBtn
-              v-show="props.notifications.length"
-              size="34"
-              @click="markAllReadOrUnread"
-            >
-              <VIcon
-                size="20"
-                color="high-emphasis"
-                :icon="!isAllMarkRead ? 'tabler-mail' : 'tabler-mail-opened' "
-              />
-
-              <VTooltip
-                activator="parent"
-                location="start"
-              >
-                {{ !isAllMarkRead ? 'Mark all as unread' : 'Mark all as read' }}
-              </VTooltip>
-            </IconBtn>
           </template>
         </VCardItem>
 
@@ -116,7 +79,7 @@ const toggleReadUnread = (isSeen, Id) => {
           <VList class="notification-list rounded-0 py-0">
             <template
               v-for="(notification, index) in props.notifications"
-              :key="notification.title"
+              :key="notification.id"
             >
               <VDivider v-if="index > 0" />
               <VListItem
@@ -124,6 +87,7 @@ const toggleReadUnread = (isSeen, Id) => {
                 lines="one"
                 min-height="66px"
                 class="list-item-hover-class"
+                :class="{ 'bg-light-blue': notification.isSeen === false }"
                 @click="$emit('click:notification', notification)"
               >
                 <!-- Slot: Prepend -->
@@ -150,6 +114,7 @@ const toggleReadUnread = (isSeen, Id) => {
                       style=" letter-spacing: 0.4px !important; line-height: 18px;"
                     >
                       {{ notification.subtitle }}
+                      <small v-if="!isEmpty(notification.order_id)" class="text-sm text-primary font-weight-regular">#{{ notification.order_id }}</small>
                     </p>
                     <p
                       class="text-sm text-disabled mb-0"
@@ -167,14 +132,6 @@ const toggleReadUnread = (isSeen, Id) => {
                       :color="!notification.isSeen ? 'primary' : '#a8aaae'"
                       :class="`${notification.isSeen ? 'visible-in-hover' : ''}`"
                       class="mb-2"
-                      @click.stop="toggleReadUnread(notification.isSeen, notification.id)"
-                    />
-
-                    <VIcon
-                      size="20"
-                      icon="tabler-x"
-                      class="visible-in-hover"
-                      @click="$emit('remove', notification.id)"
                     />
                   </div>
                 </div>
@@ -186,7 +143,7 @@ const toggleReadUnread = (isSeen, Id) => {
               class="text-center text-medium-emphasis"
               style="block-size: 56px;"
             >
-              <VListItemTitle>No Notification Found!</VListItemTitle>
+              <VListItemTitle>Tidak ada notifikasi baru</VListItemTitle>
             </VListItem>
           </VList>
         </PerfectScrollbar>

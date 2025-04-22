@@ -6,10 +6,18 @@ export const resolveIconType = title => {
     }
 	} else {
     return {
-			icon: 'tabler-wallet',
+			icon: 'tabler-package-export',
       color: 'primary',
     }
 	}
+}
+
+export const resolveNotifOrderId = urlPath => {
+  var _id = null
+  if(!isEmpty(urlPath)){
+    _id = urlPath.substr(urlPath.lastIndexOf('/')+1)
+  }
+  return _id
 }
 
 export const formattedDate = str => {

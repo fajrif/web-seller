@@ -133,9 +133,11 @@ const headersTransaction = [
               <p class="font-weight-medium text-base mb-0 text-high-emphasis">
                 {{ resolveBalanceType(item.transaction_type_name).text }}
               </p>
-              <p class="text-sm mb-0">
-                {{ item.client_ref }}
-              </p>
+              <template v-if="!isEmpty(item.order)">
+                <RouterLink :to="{ name: 'pesanan-view-id', params: { id: item.order.id } }">
+                  <small class="text-sm text-secondary font-weight-regular">{{ item.order.trx_no }}</small>
+                </RouterLink>
+              </template>
             </div>
           </div>
         </template>

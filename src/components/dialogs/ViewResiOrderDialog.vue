@@ -108,9 +108,9 @@ watch(() => props.isDialogVisible, async (visible) => {
                         class="ma-4"
                         ></v-img>
                       <v-img
-                        style="max-width:80px"
-                        :width="80"
-                        cover
+                        style="max-width:100px"
+                        :width="100"
+                        contain
                         :src="orderData.delivery.image_logistic"
                         class="ma-4"
                         ></v-img>

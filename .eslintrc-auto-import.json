@@ -420,6 +420,7 @@
     "resolveTransactionAmount": true,
     "resolveBankLogo": true,
     "createHashPin": true,
-    "createHash": true
+    "createHash": true,
+    "resolveNotifOrderId": true
   }
 }

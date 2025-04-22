@@ -98,6 +98,25 @@ export const useMessageStore = defineStore('snackbar', () => {
   return { visible, title, text, color, icon, mode, position, timeout, setMessage, close }
 })
 
+export const useNotificationStore = defineStore('notification', () => {
+  const totalUnread = ref(0)
+
+  async function getTotalUnread() {
+    try{
+      const { data: totalData } = await useApiCore(createUrl('/seller/query/notification'))
+      if (totalData.value?.success) {
+        totalUnread.value = totalData.value.data.total_notification
+      } else {
+        totalUnread.value = 0
+      }
+    } catch (error) {
+      console.error("Error on get total notification:", error)
+    }
+  }
+
+  return { totalUnread, getTotalUnread }
+})
+
 // !SECTION
 // FileUploadProduct
 export const useFileUploadProductStore = defineStore('fileUploadProducts', () => {

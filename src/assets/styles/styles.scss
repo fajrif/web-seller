@@ -187,3 +187,12 @@ body .v-tabs.v-tabs-pill .v-tab--selected.text-primary {
   --v-theme-on-background: 0, 0, 0 !important;
   --v-theme-on-background: 255,255,255 !important;
 }
+
+.v-menu.v-overlay .v-overlay__content .v-list .v-list-item {
+  border-radius: 0 !important;
+}
+.v-badge__badge {
+  font-size: 0.6rem !important;
+  height: 1.2rem !important;
+  padding: 4px 4px !important;
+}
