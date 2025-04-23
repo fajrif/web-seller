@@ -9,9 +9,10 @@ const props = defineProps({
 
 const dateRange = ref('')
 const searchQuery = ref('')
+const searchKeyword = ref('')
 
 // Data table options
-const itemsPerPage = ref(5)
+const itemsPerPage = 10
 const page = ref(1)
 const startDate = ref('')
 const endDate = ref('')
@@ -19,28 +20,50 @@ const endDate = ref('')
 const {
   data: ordersData,
   execute: fetchOrders, isFinished: loading,
-} = await useApiCore(createUrl('/seller/query/transaction', {
+} = await useApiCore(createUrl('/seller/query/transaction/search', {
   query: {
-    keyword: searchQuery.value,
+    keyword: searchKeyword,
     "filter[status]": props.selectedStatus,
     "filter[start_date]": startDate,
     "filter[end_date]": endDate,
     page,
-    limit: itemsPerPage,
+  },
+}))
+
+const {
+  data: totalData,
+  execute: fetchTotalOrders
+} = await useApiCore(createUrl('/seller/query/transaction/search/count', {
+  query: {
+    keyword: searchKeyword,
+    "filter[status]": props.selectedStatus,
+    "filter[start_date]": startDate,
+    "filter[end_date]": endDate,
+    page,
   },
 }))
 
 const orders = computed(() => ordersData.value.data.data)
-const totalOrder = computed(() => ordersData.value.data.total)
+const totalOrder = computed(() => totalData.value.data)
 
 const callbackOrderStatusButton = () => {
   fetchOrders()
 }
 
 const searchInvoiceNo = () => {
-  if(!isEmpty(searchQuery.value)) {
+	if (searchQuery.value.length > 3 || searchQuery.value.length === 0) {
+		searchKeyword.value = searchQuery.value
+    page.value = 1
     fetchOrders()
-  }
+	}
+}
+
+const clearSearchInvoiceNo = () => {
+	if (searchKeyword.value.length > 0) {
+		searchKeyword.value = ''
+    page.value = 1
+    fetchOrders()
+	}
 }
 
 watch(dateRange, (newVal, oldVal) => {
@@ -76,19 +99,14 @@ watch(dateRange, (newVal, oldVal) => {
 							style="inline-size: 400px;"
 							class="me-3"
               :disabled="!loading"
-              @click:clear="fetchOrders"
+              @click:clear="clearSearchInvoiceNo"
               @click:append-inner="searchInvoiceNo"
-              @keyup.enter="searchInvoiceNo"
+              @keydown.enter.prevent="searchInvoiceNo"
 							/>
 					</div>
 
 					<VSpacer />
 					<div class="d-flex gap-4 flex-wrap align-center">
-						<AppSelect
-							v-model="itemsPerPage"
-							:items="[5, 10, 20, 25, 50]"
-              :disabled="!loading"
-							/>
 						<AppDateTimePicker
 							v-model="dateRange"
 							placeholder="Pilih Tanggal"

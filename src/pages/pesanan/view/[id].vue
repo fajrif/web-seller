@@ -70,7 +70,7 @@ const trackOrderItem = () => {
 									Invoice
 								</h6>
 								<span class="font-weight-bold">{{ orderData.trx_no }}</span>
-								<RouterLink :to="{ name: 'pesanan-invoice-id', params: { id: orderData.id } }">
+								<RouterLink :to="{ name: 'pesanan-invoice-id', params: { id: orderData.id } }" style="width:fit-content;">
 									<span class="font-weight-medium">Lihat Invoice</span>
 								</RouterLink>
 							</div>
