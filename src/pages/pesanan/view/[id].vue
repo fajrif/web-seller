@@ -255,7 +255,7 @@ const trackOrderItem = () => {
 							<p class="mb-4">
 								Total Harga ({{ orderData.detail.length }} Produk)
 							</p>
-							<p class="mb-4">
+							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
 								Ongkos Kirim
 							</p>
 							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
@@ -282,7 +282,7 @@ const trackOrderItem = () => {
 							<p class="mb-4">
 								{{ toCurrency(subTotalProduct) }}
 							</p>
-							<p class="mb-4">
+							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
 								{{ toCurrency(orderData.delivery.delivery_fee) }}
 							</p>
 							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
