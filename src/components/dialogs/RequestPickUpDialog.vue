@@ -33,9 +33,29 @@ const selectedDate = ref('')
 const selectedTime = ref('')
 
 const statusSelected = computed(() => !isEmpty(selectedDate.value) && !isEmpty(selectedTime.value))
+const selectedTimeText = computed(() => {
+  const selectedItem = timeOptionsJemput.find(item => item.value === selectedTime.value);
+  return selectedItem ? selectedItem.label : '';
+})
 
 const toggleRequestPickUp = () => {
   toggleMode.value = !toggleMode.value
+}
+
+const checkDateTime = (time) => {
+  if(isEmpty(selectedDate.value)) {
+    return false;
+  } else {
+    if(isDateToday(selectedDate.value)){
+      return isMoreThanHour(time);
+    } else {
+      return false;
+    }
+  }
+}
+
+const checkDateChanges = (val) => {
+  selectedTime.value = ''
 }
 
 const onReset = () => {
@@ -116,6 +136,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                   label="Tanggal"
                   prepend-inner-icon="tabler-calendar"
                   placeholder="Pilih tanggal"
+                  @update:model-value="checkDateChanges"
                   :config="{ enableTime: false, dateFormat: 'Y-m-d', minDate: 'today' }"
                   />
               </VCol>
@@ -125,10 +146,18 @@ watch(() => props.isDialogVisible, async (visible) => {
                   :items="timeOptionsJemput"
                   item-title="label"
                   item-value="value"
+                  :disabled="isEmpty(selectedDate)"
                   label="Waktu"
                   prepend-inner-icon="tabler-clock"
                   placeholder="Pilih waktu"
-                  />
+                  >
+                  <template #item="{ props, item }">
+                    <v-list-item
+                      v-bind="props"
+                      :disabled="checkDateTime(item.raw.limit)"
+                    ></v-list-item>
+                  </template>
+                </AppSelect>
               </VCol>
               <VCol v-show="statusSelected" cols="12" class="pb-0">
                 <h6 class="text-h6 mb-2">
@@ -147,7 +176,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                         {{ props.shippingType }}
                       </h6>
                       <p class="text-body-2 mb-0">
-                        Estimasi penjemputan hingga <strong>{{ toLocaleDateTime(selectedDate,'dddd, DD MMMM YYYY') }} {{ selectedTime }}</strong>
+                        Estimasi penjemputan hingga <strong>{{ toLocaleDateTime(selectedDate,'dddd, DD MMMM YYYY') }} {{ selectedTimeText }}</strong>
                       </p>
                     </div>
                   </div>

@@ -94,6 +94,14 @@ export const lengthValidator = (value, length) => {
   return String(value).length === length || `Panjang karakter harus ${length} karakter`
 }
 
+// 👉 Maximum Length Validator
+export const maxLengthValidator = (value, length) => {
+  if (isEmpty(value))
+    return true
+
+	return String(value).length <= length || `Panjang karakter maximum ${length} karakter`
+}
+
 // 👉 Minimum Length Validator
 export const minLengthValidator = (value, length) => {
   if (isEmpty(value))

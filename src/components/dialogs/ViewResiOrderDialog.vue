@@ -1,5 +1,6 @@
 <script setup>
 import logoMarketplace from '@images/misc/logo-pln-mobile.png'
+import shipSeller from '@images/logos/delivery/seller.png'
 import { useQRCode } from '@vueuse/integrations/useQRCode'
 import { toJpeg } from 'html-to-image'
 
@@ -55,7 +56,7 @@ watch(() => props.isDialogVisible, async (visible) => {
       const { data: orderDetails, execute: fetchOrder } = await useApiCore(`/seller/query/transaction/detail/${ props.orderId }`)
       if (orderDetails.value?.status == 200) {
         orderData.value = orderDetails.value.data
-        _orderId = String(props.orderId).padStart(12, '0')
+        _orderId = orderData.value.delivery.awb_number
         qrcode = useQRCode(_orderId)
       }
       if(isNullOrUndefined(orderData.value))
@@ -103,7 +104,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                       <v-img
                         style="max-width:80px"
                         :width="80"
-                        cover
+                        contain
                         :src="logoMarketplace"
                         class="ma-4"
                         ></v-img>
@@ -111,7 +112,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                         style="max-width:100px"
                         :width="100"
                         contain
-                        :src="orderData.delivery.image_logistic"
+                        :src="orderData.delivery.shipping_type === 'custom' ? shipSeller : orderData.delivery.image_logistic"
                         class="ma-4"
                         ></v-img>
                     </div>
@@ -149,7 +150,7 @@ watch(() => props.isDialogVisible, async (visible) => {
                 <tr>
                   <td colspan="2">
                     <p class="text-center my-2 text-body-1 font-weight-bold">
-                      Jenis Layanan: {{ orderData.delivery.shipping_type }}
+                      Jenis Layanan: {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
                     </p>
                   </td>
                 </tr>

@@ -12,7 +12,19 @@ const orderData = computed(() => orderDetails.value?.data)
 
 const subTotalProduct = computed(() => {
   let _subTotal = 0;
-  orderDetails.value?.data?.detail.forEach((x, i) => _subTotal += x.total_amount);
+  orderDetails.value?.data?.detail.forEach((x, i) => _subTotal += parseInt(x.total_amount));
+  return _subTotal;
+})
+
+const subTotalDelivery = computed(() => {
+  let _subTotal = 0;
+  if(orderDetails.value?.data) {
+    let delivery = orderDetails.value?.data.delivery;
+    _subTotal = parseInt(delivery.delivery_fee);
+    if(!isEmpty(delivery.insurance_fee)){
+      _subTotal += parseInt(delivery.insurance_fee);
+    }
+  }
   return _subTotal;
 })
 
@@ -90,7 +102,9 @@ const trackOrderItem = () => {
 									Nama Pembeli
 								</h6>
 								<span class="font-weight-bold">{{ orderData.buyer.full_name }}</span>
-								<span>{{ orderData.buyer.phone }}</span>
+                <a class="text-body-1 font-weight-medium" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.buyer.phone}`">
+                  {{ orderData.buyer.phone }}
+                </a>
 							</div>
 						</VCol>
 						<VCol cols="6" md="3">
@@ -195,7 +209,7 @@ const trackOrderItem = () => {
 									Kurir
 								</h6>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="mb-2">{{ orderData.delivery.delivery_method }}</span>
+                  <span class="mb-2">{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}</span>
                   <span v-if="orderIsShipped(orderData.progress_active.status_code)" style="font-size:smaller;">
                     <button @click="trackOrderItem">
                       <span class="text-primary">Lacak</span>
@@ -242,6 +256,12 @@ const trackOrderItem = () => {
 								Total Harga ({{ orderData.detail.length }} Produk)
 							</p>
 							<p class="mb-4">
+								Ongkos Kirim
+							</p>
+							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
+								Insurance Fee
+							</p>
+							<p class="mb-4">
 								Total Ongkos Kirim
 							</p>
 							<p class="mb-4">
@@ -264,6 +284,12 @@ const trackOrderItem = () => {
 							</p>
 							<p class="mb-4">
 								{{ toCurrency(orderData.delivery.delivery_fee) }}
+							</p>
+							<p v-if="!isEmpty(orderData.delivery.insurance_fee)" class="mb-4">
+								{{ toCurrency(orderData.delivery.insurance_fee) }}
+							</p>
+							<p class="mb-4">
+								{{ toCurrency(subTotalDelivery) }}
 							</p>
 							<p class="mb-4">
 								{{ toCurrency(orderData.total_mdr) }}

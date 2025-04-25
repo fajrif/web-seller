@@ -4,15 +4,28 @@ import logoMarketPlace from '@images/misc/logo-marketplace.png'
 import logoLunas from '@images/misc/cap-lunas.png'
 
 const route = useRoute('pesanan-view-id')
-const orderData = ref()
-var subTotalProduct = 0
 
 const { data: orderDetails } = await useApiCore(`/seller/query/transaction/detail/${ route.params.id }`)
-if (orderDetails.value.status == 200) {
-  orderData.value = orderDetails.value.data
-	orderData.value.detail.forEach((x, i) => subTotalProduct += x.total_amount);
-}
 
+const orderData = computed(() => orderDetails.value?.data)
+
+const subTotalProduct = computed(() => {
+  let _subTotal = 0;
+  orderDetails.value?.data?.detail.forEach((x, i) => _subTotal += parseInt(x.total_amount));
+  return _subTotal;
+})
+
+const subTotalDelivery = computed(() => {
+  let _subTotal = 0;
+  if(orderDetails.value?.data) {
+    let delivery = orderDetails.value?.data.delivery;
+    _subTotal = parseInt(delivery.delivery_fee);
+    if(!isEmpty(delivery.insurance_fee)){
+      _subTotal += parseInt(delivery.insurance_fee);
+    }
+  }
+  return _subTotal;
+})
 </script>
 
 <template>
@@ -75,7 +88,7 @@ if (orderDetails.value.status == 200) {
 										Kepada
 									</span>
 									<h6 class="text-h6 font-weight-body">
-										{{ orderData.buyer.full_name }} ( {{ orderData.buyer.phone }} )
+										{{ orderData.delivery.receiver_name }} ( {{ orderData.delivery.receiver_phone }} )
 									</h6>
 									<p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-1 font-weight-regular mb-0 text-end">
 									</p>
@@ -181,7 +194,7 @@ if (orderDetails.value.status == 200) {
 						<tbody class="text-base">
 							<tr>
 								<td class="text-no-wrap">
-									{{ orderData.delivery.delivery_method }}
+									{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
 								</td>
 								<td class="text-center">
 									{{ orderData.total_weight }} gr
@@ -192,6 +205,20 @@ if (orderDetails.value.status == 200) {
 							</tr>
 						</tbody>
 					</VTable>
+          <div v-if="!isEmpty(orderData.delivery.insurance_fee)"
+            class="d-flex justify-center py-2 px-6 mb-4">
+						<div class="me-auto">
+							<p class="font-weight-medium mb-0">
+								Insurance Fee
+							</p>
+						</div>
+
+						<div class="ms-auto text-end">
+							<p class="font-weight-medium mb-0">
+								{{ toCurrency(orderData.delivery.insurance_fee) }}
+							</p>
+						</div>
+					</div>
 					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-6">
 						<div class="me-auto">
 							<p class="font-weight-medium mb-0">
@@ -201,7 +228,7 @@ if (orderDetails.value.status == 200) {
 
 						<div class="ms-auto text-end">
 							<p class="font-weight-medium mb-0">
-								{{ toCurrency(orderData.delivery.delivery_fee) }}
+								{{ toCurrency(subTotalDelivery) }}
 							</p>
 						</div>
 					</div>

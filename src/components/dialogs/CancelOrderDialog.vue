@@ -110,7 +110,8 @@ const requiredValidatorNotes = (value, selected) => {
 								<AppTextField
 									v-show="textNotesVisible"
 									v-model="textNotes"
-									:rules="[requiredValidatorNotes(textNotes, selectedNotes)]"
+									:rules="[maxLengthValidator(textNotes,50),requiredValidatorNotes(textNotes, selectedNotes)]"
+                  counter
 									placeholder="Masukan alasan penolakan"
 								/>
               </div>

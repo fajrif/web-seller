@@ -180,8 +180,7 @@ watch(dateRange, (newVal, oldVal) => {
 													<p class="text-body-2 mt-1 mb-0">
 														<strong>{{ slotProps.item.delivery.receiver_name }}</strong> ({{ slotProps.item.delivery.receiver_phone }})
 													</p>
-													<p class="text-body-2 mb-0">
-														{{ slotProps.item.delivery.address }}
+													<p v-html="slotProps.item.delivery.address" class="text-body-2 mb-0">
 													</p>
 												</VCol>
 												<VCol
@@ -191,7 +190,7 @@ watch(dateRange, (newVal, oldVal) => {
 													>
 													<span class="text-body-2 font-weight-bold">Kurir:</span>
 													<p class="text-body-2 my-1">
-														{{ slotProps.item.delivery.courier }}
+                            {{ resolveShippingTypeText(slotProps.item.delivery.shipping_type) }}
 													</p>
 												</VCol>
 											</VRow>
@@ -263,28 +262,21 @@ watch(dateRange, (newVal, oldVal) => {
 
 						<!-- Nama Pelanggan -->
 						<template #item.nama_pelanggan="{ item }">
-							<VIcon
-								start
-								icon="tabler-user"
-								class="mb-1"
-							/>
-							<span class="text-body-2 font-weight-medium">
-								{{ item.buyer.full_name }}
-							</span>
-						</template>
-
-						<!-- Respond Date -->
-						<template #item.respond_date="{ item }">
-							<VChip
-								v-if="item.progress_active.status_code == '09'"
-								color="secondary"
-								class="mx-2">
-								<VIcon
-									start
-									icon="tabler-cancel"
-								/>
-								Transaksi Dibatalkan
-							</VChip>
+              <div class="d-flex flex-wrap align-center">
+                <VIcon
+                  start
+                  icon="tabler-user"
+                  class="mb-1"
+                  />
+                <div class="d-flex flex-column">
+                  <span class="text-body-2 font-weight-medium">
+                    {{ item.buyer.full_name }}
+                  </span>
+                  <a class="text-body-2 font-weight-medium" target="_blank" :href="`https://api.whatsapp.com/send?phone=${item.buyer.phone}`">
+                    {{ item.buyer.phone }}
+                  </a>
+                </div>
+              </div>
 						</template>
 
 						<!-- pagination -->

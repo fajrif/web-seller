@@ -421,6 +421,11 @@
     "resolveBankLogo": true,
     "createHashPin": true,
     "createHash": true,
-    "resolveNotifOrderId": true
+    "resolveNotifOrderId": true,
+    "resolveShippingTypeText": true,
+    "maxLengthValidator": true,
+    "isDateToday": true,
+    "isLessThanHour": true,
+    "isMoreThanHour": true
   }
 }

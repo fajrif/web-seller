@@ -75,9 +75,12 @@ declare global {
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
   const integerValidator: typeof import('./src/@core/utils/validators.js')['integerValidator']
+  const isDateToday: typeof import('./src/utils/orderHelper.js')['isDateToday']
   const isDefined: typeof import('@vueuse/core')['isDefined']
   const isEmpty: typeof import('./src/@core/utils/helpers.js')['isEmpty']
   const isEmptyArray: typeof import('./src/@core/utils/helpers.js')['isEmptyArray']
+  const isLessThanHour: typeof import('./src/utils/orderHelper.js')['isLessThanHour']
+  const isMoreThanHour: typeof import('./src/utils/orderHelper.js')['isMoreThanHour']
   const isNullOrUndefined: typeof import('./src/@core/utils/helpers.js')['isNullOrUndefined']
   const isObject: typeof import('./src/@core/utils/helpers.js')['isObject']
   const isProxy: typeof import('vue')['isProxy']
@@ -99,6 +102,7 @@ declare global {
   const mapStores: typeof import('pinia')['mapStores']
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
+  const maxLengthValidator: typeof import('./src/@core/utils/validators.js')['maxLengthValidator']
   const mimes: typeof import('./src/utils/mimes.js')['default']
   const minIntegerValidator: typeof import('./src/@core/utils/validators.js')['minIntegerValidator']
   const minLengthValidator: typeof import('./src/@core/utils/validators.js')['minLengthValidator']
@@ -162,6 +166,7 @@ declare global {
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveNotifOrderId: typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
+  const resolveShippingTypeText: typeof import('./src/utils/orderHelper.js')['resolveShippingTypeText']
   const resolveStateShipment: typeof import('./src/utils/orderHelper.js')['resolveStateShipment']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
   const resolveStatusOrder: typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']
@@ -489,9 +494,11 @@ declare module 'vue' {
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
     readonly integerValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['integerValidator']>
+    readonly isDateToday: UnwrapRef<typeof import('./src/utils/orderHelper.js')['isDateToday']>
     readonly isDefined: UnwrapRef<typeof import('@vueuse/core')['isDefined']>
     readonly isEmpty: UnwrapRef<typeof import('./src/@core/utils/helpers.js')['isEmpty']>
     readonly isEmptyArray: UnwrapRef<typeof import('./src/@core/utils/helpers.js')['isEmptyArray']>
+    readonly isMoreThanHour: UnwrapRef<typeof import('./src/utils/orderHelper.js')['isMoreThanHour']>
     readonly isNullOrUndefined: UnwrapRef<typeof import('./src/@core/utils/helpers.js')['isNullOrUndefined']>
     readonly isObject: UnwrapRef<typeof import('./src/@core/utils/helpers.js')['isObject']>
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
@@ -512,6 +519,7 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly maxLengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['maxLengthValidator']>
     readonly minIntegerValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minIntegerValidator']>
     readonly minLengthValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['minLengthValidator']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
@@ -571,6 +579,7 @@ declare module 'vue' {
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveNotifOrderId: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
+    readonly resolveShippingTypeText: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveShippingTypeText']>
     readonly resolveStateShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStateShipment']>
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>

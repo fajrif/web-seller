@@ -8,7 +8,7 @@ const elementId = computed(() => {
   const attrs = useAttrs()
   const _elementIdToken = attrs.id
   const _id = useId()
-  
+
   return _elementIdToken ? `app-select-${ _elementIdToken }` : _id
 })
 
@@ -24,7 +24,6 @@ const label = computed(() => useAttrs().label)
       v-if="label"
       :for="elementId"
       class="mb-1 text-body-2"
-      style="line-height: 15px;"
       :text="label"
     />
     <VSelect
