@@ -18,7 +18,8 @@ export const setupGuards = router => {
          * Feel free to update this logic to suit your needs
          */
 		const userDataStore = useUserDataStore()
-    const isLoggedIn = !!(isNullOrUndefined(userDataStore) !== false && useCookie('accessToken').value)
+    const isLoggedIn = (isNullOrUndefined(userDataStore) === false && useCookie('accessToken').value)
+    const isLoggedInIconCash = userDataStore.loginIconCash
 
     /*
           If user is logged in and is trying to access login like page, redirect to home
@@ -30,6 +31,12 @@ export const setupGuards = router => {
         return '/'
       else
         return undefined
+    } else {
+      // check isLoggedInIconCash
+      if(!to.fullPath.includes('dashboard') && !to.fullPath.includes('balance') && !to.fullPath.includes('withdraw')) {
+        if (isLoggedInIconCash === false)
+          return '/'
+      }
     }
     if (!canNavigate(to) && to.matched.length) {
       /* eslint-disable indent */

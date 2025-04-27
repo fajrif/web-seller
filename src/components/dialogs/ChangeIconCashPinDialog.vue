@@ -67,7 +67,7 @@ const onSubmit = () => {
       throw 'Harap masukkan semua 6 digit PIN'
     } else {
       if(newPin.value !== confirmPin.value) {
-        throw '6 digit PIN baru anda tidak sama'
+        throw 'Konfirmasi PIN tidak sesuai'
       } else {
         var oldPinString = props.phone + oldPin.value
         var newPinString = props.phone + newPin.value
@@ -139,7 +139,7 @@ const onSubmit = () => {
                   v-model="oldPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="password"
+                  type="number"
                   length="6"
                   class="pa-0 mb-2"
                   />
@@ -152,7 +152,7 @@ const onSubmit = () => {
                   v-model="newPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="password"
+                  type="number"
                   length="6"
                   class="pa-0 mb-2"
                   />
@@ -165,7 +165,7 @@ const onSubmit = () => {
                   v-model="confirmPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="password"
+                  type="number"
                   length="6"
                   class="pa-0 mb-4"
                   />

@@ -104,6 +104,7 @@ const reloadCardBalance = async () => {
     sourceAccountId.value = null
     currentSaldoPendapatan.value = 0
   }
+  userData.setLoginIconCash(isLoggedInIconCash.value)
   if(isLoggedInIconCash.value === false) {
     openActivationDialog()
   }

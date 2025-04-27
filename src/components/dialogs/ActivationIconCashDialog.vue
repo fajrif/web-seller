@@ -99,8 +99,12 @@ const onRequestOTP = async () => {
       clearStateVariables('otp')
     } else {
       if(res.code === 5006) {
-        clearStateVariables('otp')
-        errorMessageOtp.value = res.message
+        if(res.message.includes('have a valid OTP')){
+          clearStateVariables('otp')
+          errorMessageOtp.value = res.message
+        } else {
+          throw res.message
+        }
       } else if(res.code === 5000) {
         clearStateVariables('pin-register')
       } else {
@@ -199,7 +203,7 @@ const onChangePin = () => {
       throw 'Harap masukkan semua 6 digit PIN'
     } else {
       if(pin.value !== confirmPin.value) {
-        throw '6 digit PIN baru anda tidak sama'
+        throw 'Konfirmasi PIN tidak sesuai'
       } else {
         var newPinString = props.phone + pin.value
         var confirmPinString = props.phone + confirmPin.value
@@ -227,7 +231,7 @@ const onRegisterPin = () => {
       throw 'Harap masukkan semua 6 digit PIN'
     } else {
       if(pin.value !== confirmPin.value) {
-        throw '6 digit PIN baru anda tidak sama'
+        throw 'Konfirmasi PIN tidak sesuai'
       } else {
         var newPinString = props.phone + pin.value
         createHash(newPinString).then((hashedNewPin) => {
@@ -310,7 +314,7 @@ const onBackToHome = () => {
 }
 
 const openForgotPinDialog = () => {
-  isForgotHome.value = true
+  clearStateVariables('home-forgot')
 }
 
 const resolvePinText = () => {
@@ -351,8 +355,6 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
       :model-value="props.isDialogVisible"
       @update:model-value="onReset"
       >
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="onReset" />
       <!-- Dialog Content -->
       <VCard>
         <VCardText v-if="isInputOtp">
@@ -378,7 +380,7 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                 v-model="otp"
                 :disabled="loading"
                 :error="isOtpError"
-                type="password"
+                type="number"
                 length="4"
                 class="pa-0 mb-6"
                 />
@@ -420,14 +422,24 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                 {{ errorMessagePin }}
               </p>
               <div>
-                <h6 class="text-body-1 mb-4">
-                  {{ resolvePinText().textPin }}
-                </h6>
+                <div class="d-flex flex-wrap justify-space-between mb-2">
+                  <h6 class="text-body-1">
+                    {{ resolvePinText().textPin }}
+                  </h6>
+                  <a
+                    v-if="!isForgotHome && !isNotRegistered"
+                    href="#"
+                    class="text-h6 text-end text-medium-emphasis text-primary"
+                    @click="openForgotPinDialog"
+                    >
+                    Lupa Pin
+                  </a>
+                </div>
                 <VOtpInput
                   v-model="pin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="password"
+                  type="number"
                   length="6"
                   class="pa-0 mb-4"
                   />
@@ -440,7 +452,7 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   v-model="confirmPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="password"
+                  type="number"
                   length="6"
                   class="pa-0 mb-4"
                   />
@@ -508,15 +520,6 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                     @click="onRequestOTP"
                     >
                     Kirim Kode OTP
-                  </VBtn>
-                  <VBtn
-                    color="primary"
-                    variant="plain"
-                    class="text-h6 text-medium-emphasis text-primary"
-                    :disabled="loading"
-                    @click="openForgotPinDialog"
-                    >
-                    Lupa PIN
                   </VBtn>
                 </div>
               </div>

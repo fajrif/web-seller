@@ -37,12 +37,15 @@ const props = defineProps({
   },
 })
 
+const router = useRouter()
+
 const emit = defineEmits([
   'update:isDialogVisible',
 ])
 
 const onClose = () => {
   emit('update:isDialogVisible', false)
+	router.push('/iconcash/balance')
 }
 </script>
 

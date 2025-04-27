@@ -84,6 +84,8 @@ declare module 'vue' {
     UpdateStatusDialog: typeof import('./src/components/dialogs/UpdateStatusDialog.vue')['default']
     UpdateStockDialog: typeof import('./src/components/dialogs/UpdateStockDialog.vue')['default']
     UploadCropStencilImageDialog: typeof import('./src/components/dialogs/UploadCropStencilImageDialog.vue')['default']
+    ViewHistoryTransaksi: typeof import('./src/components/dialogs/ViewHistoryTransaksi.vue')['default']
+    ViewHistoryTransaksiDialog: typeof import('./src/components/dialogs/ViewHistoryTransaksiDialog.vue')['default']
     ViewResiOrderDialog: typeof import('./src/components/dialogs/ViewResiOrderDialog.vue')['default']
   }
 }

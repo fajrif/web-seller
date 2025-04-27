@@ -7,12 +7,21 @@ const props = defineProps({
 })
 
 const isLoggedInIconCash = ref(false)
+const isViewHistoryTransaksiDialogVisible = ref(false)
 
 // Data table options
 const page = ref(1)
 const dateRange = ref('')
 const startDate = ref('')
 const endDate = ref('')
+
+const tipe = ref('')
+const status = ref('')
+const orderDate = ref(0)
+const bankName = ref('')
+const accountNo = ref('')
+const accountName = ref('')
+const amount = ref(0)
 
 const getSyncData = computed(() => {
   return page.value == 1
@@ -40,7 +49,22 @@ const transactions = computed(() => {
   }
   return _data
 })
+
 const totalTransaction = computed(() => dataBalances.value.data.total)
+
+const openViewTransaksi = (id) => {
+  var obj = transactions.value.find((t) => t.order_id === id)
+  if(obj){
+    tipe.value = obj.transaction_type_name
+    status.value = obj.status
+    bankName.value = obj.bank_name
+    accountNo.value = obj.beneficiary_account
+    accountName.value = obj.beneficiary_name
+    amount.value = obj.amount
+    orderDate.value = obj.transaction_date
+    isViewHistoryTransaksiDialogVisible.value = true
+  }
+}
 
 watch(() => props.triggerReset, (newVal, oldVal) => {
 	if(newVal !== oldVal){
@@ -130,9 +154,13 @@ const headersTransaction = [
                 />
             </VAvatar>
             <div>
-              <p class="font-weight-medium text-base mb-0 text-high-emphasis">
+              <a
+                href="#"
+                class="d-block font-weight-medium text-base mb-0 text-high-emphasis"
+                @click="openViewTransaksi(item.order_id)"
+                >
                 {{ resolveBalanceType(item.transaction_type_name).text }}
-              </p>
+              </a>
               <template v-if="!isEmpty(item.order)">
                 <RouterLink :to="{ name: 'pesanan-view-id', params: { id: item.order.id } }">
                   <small class="text-sm text-secondary font-weight-regular">{{ item.order.trx_no }}</small>
@@ -195,6 +223,16 @@ const headersTransaction = [
       </VTable>
     </VCardText>
   </VCard>
+  <ViewHistoryTransaksiDialog
+    v-model:is-dialog-visible="isViewHistoryTransaksiDialogVisible"
+    v-model:transaction-type-name="tipe"
+    v-model:status="status"
+    v-model:order-date="orderDate"
+    v-model:bank-name="bankName"
+    v-model:account-no="accountNo"
+    v-model:account-name="accountName"
+    v-model:amount="amount"
+  />
 </template>
 
 <style lang="scss">

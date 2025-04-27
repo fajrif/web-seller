@@ -85,6 +85,18 @@ const clearAccountNo = () => {
 
 const onReset = () => {
   emit('update:isDialogVisible', false)
+  setTimeout(() => {
+    errMessage.value = ''
+    if(props.itemId === 0){
+      bankId.value = null
+      accountName.value = ''
+      accountNo.value = ''
+    } else {
+      bankId.value = props.bankId
+      accountNo.value = props.accountNo
+      accountName.value = props.accountName
+    }
+  }, 1000);
 }
 
 const onSubmit = () => {
@@ -98,9 +110,9 @@ const onSubmit = () => {
 }
 
 watch(() => props.itemId, (value) => {
-	bankId.value = props.bankId
-	accountNo.value = props.accountNo
-	accountName.value = props.accountName
+  bankId.value = props.bankId
+  accountNo.value = props.accountNo
+  accountName.value = props.accountName
 });
 </script>
 
@@ -186,15 +198,13 @@ watch(() => props.itemId, (value) => {
                   <VBtn
                     :loading="loading"
                     :icon="$vuetify.display.smAndDown"
-                    :color="validBankAccount ? 'success' : 'secondary'"
+                    color="success"
                     variant="tonal"
                     @click="checkAccount"
                   >
-                    <VIcon
-                      :icon="validBankAccount ? 'tabler-circle-check' : 'tabler-circle-dashed-check'"
-                      :color="validBankAccount ? 'success' : 'warning'"
-                      size="22"
-                    />
+                    <small>
+                      Periksa
+                    </small>
                     <VTooltip
                       activator="parent"
                       location="top"

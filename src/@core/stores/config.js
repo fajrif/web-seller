@@ -386,6 +386,7 @@ export const useUserDataStore = defineStore('userData', () => {
   const photo_url = ref()
   const status = ref()
   const phone = ref()
+  const loginIconCash = ref(false)
 
   function setUserData(data) {
 		id.value = data.merchant.id
@@ -393,6 +394,10 @@ export const useUserDataStore = defineStore('userData', () => {
 		photo_url.value = data.merchant.photo_url
 		status.value = data.merchant.status
 		phone.value = data.merchant.phone_office
+  }
+
+  function setLoginIconCash(status) {
+		loginIconCash.value = status
   }
 
   function clear() {
@@ -407,10 +412,11 @@ export const useUserDataStore = defineStore('userData', () => {
 			photo_url.value = null
 			status.value = null
 			phone.value = null
+			loginIconCash.value = false
 		});
   }
 
-  return { id, name, photo_url, status, phone, setUserData, clear }
+  return { id, name, photo_url, status, phone, loginIconCash, setLoginIconCash, setUserData, clear }
 }, {
   persist: {
     storage: localStorage,

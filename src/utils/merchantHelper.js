@@ -83,9 +83,13 @@ export const updateUserDataStore = async (callback) => {
 
     userDataStore.setUserData(data)
 
-    await nextTick(() => {
-			callback()
-    })
+    const { data: dataBalance } = await useApiCore("/iconcash/query/balance/customer")
+    if (dataBalance.value?.success) {
+      userDataStore.setLoginIconCash(true)
+    } else {
+      userDataStore.setLoginIconCash(false)
+    }
+    callback()
 
   } catch (err) {
     useCookie('accessToken').value = null

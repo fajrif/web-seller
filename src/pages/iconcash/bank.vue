@@ -5,7 +5,6 @@ import { useMessageStore } from '@core/stores/config'
 const router = useRouter()
 const messageStore = useMessageStore()
 
-const isLoggedInIconCash = ref(false)
 const isAddBankAccountDialogVisible = ref(false)
 const isEditBankAccountDialogVisible = ref(false)
 const isDeleteBankAccountDialogVisible = ref(false)
@@ -24,8 +23,13 @@ const { data: dataBankAccounts, execute: fetchBankAccounts } = await useApiCore(
 
 const bankAccountsData = computed(() => dataBankAccounts.value.data)
 
-if(dataBankAccounts.value.status && dataBankAccounts.value.status == 200) {
-  isLoggedInIconCash.value = true
+const checkErrorAccountBank = (bank_id, account_no, msg) => {
+  var _msg = msg
+  var found = bankAccountsData.value.filter((bank) => bank.bank.id === bank_id && bank.account_number === account_no )
+  if(found.length !== 0) {
+    _msg = 'Bank Akun sudah terdaftar'
+  }
+  messageStore.setMessage('error', _msg)
 }
 
 const addBankAccount = async (id, bank_id, account_name, account_no) => {
@@ -41,13 +45,13 @@ const addBankAccount = async (id, bank_id, account_name, account_no) => {
     })
     /* eslint-enable */
 
-    // Refetch showcases
+    // Refetch banks
     fetchBankAccounts()
     confirmTitle.value = "Selamat"
     confirmMessage.value = "Akun bank berhasil ditambahkan"
     isSuccessConfirmationDialogVisible.value = true
   } catch (error) {
-    messageStore.setMessage('error', 'Gagal menambahkan akun bank')
+    checkErrorAccountBank(bank_id, account_no,'Gagal menambahkan akun bank')
     console.error("Error on add bank account merchant:", error)
   }
 }
@@ -65,13 +69,13 @@ const updateBankAccount = async (id, bank_id, account_name, account_no) => {
     })
     /* eslint-enable */
 
-    // Refetch showcases
+    // Refetch banks
     fetchBankAccounts()
     confirmTitle.value = "Selamat"
     confirmMessage.value = "Akun bank berhasil diubah"
     isSuccessConfirmationDialogVisible.value = true
   } catch (error) {
-    messageStore.setMessage('error', 'Gagal update akun bank')
+    checkErrorAccountBank(bank_id, account_no,'Gagal update akun bank')
     console.error("Error on add bank account merchant:", error)
   }
 }
@@ -80,7 +84,7 @@ const deleteBankAccount = async (id) => {
   try {
     const res = await $apiCore(`/iconcash/command/customerbank/${id}`, { method: 'DELETE' })
 
-    // Refetch showcases
+    // Refetch banks
     fetchBankAccounts()
     let msg = res.message
     messageStore.setMessage('success', msg)
@@ -93,6 +97,7 @@ const deleteBankAccount = async (id) => {
 const addItem = () => {
   confirmTitle.value = ''
   confirmMessage.value = ''
+  itemId.value = 0
   isAddBankAccountDialogVisible.value = true
 }
 
@@ -136,7 +141,6 @@ const goBack = () => {
 
       <div class="d-flex gap-4 align-center flex-wrap">
         <VBtn
-          v-if="isLoggedInIconCash"
           color="primary"
           style="width:fit-content"
           prepend-icon="tabler-plus"
@@ -150,10 +154,7 @@ const goBack = () => {
       <VCardText>
         <VRow>
           <!-- 👉 Bank Account list data	-->
-          <VCol
-            v-if="isLoggedInIconCash"
-            cols="12"
-            >
+          <VCol cols="12">
             <VTable
               v-if="!isEmpty(bankAccountsData)"
               class="text-no-wrap"
@@ -228,18 +229,6 @@ const goBack = () => {
 								@click-button="addItem"
 								/>
 						</template>
-          </VCol>
-          <VCol
-            v-else
-            cols="12"
-            >
-            <EmptyData
-              description="Anda belum melakukan aktivasi iconcash anda.<br/>Silahkan lakukan aktivasi terlebih dahulu"
-              wrapper-class="px-10 py-15"
-              :img-src="logoIconCash"
-              btn-text="Kembali"
-              @click-button="goBack"
-              />
           </VCol>
         </VRow>
       </VCardText>

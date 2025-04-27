@@ -30,12 +30,25 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
       <VCarousel
         :cycle="false"
         :continuous="false"
-        :show-arrows="false"
-        hide-delimiter-background
-        :delimiter-icon="() => h(VIcon, { icon: 'fa-circle', size: '8' })"
+        :show-arrows="true"
+        hide-delimiters
         style="height:fit-content"
-        class="carousel-delimiter-bottom-end web-analytics-carousel"
+        class="web-analytics-carousel"
         >
+        <template v-slot:prev="{ props }">
+          <VBtn
+            icon="tabler-circle-chevron-left"
+            variant="plain"
+            @click="props.onClick"
+          />
+        </template>
+        <template v-slot:next="{ props }">
+          <VBtn
+            icon="tabler-circle-chevron-right"
+            variant="plain"
+            @click="props.onClick"
+          />
+        </template>
         <VCarouselItem
           v-for="item in banks"
           :key="item.id"
@@ -74,6 +87,10 @@ watch(() => props.triggerReset, (newVal, oldVal) => {
 <style lang="scss">
 .v-carousel__controls__item .v-icon {
 	opacity: 1 !important;
+}
+
+.v-window__controls {
+  padding: 0 !important;
 }
 
 .web-analytics-carousel {

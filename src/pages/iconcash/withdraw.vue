@@ -75,7 +75,6 @@ const displayWithdrawSuccess = async (data) => {
     message.value = "Request withdrawal akan diproses dalam jangka waktu H+2 hari kerja"
 
     isSuccessWithdrawDialogVisible.value = true
-
   } catch (error) {
 		messageStore.setMessage('error', 'Gagal melakukan penarikan saldo')
     console.error("Error on iconcash withdraw:", error)
@@ -249,7 +248,7 @@ watch(isLoggedInIconCash, (val, oldVal) => {
                         max-width="800"
                       >
                         <p v-if="isEmpty(banks)"
-                          class="text-error text-center"
+                          class="text-error text-center py-14"
                          >
                          Akun bank tidak ditemukan
                         </p>
