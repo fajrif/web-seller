@@ -319,6 +319,10 @@ const trackOrderItem = () => {
     <TrackingOrderDialog
       v-model:is-dialog-visible="isTrackingOrderDialogVisible"
       v-model:order-id="orderData.id"
+      v-model:order-date="orderData.order_date"
+      v-model:no-resi="orderData.delivery.awb_number"
+      v-model:city-from="orderData.merchant.city.name"
+      v-model:city-to="orderData.delivery.city.name"
       v-model:shipping-type="orderData.delivery.shipping_type"
     />
   </div>

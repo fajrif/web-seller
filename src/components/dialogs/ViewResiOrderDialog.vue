@@ -155,6 +155,13 @@ watch(() => props.isDialogVisible, async (visible) => {
                   </td>
                 </tr>
                 <tr>
+                  <td colspan="2">
+                    <h3 class="text-center text-body-1 my-4 font-weight-bold">
+                      {{ orderData.delivery.delivery_fee_cod > 0 ? 'COD' : 'NON-COD' }}
+                    </h3>
+                  </td>
+                </tr>
+                <tr>
                   <td rowspan="2">
                     <p class="text-center my-2 fw-600">
                       <img :src="qrcode" alt="QR Code" />
@@ -207,41 +214,46 @@ watch(() => props.isDialogVisible, async (visible) => {
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <div class="text-body-2 ma-2">
-                       <strong>Catatan:</strong> Pengirim wajib meminta bukti serah terima paket ke kurir
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <div class="d-flex justify-center ma-2">
-                      <div class="me-auto">
-                        <p class="text-body-2 font-weight-bold mb-1">
-                          Produk:
-                        </p>
+                    <table class="table-product w-100">
+                      <thead>
+                        <tr>
+                          <th class="text-start">
+                            <span class="text-body-2 font-weight-bold ms-2">
+                              Produk:
+                            </span>
+                          </th>
+                          <th class="text-end">
+                            <span class="text-body-2 font-weight-bold me-2">
+                              Jumlah
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
                         <template
                           v-for="item in orderData.detail"
                           :key="item.id"
                           >
-                          <span class="d-block text-body-2 mb-1">
-                            {{ item.product.name }}
-                          </span>
+                          <tr>
+                            <td>
+                              <div class="ms-2 my-2">
+                                <span class="d-block text-body-2 mb-1">
+                                  {{ item.product.name }}
+                                </span>
+                                <small v-if="!isEmpty(item.notes)" class="d-block mb-1">
+                                  Catatan: {{ item.notes }}
+                                </small>
+                              </div>
+                            </td>
+                            <td>
+                              <span class="d-block text-end text-body-2 me-2">
+                                {{ item.quantity }}
+                              </span>
+                            </td>
+                          </tr>
                         </template>
-                      </div>
-                      <div class="ms-auto text-end">
-                        <p class="text-body-2 font-weight-bold mb-1">
-                          Jumlah:
-                        </p>
-                        <template
-                          v-for="item in orderData.detail"
-                          :key="item.id"
-                          >
-                          <span class="d-block text-center text-body-2 mb-1">
-                            {{ item.quantity }}
-                          </span>
-                        </template>
-                      </div>
-                    </div>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
               </tbody>
@@ -277,6 +289,12 @@ table.table-resi,
 table.table-resi th,
 table.table-resi td {
   border: 1px solid #000;
+  border-collapse: collapse;
+}
+table.table-product,
+table.table-product th,
+table.table-product td {
+  border: 0;
   border-collapse: collapse;
 }
 </style>

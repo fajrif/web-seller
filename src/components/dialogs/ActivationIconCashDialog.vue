@@ -124,19 +124,19 @@ const onValidateOTP = async () => {
     if(otp.value.length < 4) {
       throw 'Kode OTP salah'
     } else {
-      const res = await $apiCore('/iconcash/query/otp/validate', {
-        method: 'POST',
-        body: {
-          otp: otp.value
-        },
-        ignoreResponseError: true
-      })
+       const res = await $apiCore('/iconcash/query/otp/validate', {
+         method: 'POST',
+         body: {
+           otp: otp.value
+         },
+         ignoreResponseError: true
+       })
 
-      if(res.status_code == 200) {
-        clearStateVariables('pin')
-      } else {
-        throw res.message
-      }
+       if(res.status_code == 200) {
+         clearStateVariables('pin')
+       } else {
+         throw res.message
+       }
     }
   } catch (error) {
     loading.value = false
@@ -317,6 +317,11 @@ const openForgotPinDialog = () => {
   clearStateVariables('home-forgot')
 }
 
+const clearPinValue = () => {
+  errorMessagePin.value = ''
+  isPinError.value = false
+}
+
 const resolvePinText = () => {
   if(isForgotHome.value === true) {
     return {
@@ -376,6 +381,11 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
               <h6 class="text-body-1 mb-4">
                 Masukkan 4 digit Kode OTP yang dikirimkan nomor anda <strong>{{ props.phone }}</strong>
               </h6>
+              <p v-if="!isEmpty(errorMessageOtp)"
+                class="text-error"
+                >
+                {{ errorMessageOtp }}
+              </p>
               <VOtpInput
                 v-model="otp"
                 :disabled="loading"
@@ -384,11 +394,6 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                 length="4"
                 class="pa-0 mb-6"
                 />
-              <p v-if="!isEmpty(errorMessageOtp)"
-                class="text-error"
-                >
-                {{ errorMessageOtp }}
-              </p>
               <VBtn
                 :loading="loading"
                 :disabled="loading"
@@ -442,6 +447,7 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   type="number"
                   length="6"
                   class="pa-0 mb-4"
+                  @update:model-value="clearPinValue"
                   />
               </div>
               <div v-if="isForgotHome || isNotRegistered">

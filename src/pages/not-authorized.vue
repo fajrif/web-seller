@@ -1,9 +1,4 @@
 <script setup>
-import pages401 from '@images/pages/401.png'
-import miscMaskDark from '@images/pages/misc-mask-dark.png'
-import miscMaskLight from '@images/pages/misc-mask-light.png'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-
 definePage({
   alias: '/pages/misc/not-authorized',
   meta: {
@@ -11,8 +6,6 @@ definePage({
     public: true,
   },
 })
-
-const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 </script>
 
 <template>
@@ -29,13 +22,6 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
     >
       Back To Home
     </VBtn>
-
-    <img
-      class="misc-footer-img d-none d-md-block"
-      :src="authThemeMask"
-      alt="misc-footer-img"
-      height="320"
-    >
   </div>
 </template>
 

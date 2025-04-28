@@ -15,7 +15,7 @@ const tabs = [
     id: 1,
     title: 'Semua',
     tab: 'semua',
-    status: "",
+    status: "01,02,03,08,09,88",
   },
   {
     id: 2,
@@ -33,7 +33,7 @@ const tabs = [
     id: 4,
     title: 'Dalam Pengiriman',
     tab: 'pengiriman',
-    status: "03",
+    status: "03,08",
   },
   {
     id: 5,

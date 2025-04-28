@@ -9,6 +9,22 @@ const props = defineProps({
     required: true,
     default: 0,
   },
+  orderDate: {
+    type: String,
+    required: true,
+  },
+  noResi: {
+    type: String,
+    required: true,
+  },
+  cityFrom: {
+    type: String,
+    required: true,
+  },
+  cityTo: {
+    type: String,
+    required: true,
+  },
   shippingType: {
     type: String,
     required: true,
@@ -100,7 +116,7 @@ watch(() => props.isDialogVisible, (visible) => {
       <!-- 👉 Title -->
       <VCardItem class="pb-0">
         <VCardTitle>
-          <h4 class="text-h4 mb-0">
+          <h4 class="text-h4 text-center mb-0">
             Lacak Pengiriman
           </h4>
         </VCardTitle>
@@ -111,8 +127,11 @@ watch(() => props.isDialogVisible, (visible) => {
             <!-- Draw timeline status pengiriman -->
             <div v-if="!isEmpty(dataTimeLine)">
 
-              <h6 class="text-h6 text-center mb-0">
+              <h6 class="text-h6 text-center mb-2">
                 {{ statusCourier }}
+              </h6>
+              <h6 class="text-body-2 text-center mb-1">
+                No.Resi: {{ props.noResi }}
               </h6>
 
               <VTimeline
@@ -215,14 +234,18 @@ watch(() => props.isDialogVisible, (visible) => {
 
               </VTimeline>
 
-              <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-4">
-                <span>Estimasi tiba</span>
-                <span v-if="!isEmpty(estimateDate)"
-                  class="fw-600"
-                  >
-                  {{ estimateDate }}
-                </span>
-                <span v-else>N/A</span>
+              <div class="d-flex justify-space-between align-center gap-2 flex-wrap text-center mb-4">
+                <div style="width:100px">
+                  <small>{{ toLocaleDateTime(props.orderDate, 'DD MM YYYY') }}</small>
+                  <span class="d-block fw-900 text-body-2">{{ props.cityFrom }}</span>
+                </div>
+                <div style="width:100px">
+                  <small v-if="!isEmpty(estimateDate)">
+                    {{ estimateDate }}
+                  </small>
+                  <small v-else>N/A</small>
+                  <span class="d-block fw-900 text-body-2">{{ props.cityTo }}</span>
+                </div>
               </div>
 
               <VTimeline
@@ -242,7 +265,7 @@ watch(() => props.isDialogVisible, (visible) => {
                     size="x-small"
                     >
                     <span
-                      class="app-timeline-title"
+                      class="app-timeline-title text-body-2"
                       :class="{ 'fw-600': index === 0 }"
                       >
                       {{ toLocaleDateTime(item.date) }}

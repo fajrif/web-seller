@@ -34,6 +34,10 @@ export const orderHeaders = [
 
 export const statusOrder = [
   {
+    id: '01,02,03,08,09,88',
+    name: "Semua",
+  },
+  {
     id: '01',
     name: "Pesanan Baru",
   },
@@ -42,7 +46,7 @@ export const statusOrder = [
     name: "Siap Dikirim",
   },
   {
-    id: '03',
+    id: '03,08',
     name: "Dalam Pengiriman",
   },
   {
