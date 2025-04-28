@@ -7,6 +7,7 @@ const props = defineProps({
   },
 })
 
+const viewMore = ref(false)
 const dateRange = ref('')
 const searchQuery = ref('')
 const searchKeyword = ref('')
@@ -48,6 +49,14 @@ const totalOrder = computed(() => totalData.value.data)
 
 const callbackOrderStatusButton = () => {
   fetchOrders()
+}
+
+const checkViewMoreLess = (index) => {
+  if(viewMore.value === false){
+    return index <= 2
+  } else {
+    return true
+  }
 }
 
 const searchInvoiceNo = () => {
@@ -149,8 +158,10 @@ watch(dateRange, (newVal, oldVal) => {
 											md="6"
 											class="ps-8 py-0"
 											>
-											<template v-for="order_item in slotProps.item.detail">
-												<div class="d-flex align-center gap-x-4 mb-2">
+											<template v-for="(order_item, index) in slotProps.item.detail">
+                        <div
+                          v-if="checkViewMoreLess(index)"
+                          class="d-flex align-center gap-x-4 mb-2">
 													<VAvatar
 														v-if="order_item.product_main_photo"
 														size="50"
@@ -164,6 +175,24 @@ watch(dateRange, (newVal, oldVal) => {
 													</div>
 												</div>
 											</template>
+                      <template v-if="slotProps.item.detail.length > 3">
+                        <VBtn
+                          v-if="viewMore === false"
+                          variant="plain"
+                          class="px-0"
+                          @click="viewMore =! viewMore"
+                          >
+                          <small>View more...</small>
+                        </VBtn>
+                        <VBtn
+                          v-else
+                          variant="plain"
+                          class="px-0"
+                          @click="viewMore =! viewMore"
+                          >
+                          <small>View less...</small>
+                        </VBtn>
+                      </template>
 										</VCol>
 										<VCol
 											cols="12"
