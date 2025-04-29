@@ -26,7 +26,6 @@ const onReset = () => {
 }
 
 const generateResiOtomatis = () => {
-  console.log('Generate Resi Otomatis')
   emit('formSubmitted', props.orderId)
   onReset()
 }

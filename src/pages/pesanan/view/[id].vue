@@ -66,6 +66,8 @@ const trackOrderItem = () => {
           v-model:status-code="orderData.progress_active.status_code"
           v-model:delivery-setting="orderData.delivery.delivery_setting"
           v-model:shipping-type="orderData.delivery.shipping_type"
+          v-model:is-pickup="orderData.delivery.is_pickup"
+          v-model:is-drop-point="orderData.delivery.is_drop_point"
           :display-detail="false"
           @callback-button="callbackOrderStatusButton"
         />

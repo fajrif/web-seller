@@ -298,6 +298,8 @@ watch(dateRange, (newVal, oldVal) => {
                         v-model:status-code="slotProps.item.progress_active.status_code"
                         v-model:delivery-setting="slotProps.item.delivery.delivery_setting"
                         v-model:shipping-type="slotProps.item.delivery.shipping_type"
+                        v-model:is-pickup="slotProps.item.delivery.is_pickup"
+                        v-model:is-drop-point="slotProps.item.delivery.is_drop_point"
                         size="small"
                         @callback-button="callbackOrderStatusButton"
                       />

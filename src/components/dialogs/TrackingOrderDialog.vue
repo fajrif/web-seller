@@ -40,6 +40,7 @@ const statusCourier = ref('')
 const estimateDate = ref('')
 const activeState = ref(0)
 const orderData = ref()
+const startDate = ref()
 const trackData = ref()
 const dataTimeLine = ref([])
 
@@ -56,17 +57,19 @@ const getOrderData = async () => {
   const { data: orderDetails } = await useApiCore(`/seller/query/transaction/detail/${ props.orderId }`)
   if (orderDetails.value?.status == 200) {
     orderData.value = orderDetails.value.data
+    startDate.value = orderData.value.updated_at
     let _progressActive = orderData.value.progress_active
     if(_progressActive) {
       let _data = resolveCustomShipment(_progressActive)
       dataTimeLine.value = [ { date: _progressActive.updated_at, description: _data.description }]
       statusCourier.value = _data.title
       activeState.value = _data.state
+      estimateDate.value = toLocaleDateTime(_progressActive.updated_at, 'DD MMM YYYY')
     }
     // set estimateDate
-    let _orderDate = orderData.value.order_date
-    let _num = orderData.value.delivery.estimate_delivered_day || 0
-    estimateDate.value = getRespondTime(_orderDate, _num)
+    // let _orderDate = orderData.value.order_date
+    // let _num = orderData.value.delivery.estimate_delivered_day || 0
+    // estimateDate.value = getRespondTime(_orderDate, _num)
   }
 }
 
@@ -74,14 +77,15 @@ const getTrackingData = async () => {
   const { data: trackingDetails } = await useApiCore(`/track/${ props.orderId }`)
   if (trackingDetails.value?.status == 200) {
     trackData.value = trackingDetails.value.data
+    startDate.value = trackData.value.waybill_date
     dataTimeLine.value = trackData.value.tracking
     if(!isEmpty(dataTimeLine.value)) {
       let obj = dataTimeLine.value[0]
       if(typeof obj === 'object') {
         statusCourier.value = obj.status_courier
         activeState.value = resolveStateShipment(obj.status)
+        estimateDate.value = toLocaleDateTime(obj.date, 'DD MMM YYYY')
       }
-      estimateDate.value = toLocaleDateTime(trackData.value.estimate_delivered_date, 'DD MMM YYYY')
     }
   }
 }
@@ -89,7 +93,7 @@ const getTrackingData = async () => {
 watch(() => props.isDialogVisible, (visible) => {
   try {
     if (visible) {
-      if(props.shippingType == 'custom') {
+      if(props.shippingType === 'custom') {
         getOrderData()
       } else {
         getTrackingData()
@@ -126,7 +130,6 @@ watch(() => props.isDialogVisible, (visible) => {
           <VCol cols="12">
             <!-- Draw timeline status pengiriman -->
             <div v-if="!isEmpty(dataTimeLine)">
-
               <h6 class="text-h6 text-center mb-2">
                 {{ statusCourier }}
               </h6>
@@ -234,12 +237,12 @@ watch(() => props.isDialogVisible, (visible) => {
 
               </VTimeline>
 
-              <div class="d-flex justify-space-between align-center gap-2 flex-wrap text-center mb-4">
-                <div style="width:100px">
-                  <small>{{ toLocaleDateTime(props.orderDate, 'DD MM YYYY') }}</small>
+              <div class="d-flex justify-space-between align-start gap-2 flex-wrap text-center mb-4">
+                <div>
+                  <small>{{ toLocaleDateTime(startDate, 'DD MMM YYYY') }}</small>
                   <span class="d-block fw-900 text-body-2">{{ props.cityFrom }}</span>
                 </div>
-                <div style="width:100px">
+                <div>
                   <small v-if="!isEmpty(estimateDate)">
                     {{ estimateDate }}
                   </small>
@@ -283,8 +286,8 @@ watch(() => props.isDialogVisible, (visible) => {
             </div>
             <!-- End Draw timeline status pengiriman -->
             <div v-else>
-              <p class="text-body-1 font-weight-regular">
-                Lacak pengiriman tidak dapat ditampilkan...
+              <p class="text-body-1 text-center font-weight-regular">
+                Maaf data lacak pengiriman tidak dapat ditemukan...
               </p>
             </div>
 

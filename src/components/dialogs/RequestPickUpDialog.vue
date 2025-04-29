@@ -16,11 +16,22 @@ const props = defineProps({
     required: true,
     default: '',
   },
+  isPickup: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  isDropPoint: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
   'update:isDialogVisible',
   'formSubmitted',
+  'formSubmittedGenerateResi',
 ])
 
 const messageStore = useMessageStore()
@@ -56,6 +67,11 @@ const checkDateTime = (time) => {
 
 const checkDateChanges = (val) => {
   selectedTime.value = ''
+}
+
+const generateResiOtomatis = () => {
+  emit('formSubmittedGenerateResi', props.orderId)
+  onReset()
 }
 
 const onReset = () => {
@@ -184,7 +200,9 @@ watch(() => props.isDialogVisible, async (visible) => {
               </VCol>
             </template>
             <template v-else>
-              <VCol cols="12" class="pb-0">
+              <VCol
+                v-if="props.isPickup === true"
+                cols="12" class="pb-0">
                 <div
                   class="border cursor-pointer pa-4"
                   @click="toggleRequestPickUp"
@@ -209,6 +227,38 @@ watch(() => props.isDialogVisible, async (visible) => {
                       icon="tabler-chevron-right"
                       @click="toggleRequestPickUp"
                       />
+                  </div>
+                </div>
+              </VCol>
+              <VCol
+                v-if="props.isDropPoint === true"
+                cols="12" class="pb-0">
+                <div
+                  class="border cursor-pointer pa-4"
+                  @click="generateResiOtomatis"
+                  >
+                  <div class="d-flex justify-space-between align-center gap-4 mb-2">
+                    <VAvatar
+                      rounded="lg"
+                      color="info"
+                      variant="tonal"
+                      icon="tabler-receipt"
+                    />
+                    <div>
+                      <h6 class="text-h6">
+                        Generate Resi Otomatis
+                      </h6>
+                      <p class="text-body-2 mb-0">
+                        Resi akan digenerate secara otomatis. Cetak resi
+                        dan tempelkan pada paket Anda. Anda dapat
+                        mengirimkan paket Anda ke counter terdekat
+                      </p>
+                    </div>
+                    <IconBtn
+                      color="secondary"
+                      icon="tabler-chevron-right"
+                      @click="generateResiOtomatis"
+                    />
                   </div>
                 </div>
               </VCol>

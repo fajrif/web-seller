@@ -24,6 +24,16 @@ const props = defineProps({
     required: true,
     default: '',
   },
+  isPickup: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  isDropPoint: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   size: {
     type: String,
     required: false,
@@ -45,7 +55,6 @@ const messageStore = useMessageStore()
 const isAcceptOrderDialogVisible = ref(false)
 const isCancelOrderDialogVisible = ref(false)
 const isRequestPickUpDialogVisible = ref(false)
-const isGenerateResiOtomatisDialogVisible = ref(false)
 const isInputResiOrderDialogVisible = ref(false)
 const isViewResiOrderDialogVisible = ref(false)
 const isLoadingVisible = ref(false)
@@ -151,10 +160,6 @@ const requestPickUpOrderItem = () => {
   isRequestPickUpDialogVisible.value = true
 }
 
-const generateResiOrderItem = () => {
-  isGenerateResiOtomatisDialogVisible.value = true
-}
-
 const inputResiOrderItem = () => {
   isInputResiOrderDialogVisible.value = true
 }
@@ -172,6 +177,7 @@ const viewOrderItem = () => {
   <div
     class="d-flex justify-end gap-4"
     >
+    <!-- newOrder -->
     <template v-if="props.statusCode == '01'">
       <VBtn
         color="error"
@@ -190,6 +196,7 @@ const viewOrderItem = () => {
         Terima Pesanan
       </VBtn>
     </template>
+    <!-- readyDelivery -->
     <template v-else-if="props.statusCode == '02'">
       <VBtn
         v-if="props.deliverySetting == 'shipper'"
@@ -203,12 +210,12 @@ const viewOrderItem = () => {
         v-else-if="props.shippingType == 'custom'"
         color="primary"
         :size="props.size"
-        @click="generateResiOrderItem"
+        @click="generateResiOrder(props.orderId)"
         >
         Buat Resi Otomatis
       </VBtn>
       <VBtn
-        v-else
+        v-else-if="props.shippingType != 'custom' && props.deliverySetting == 'rajaongkir'"
         color="primary"
         :size="props.size"
         @click="inputResiOrderItem"
@@ -216,9 +223,10 @@ const viewOrderItem = () => {
         Masukkan Resi
       </VBtn>
     </template>
+    <!-- onDelivery -->
     <template v-else>
       <VBtn
-        v-if="props.statusCode == '03' || props.statusCode == '88'"
+        v-if="props.statusCode == '03' || props.statusCode == '08'"
         color="primary"
         variant="outlined"
         :size="props.size"
@@ -259,13 +267,10 @@ const viewOrderItem = () => {
     v-model:is-dialog-visible="isRequestPickUpDialogVisible"
     v-model:order-id="props.orderId"
     v-model:shipping-type="props.shippingType"
+    v-model:is-pickup="props.isPickup"
+    v-model:is-drop-point="props.isDropPoint"
     @form-submitted="requestPickUpOrder"
-  />
-  <GenerateResiOtomatisDialog
-    v-model:is-dialog-visible="isGenerateResiOtomatisDialogVisible"
-    v-model:order-id="props.orderId"
-    v-model:shipping-type="props.shippingType"
-    @form-submitted="generateResiOrder"
+    @form-submitted-generate-resi="generateResiOrder"
   />
   <ViewResiOrderDialog
     v-model:is-dialog-visible="isViewResiOrderDialogVisible"
