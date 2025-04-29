@@ -1,4 +1,5 @@
 <script setup>
+import { useMessageStore } from '@core/stores/config'
 import iconFileBox from '@images/icons/ic-file-box.png'
 
 const props = defineProps({
@@ -7,12 +8,18 @@ const props = defineProps({
   },
 })
 
+const messageStore = useMessageStore()
+const isLoadingVisible = ref(false)
+const isAcceptOrderDialogVisible = ref(false)
+
 const viewMore = ref(false)
 const dateRange = ref('')
 const searchQuery = ref('')
 const searchKeyword = ref('')
 
 // Data table options
+const selected = ref([])
+const invoicesNo = ref([])
 const itemsPerPage = 10
 const page = ref(1)
 const startDate = ref('')
@@ -49,6 +56,30 @@ const totalOrder = computed(() => totalData.value.data)
 
 const callbackOrderStatusButton = () => {
   fetchOrders()
+  fetchTotalOrders()
+}
+
+const acceptMultipleOrder = async (orderIds) => {
+  isLoadingVisible.value = true
+  try {
+		const res = await $apiCore('/seller/command/order/accept/', {
+  		method: 'POST',
+  		body: { id: orderIds },
+		})
+    fetchOrders()
+    fetchTotalOrders()
+  	messageStore.setMessage('success', res.message)
+    isLoadingVisible.value = false
+  } catch (error) {
+    messageStore.setMessage('error', 'Gagal terima pesanan')
+    console.error("Error on accepts order data:", error)
+    isLoadingVisible.value = false
+  }
+}
+
+const bulkApproval = () => {
+  invoicesNo.value = orders.value.filter((o) => selected.value.includes(o.id)).map(d => d.trx_no)
+  isAcceptOrderDialogVisible.value = true
 }
 
 const checkViewMoreLess = (index) => {
@@ -96,7 +127,7 @@ watch(dateRange, (newVal, oldVal) => {
     <!-- 👉 orders -->
     <VCard>
 			<VCardText>
-				<div class="d-flex flex-wrap gap-4 mb-6">
+				<div class="d-flex flex-wrap align-center gap-4 mb-6">
 					<div class="d-flex align-center">
 						<!-- 👉 Search	-->
 						<AppTextField
@@ -112,18 +143,28 @@ watch(dateRange, (newVal, oldVal) => {
               @click:append-inner="searchInvoiceNo"
               @keydown.enter.prevent="searchInvoiceNo"
 							/>
+            <AppDateTimePicker
+              v-model="dateRange"
+              placeholder="Pilih Tanggal"
+              style="inline-size: 200px;"
+              :disabled="!loading"
+              :config="{ mode: 'range' }"
+            />
 					</div>
 
 					<VSpacer />
-					<div class="d-flex gap-4 flex-wrap align-center">
-						<AppDateTimePicker
-							v-model="dateRange"
-							placeholder="Pilih Tanggal"
-							style="inline-size: 200px;"
-              :disabled="!loading"
-							:config="{ mode: 'range' }"
-						/>
-					</div>
+          <VBtn
+						v-if="props.selectedStatus === '01'"
+            :disabled="selected.length === 0"
+            size="small"
+            @click="bulkApproval"
+            >
+            <VIcon
+              start
+              icon="tabler-checkbox"
+            />
+            Terima Semua Pesanan
+          </VBtn>
 				</div>
         <VProgressLinear
           v-if="!loading"
@@ -137,13 +178,16 @@ watch(dateRange, (newVal, oldVal) => {
 					class="data-orders-table border rounded">
 					<!-- 👉 Datatable	-->
 					<VDataTableServer
+            v-model="selected"
 						v-model:items-per-page="itemsPerPage"
 						v-model:page="page"
 						:headers="orderHeaders"
 						:items="orders"
 						:items-length="totalOrder"
+            item-value="id"
 						:loading="!loading"
 						:expanded="[orders[0].id]"
+						:show-select="props.selectedStatus === '01'"
 						expand-on-click
 						>
 						<!-- Template	-->
@@ -151,7 +195,7 @@ watch(dateRange, (newVal, oldVal) => {
 						<!-- Expanded Row Data -->
 						<template #expanded-row="slotProps">
 							<tr class="v-data-table__tr bg-white">
-								<td :colspan="orderHeaders.length">
+								<td :colspan="props.selectedStatus === '01' ? 6 : 5">
 									<VRow class="ma-4">
 										<VCol
 											cols="12"
@@ -228,7 +272,7 @@ watch(dateRange, (newVal, oldVal) => {
 								</td>
 							</tr>
 							<tr class="v-data-table__tr">
-								<td :colspan="orderHeaders.length">
+								<td :colspan="props.selectedStatus === '01' ? 6 : 5">
 									<VRow class="mx-4 my-2">
 										<VCol
 											cols="12"
@@ -333,6 +377,17 @@ watch(dateRange, (newVal, oldVal) => {
 			</VCardText>
     </VCard>
   </div>
+  <AcceptOrderDialog
+    v-model:is-dialog-visible="isAcceptOrderDialogVisible"
+    v-model:array-order-id="selected"
+    v-model:array-invoice-no="invoicesNo"
+    @form-submitted="acceptMultipleOrder"
+    />
+  <OrderLoadingDialog
+    v-model:is-dialog-visible="isLoadingVisible"
+    :is-progress-linear="true"
+    message-text="Pesanan di proses, harap tunggu..."
+  />
 </template>
 
 <style scoped>

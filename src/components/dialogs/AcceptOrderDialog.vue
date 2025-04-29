@@ -8,8 +8,18 @@ const props = defineProps({
   },
   orderId: {
     type: Number,
-    required: true,
+    required: false,
     default: 0,
+  },
+  arrayOrderId: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  arrayInvoiceNo: {
+    type: Array,
+    required: false,
+    default: [],
   },
   invoiceNo: {
     type: String,
@@ -27,7 +37,11 @@ const onReset = () => {
 }
 
 const onSubmit = () => {
-  emit('formSubmitted', props.orderId)
+  if(props.arrayOrderId.length > 0) {
+    emit('formSubmitted', props.arrayOrderId)
+  } else {
+    emit('formSubmitted', props.orderId)
+  }
   emit('update:isDialogVisible', false)
 }
 </script>
@@ -51,7 +65,19 @@ const onSubmit = () => {
                   class="mx-auto w-40"
                 />
                 <h3>Terima Pesanan Tersebut?</h3>
-                <p class="text-body-2">
+                <div v-if="props.arrayInvoiceNo.length > 0" class="text-body-2">
+                  <p class="mb-2">
+                    Apakah anda ingin menerima beberapa pesanan dengan Invoice No:
+                  </p>
+                  <div class="d-flex justify-center">
+                    <ul class="text-start">
+                      <template v-for="invoiceNo in props.arrayInvoiceNo">
+                        <li><strong>{{ invoiceNo }}</strong></li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+                <p v-else class="text-body-2">
                   Apakah anda ingin menerima pesanan dengan Invoice No: <strong>{{ props.invoiceNo }}</strong> ?
                 </p>
               </div>
