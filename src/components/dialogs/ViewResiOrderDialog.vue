@@ -154,10 +154,10 @@ watch(() => props.isDialogVisible, async (visible) => {
                     </p>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="orderData.delivery.delivery_fee_cod === null || orderData.delivery.delivery_fee_cod === 0">
                   <td colspan="2">
                     <h3 class="text-center text-body-1 my-4 font-weight-bold">
-                      {{ orderData.delivery.delivery_fee_cod > 0 ? 'COD' : 'NON-COD' }}
+                      NON-COD
                     </h3>
                   </td>
                 </tr>

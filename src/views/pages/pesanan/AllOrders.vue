@@ -8,6 +8,9 @@ const props = defineProps({
   },
 })
 
+var successUpload = []
+var dataUpload = []
+
 const messageStore = useMessageStore()
 const isLoadingVisible = ref(false)
 const isAcceptOrderDialogVisible = ref(false)
@@ -59,22 +62,55 @@ const callbackOrderStatusButton = () => {
   fetchTotalOrders()
 }
 
+const checkAcceptOrder = (id, status) => {
+	if(status){
+		successUpload.push(id)
+    let index = dataUpload.indexOf(id);
+    if (index > -1) {
+      dataUpload.splice(index, 1);
+    }
+	}
+	if(dataUpload.length === 0){
+    isLoadingVisible.value = false
+    callbackOrderStatusButton()
+
+		if(successUpload.length > 0) {
+			messageStore.setMessage('success', `Berhasil terima ${successUpload.length} pesanan`)
+		} else {
+			messageStore.setMessage('error', 'Gagal terima pesanan, Harap periksa kembali data Order ID')
+		}
+		successUpload = []
+	} else {
+    acceptOrder(dataUpload[0])
+	}
+}
+
+const acceptOrder = async (id) => {
+  try {
+		await $apiCore('/seller/command/order/accept/', {
+  		method: 'POST',
+  		body: { id: [id] },
+		})
+
+    await nextTick(() => {
+			checkAcceptOrder(id, true)
+		})
+  } catch (error) {
+    console.error("Error on accept order data:", error)
+    checkAcceptOrder(id, true)
+  }
+}
+
 const acceptMultipleOrder = async (orderIds) => {
   isLoadingVisible.value = true
-  try {
-		const res = await $apiCore('/seller/command/order/accept/', {
-  		method: 'POST',
-  		body: { id: orderIds },
-		})
-    fetchOrders()
-    fetchTotalOrders()
-  	messageStore.setMessage('success', res.message)
+	successUpload = []
+  dataUpload = orderIds
+  if(dataUpload.length > 0){
+    acceptOrder(dataUpload[0])
+	} else {
     isLoadingVisible.value = false
-  } catch (error) {
-    messageStore.setMessage('error', 'Gagal terima pesanan')
-    console.error("Error on accepts order data:", error)
-    isLoadingVisible.value = false
-  }
+    messageStore.setMessage('error', 'Data Order ID Kosong')
+	}
 }
 
 const bulkApproval = () => {
