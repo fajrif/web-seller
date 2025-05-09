@@ -68,7 +68,7 @@ const subTotalDelivery = computed(() => {
 							</div>
 						</div>
 						<div class="d-flex flex-row justify-space-between gap-6">
-							<div>
+							<div style="max-width:400px">
 								<div class="d-flex flex-column align-start gap-x-4">
 									<!-- 👉 Address -->
 									<span class="text-body-1 font-weight-regular">
@@ -81,7 +81,7 @@ const subTotalDelivery = computed(() => {
 									</p>
 								</div>
 							</div>
-							<div>
+							<div style="max-width:400px">
 								<div class="d-flex flex-column align-end gap-x-4">
 									<!-- 👉 Address -->
 									<span class="text-body-1 font-weight-regular">

@@ -272,7 +272,7 @@ watch(() => props.isDialogVisible, async (visible) => {
           color="primary"
           variant="tonal"
           class="w-100"
-          :disabled="isNullOrUndefined(orderData)"
+          :disabled="isNullOrUndefined(orderData) || isEmpty(_orderId)"
           :loading="loading"
 					prepend-icon="tabler-download"
           @click="downloadReceipt"
