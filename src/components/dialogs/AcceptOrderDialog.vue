@@ -64,20 +64,11 @@ const onSubmit = () => {
                   :src="iconAsk"
                   class="mx-auto w-40"
                 />
-                <h3>Terima Pesanan Tersebut?</h3>
-                <div v-if="props.arrayInvoiceNo.length > 0" class="text-body-2">
-                  <p class="mb-2">
-                    Apakah anda ingin menerima beberapa pesanan dengan Invoice No:
-                  </p>
-                  <div class="d-flex justify-center">
-                    <ul class="text-start">
-                      <template v-for="invoiceNo in props.arrayInvoiceNo">
-                        <li><strong>{{ invoiceNo }}</strong></li>
-                      </template>
-                    </ul>
-                  </div>
-                </div>
-                <p v-else class="text-body-2">
+                <h3 class="mb-1">Terima Pesanan Tersebut?</h3>
+                <p v-if="props.arrayInvoiceNo.length > 0" class="text-body-2 mb-0">
+                  Apakah anda ingin menerima <strong>{{ props.arrayInvoiceNo.length }} pesanan</strong> tersebut
+                </p>
+                <p v-else class="text-body-2 mb-0">
                   Apakah anda ingin menerima pesanan dengan Invoice No: <strong>{{ props.invoiceNo }}</strong> ?
                 </p>
               </div>

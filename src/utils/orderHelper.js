@@ -179,6 +179,10 @@ export const orderIsShipped = statusId => {
   return (statusId === '03' || statusId === '08')
 }
 
+export const orderIsCompleted = statusId => {
+  return (statusId === '88')
+}
+
 export const isDateToday = (dateString) => {
   const inputDate = new Date(dateString);
   const today = new Date();
@@ -214,6 +218,25 @@ export const resolveShippingTypeText = type => {
   }
 }
 
+export const resolveDeliverySettingLabel = deliverySetting => {
+  if (deliverySetting === 'shipper') {
+    return {
+      text: 'Kurir Tanpa Biaya',
+      color: 'info',
+    }
+  } else if (deliverySetting === 'rajaongkir') {
+    return {
+      text: 'Kurir Dengan Biaya',
+      color: 'warning',
+    }
+  } else {
+    return {
+      text: deliverySetting,
+      color: 'secondary',
+    }
+  }
+}
+
 export const toLocaleDateTime = (date,format='DD MMM YYYY HH:mm') => {
 	if(isEmpty(date))
 		return ''
@@ -237,3 +260,21 @@ export const getRespondTime = (date, num=3) => {
 
 	return useDateFormat(_date, 'DD MMM YYYY')
 }
+
+export const toKilo = (weight) => {
+	if(isEmpty(weight))
+		return ''
+
+  var _weight = parseInt(weight);
+  return _weight/1000
+}
+
+export const toTitleCase = (value) => {
+	if(isEmpty(value))
+		return ''
+
+  return value.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
+

@@ -426,6 +426,10 @@
     "maxLengthValidator": true,
     "isDateToday": true,
     "isLessThanHour": true,
-    "isMoreThanHour": true
+    "isMoreThanHour": true,
+    "toKilo": true,
+    "orderIsCompleted": true,
+    "resolveShippingTypeLabel": true,
+    "resolveDeliverySettingLabel": true
   }
 }

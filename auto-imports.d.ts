@@ -133,6 +133,7 @@ declare global {
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const operationalAttrs: typeof import('./src/utils/merchantHelper.js')['operationalAttrs']
   const orderHeaders: typeof import('./src/utils/orderHelper.js')['orderHeaders']
+  const orderIsCompleted: typeof import('./src/utils/orderHelper.js')['orderIsCompleted']
   const orderIsShipped: typeof import('./src/utils/orderHelper.js')['orderIsShipped']
   const paginationMeta: typeof import('./src/utils/paginationMeta.js')['paginationMeta']
   const passwordValidator: typeof import('./src/@core/utils/validators.js')['passwordValidator']
@@ -163,9 +164,11 @@ declare global {
   const resolveCompleteAddress: typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveCustomShipment: typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']
+  const resolveDeliverySettingLabel: typeof import('./src/utils/orderHelper.js')['resolveDeliverySettingLabel']
   const resolveIconType: typeof import('./src/utils/notificationHelper.js')['resolveIconType']
   const resolveNotifOrderId: typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
+  const resolveShippingTypeLabel: typeof import('./src/utils/orderHelper.js')['resolveShippingTypeLabel']
   const resolveShippingTypeText: typeof import('./src/utils/orderHelper.js')['resolveShippingTypeText']
   const resolveStateShipment: typeof import('./src/utils/orderHelper.js')['resolveStateShipment']
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
@@ -197,12 +200,13 @@ declare global {
   const timeOptionsJemput: typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']
   const titleize: typeof import('./src/utils/merchantHelper.js')['titleize']
   const toCurrency: typeof import('./src/utils/productHelper.js')['toCurrency']
+  const toKilo: typeof import('./src/utils/orderHelper.js')['toKilo']
   const toLocaleDateTime: typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']
   const toRaw: typeof import('vue')['toRaw']
   const toReactive: typeof import('@vueuse/core')['toReactive']
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
-  const toTitleCase: typeof import('./src/utils/iconCashHelper.js')['toTitleCase']
+  const toTitleCase: typeof import('./src/utils/orderHelper.js')['toTitleCase']
   const toValue: typeof import('vue')['toValue']
   const triggerRef: typeof import('vue')['triggerRef']
   const truncateText: typeof import('./src/utils/productHelper.js')['truncateText']
@@ -546,6 +550,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly orderHeaders: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderHeaders']>
+    readonly orderIsCompleted: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderIsCompleted']>
     readonly orderIsShipped: UnwrapRef<typeof import('./src/utils/orderHelper.js')['orderIsShipped']>
     readonly paginationMeta: UnwrapRef<typeof import('./src/utils/paginationMeta.js')['paginationMeta']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['passwordValidator']>
@@ -576,6 +581,7 @@ declare module 'vue' {
     readonly resolveCompleteAddress: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCompleteAddress']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveCustomShipment: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveCustomShipment']>
+    readonly resolveDeliverySettingLabel: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveDeliverySettingLabel']>
     readonly resolveIconType: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveIconType']>
     readonly resolveNotifOrderId: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['resolveNotifOrderId']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
@@ -584,7 +590,6 @@ declare module 'vue' {
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveStock: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStock']>
-    readonly resolveTransactionAmount: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
@@ -607,12 +612,14 @@ declare module 'vue' {
     readonly timeOptionsJemput: UnwrapRef<typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']>
     readonly titleize: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['titleize']>
     readonly toCurrency: UnwrapRef<typeof import('./src/utils/productHelper.js')['toCurrency']>
+    readonly toKilo: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toKilo']>
     readonly toLocaleDateTime: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toLocaleDateTime']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toTitleCase: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['toTitleCase']>
+    readonly toTitleCase: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toTitleCase']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly truncateText: UnwrapRef<typeof import('./src/utils/productHelper.js')['truncateText']>

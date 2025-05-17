@@ -64,7 +64,7 @@ const getOrderData = async () => {
       dataTimeLine.value = [ { date: _progressActive.updated_at, description: _data.description }]
       statusCourier.value = _data.title
       activeState.value = _data.state
-      estimateDate.value = toLocaleDateTime(_progressActive.updated_at, 'DD MMM YYYY')
+      estimateDate.value = toLocaleDateTime(_progressActive.updated_at, 'DD MMM YYYY HH:mm:ss')
     }
     // set estimateDate
     // let _orderDate = orderData.value.order_date
@@ -78,13 +78,13 @@ const getTrackingData = async () => {
   if (trackingDetails.value?.status == 200) {
     trackData.value = trackingDetails.value.data
     startDate.value = trackData.value.waybill_date
+    statusCourier.value = toTitleCase(trackData.value.status_order)
     dataTimeLine.value = trackData.value.tracking
     if(!isEmpty(dataTimeLine.value)) {
       let obj = dataTimeLine.value[0]
       if(typeof obj === 'object') {
-        statusCourier.value = obj.status_courier
         activeState.value = resolveStateShipment(obj.status)
-        estimateDate.value = toLocaleDateTime(obj.date, 'DD MMM YYYY')
+        estimateDate.value = toLocaleDateTime(obj.date, 'DD MMM YYYY HH:mm:ss')
       }
     }
   }
@@ -239,7 +239,7 @@ watch(() => props.isDialogVisible, (visible) => {
 
               <div class="d-flex justify-space-between align-start gap-2 flex-wrap text-center mb-4">
                 <div>
-                  <small>{{ toLocaleDateTime(startDate, 'DD MMM YYYY') }}</small>
+                  <small>{{ toLocaleDateTime(startDate, 'DD MMM YYYY HH:mm:ss') }}</small>
                   <span class="d-block fw-900 text-body-2">{{ props.cityFrom }}</span>
                 </div>
                 <div>
@@ -271,7 +271,7 @@ watch(() => props.isDialogVisible, (visible) => {
                       class="app-timeline-title text-body-2"
                       :class="{ 'fw-600': index === 0 }"
                       >
-                      {{ toLocaleDateTime(item.date) }}
+                      {{ toLocaleDateTime(item.date, 'DD MMM YYYY HH:mm:ss') }}
                     </span>
                     <div
                       class="app-timeline-text mt-1"

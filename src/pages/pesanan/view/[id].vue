@@ -104,9 +104,18 @@ const trackOrderItem = () => {
 									Nama Pembeli
 								</h6>
 								<span class="font-weight-bold">{{ orderData.buyer.full_name }}</span>
-                <a class="text-body-1 font-weight-medium" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.buyer.phone}`">
+                <span class="text-body-1 font-weight-medium">
                   {{ orderData.buyer.phone }}
-                </a>
+                  <a v-if="!isEmpty(orderData.buyer.phone)" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.buyer.phone}`">
+                    <i class="tabler-message v-icon notranslate v-theme--light v-icon--size-default" style="width:.8em;height:.8em;" aria-hidden="true"></i>
+                    <VTooltip
+                      activator="parent"
+                      location="top"
+                    >
+                      Kirim Pesan ke Pembeli
+                    </VTooltip>
+                  </a>
+                </span>
 							</div>
 						</VCol>
 						<VCol cols="6" md="3">
@@ -200,7 +209,19 @@ const trackOrderItem = () => {
 								<h6 class="text-h6">
 									Alamat
 								</h6>
-								<span class="font-weight-bold">{{ orderData.delivery.receiver_name }} ({{ orderData.delivery.receiver_phone }})</span>
+                <span>
+                  <strong>{{ orderData.delivery.receiver_name }}</strong>
+                  ({{ orderData.delivery.receiver_phone }})
+                  <a v-if="!isEmpty(orderData.delivery.receiver_phone)" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.delivery.receiver_phone}`">
+                    <i class="tabler-message v-icon notranslate v-theme--light v-icon--size-default" style="width:.8em;height:.8em;" aria-hidden="true"></i>
+                    <VTooltip
+                      activator="parent"
+                      location="top"
+                    >
+                      Kirim Pesan ke Penerima
+                    </VTooltip>
+                  </a>
+                </span>
 								<p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-1 mb-0" style="max-width:300px;">
 								</p>
 							</div>
@@ -211,13 +232,41 @@ const trackOrderItem = () => {
 									Kurir
 								</h6>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="mb-2">{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}</span>
-                  <span v-if="orderIsShipped(orderData.progress_active.status_code)" style="font-size:smaller;">
+                  <VChip
+                    color="success"
+                    class="font-weight-medium mb-2"
+                    size="small"
+                    style="width:fit-content"
+                    >
+                    {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
+                  </VChip>
+                  <VChip
+                    :color="resolveDeliverySettingLabel(orderData.delivery.delivery_setting).color"
+                    class="font-weight-medium mb-2"
+                    size="small"
+                    style="width:fit-content"
+                    >
+                    {{ resolveDeliverySettingLabel(orderData.delivery.delivery_setting).text }}
+                  </VChip>
+                  <span v-if="orderIsShipped(orderData.progress_active.status_code) || orderIsCompleted(orderData.progress_active.status_code)" style="font-size:smaller;">
                     <button @click="trackOrderItem">
                       <span class="text-primary">Lacak</span>
+                      <VTooltip
+                        activator="parent"
+                        location="top"
+                      >
+                        Lacak Pengiriman
+                      </VTooltip>
                     </button>
                   </span>
                 </div>
+								<h6 class="text-h6">
+									Waktu Request Pickup
+								</h6>
+                <div v-if="!isEmpty(orderData.delivery.request_pickup_time)" class="d-flex flex-wrap gap-2">
+                  <span class="mb-2">{{ toLocaleDateTime(orderData.delivery.request_pickup_time, 'DD MMM YYYY HH:mm:ss') }}</span>
+                </div>
+								<span v-else>-</span>
 								<h6 class="text-h6">
 									No.Resi
 								</h6>

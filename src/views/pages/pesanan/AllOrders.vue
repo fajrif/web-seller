@@ -187,7 +187,6 @@ watch(dateRange, (newVal, oldVal) => {
               :config="{ mode: 'range' }"
             />
 					</div>
-
 					<VSpacer />
           <VBtn
 						v-if="props.selectedStatus === '01'"
@@ -297,10 +296,23 @@ watch(dateRange, (newVal, oldVal) => {
 													md="6"
 													class="d-flex flex-column justify-start"
 													>
-													<span class="text-body-2 font-weight-bold">Kurir:</span>
-													<p class="text-body-2 my-1">
+													<span class="text-body-2 font-weight-bold mb-2">Kurir:</span>
+                          <VChip
+                            color="success"
+                            class="font-weight-medium mb-2"
+                            size="small"
+                            style="width:fit-content"
+                            >
                             {{ resolveShippingTypeText(slotProps.item.delivery.shipping_type) }}
-													</p>
+                          </VChip>
+                          <VChip
+                            :color="resolveDeliverySettingLabel(slotProps.item.delivery.delivery_setting).color"
+                            class="font-weight-medium mb-2"
+                            size="small"
+                            style="width:fit-content"
+                            >
+                            {{ resolveDeliverySettingLabel(slotProps.item.delivery.delivery_setting).text }}
+                          </VChip>
 												</VCol>
 											</VRow>
 										</VCol>

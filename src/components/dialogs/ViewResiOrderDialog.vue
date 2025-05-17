@@ -120,21 +120,21 @@ watch(() => props.isDialogVisible, async (visible) => {
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <div class="d-flex justify-center pa-4">
+                    <div class="d-flex justify-center pa-2">
                       <div class="me-auto">
-                        <p class="text-body-1 mb-2 fw-600">
+                        <p class="text-body-1 text-black mb-1 fw-600">
                           Nomor Invoice:
                         </p>
-                        <p class="text-body-1 mb-0 fw-600">
+                        <p class="text-body-1 text-black mb-0 fw-600">
                           Nomor Order:
                         </p>
                       </div>
                       <div class="ms-auto text-end">
-                        <p class="text-body-1 mb-2 fw-600">
+                        <p class="text-body-1 text-black mb-1 fw-600">
                           {{ orderData.trx_no }}
                         </p>
-                        <p class="text-body-1 mb-0 fw-600">
-                          #{{ orderData.id }}
+                        <p class="text-body-1 text-black mb-0 fw-600">
+                          {{ orderData.no_reference }}
                         </p>
                       </div>
                     </div>
@@ -149,81 +149,85 @@ watch(() => props.isDialogVisible, async (visible) => {
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <p class="text-center my-2 text-body-1 font-weight-bold">
-                      Jenis Layanan: {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
+                    <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
+                      {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
                     </p>
-                  </td>
-                </tr>
-                <tr v-if="orderData.delivery.delivery_fee_cod === null || orderData.delivery.delivery_fee_cod === 0">
-                  <td colspan="2">
-                    <h3 class="text-center text-body-1 my-4 font-weight-bold">
-                      NON-COD
-                    </h3>
                   </td>
                 </tr>
                 <tr>
-                  <td rowspan="2">
-                    <p class="text-center my-2 fw-600">
-                      <img :src="qrcode" alt="QR Code" />
+                  <td colspan="2">
+                    <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
+                      Non COD
                     </p>
                   </td>
+                </tr>
+                <tr>
+                  <td rowspan="2" style="width:150px;">
+                    <img :src="qrcode" alt="QR Code" width="150" height="150" />
+                  </td>
                   <td>
-                    <p class="text-body-1 text-center my-2 fw-600">
+                    <p class="text-body-1 text-center text-black font-weight-medium my-2">
                       Asuransi: {{ toCurrency(orderData.delivery.insurance_fee) }}
                     </p>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <p class="text-body-1 text-center my-2 fw-600">
-                      Berat: {{ orderData.total_weight }} gr
+                    <p class="text-body-1 text-center text-black font-weight-medium my-2">
+                      Berat: {{ toKilo(orderData.total_weight) }} KG
                     </p>
                   </td>
                 </tr>
                 <tr>
-                  <td>
-                    <div class="ma-2">
-                      <p class="text-body-2 font-weight-bold mb-1">
-                        Pengirim:
-                      </p>
-                      <p class="text-body-2 font-weight-regular mb-1">
-                        {{ orderData.merchant.name }}
-                      </p>
-                      <p v-html="resolveCompleteAddress(orderData.merchant)" class="text-body-2 font-weight-regular mb-1">
-                      </p>
-                      <p class="text-body-2 font-weight-regular mb-0">
-                        {{ orderData.merchant.phone_office }}
-                      </p>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="ma-2">
-                      <p class="text-body-2 font-weight-bold mb-1">
-                        Penerima:
-                      </p>
-                      <p class="text-body-2 font-weight-regular mb-1">
-                        {{ orderData.buyer.full_name }}
-                      </p>
-                      <p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-2 font-weight-regular mb-1">
-                      </p>
-                      <p class="text-body-2 font-weight-regular mb-0">
-                        {{ orderData.buyer.phone }}
-                      </p>
-                    </div>
+                  <td colspan="2">
+                    <table class="table-address">
+                      <tr>
+                        <td>
+                          <div class="ma-2">
+                            <p class="text-body-2 font-weight-bold text-black mb-1">
+                              Penerima:
+                            </p>
+                            <p class="text-body-2 font-weight-medium mb-1">
+                              {{ orderData.delivery.receiver_name }}
+                            </p>
+                            <p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-2 font-weight-regular mb-1">
+                            </p>
+                            <p class="text-body-2 font-weight-regular mb-0">
+                              {{ orderData.delivery.receiver_phone }}
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="ma-2">
+                            <p class="text-body-2 font-weight-bold text-black mb-1">
+                              Pengirim:
+                            </p>
+                            <p class="text-body-2 font-weight-medium mb-1">
+                              {{ orderData.merchant.name }}
+                            </p>
+                            <p v-html="resolveCompleteAddress(orderData.merchant)" class="text-body-2 font-weight-regular mb-1">
+                            </p>
+                            <p class="text-body-2 font-weight-regular mb-0">
+                              {{ orderData.merchant.phone_office }}
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <table class="table-product w-100">
+                    <table class="table-product w-100 my-2">
                       <thead>
                         <tr>
                           <th class="text-start">
-                            <span class="text-body-2 font-weight-bold ms-2">
+                            <span class="text-body-2 text-black font-weight-bold d-block ms-2 mb-1">
                               Produk:
                             </span>
                           </th>
                           <th class="text-end">
-                            <span class="text-body-2 font-weight-bold me-2">
+                            <span class="text-body-2 text-black font-weight-bold d-block me-2 mb-1">
                               Jumlah
                             </span>
                           </th>
@@ -236,12 +240,12 @@ watch(() => props.isDialogVisible, async (visible) => {
                           >
                           <tr>
                             <td>
-                              <div class="ms-2 my-2">
-                                <span class="d-block text-body-2 mb-1">
+                              <div class="ms-2 my-0">
+                                <small class="d-block mb-0">
                                   {{ item.product.name }}
-                                </span>
-                                <small v-if="!isEmpty(item.notes)" class="d-block mb-1">
-                                  Catatan: {{ item.notes }}
+                                </small>
+                                <small class="d-block mb-1">
+                                  <strong class="font-weight-bold text-black">Catatan:</strong> {{ isEmpty(item.notes) ? '-' : item.notes }}
                                 </small>
                               </div>
                             </td>
@@ -288,7 +292,7 @@ watch(() => props.isDialogVisible, async (visible) => {
 table.table-resi,
 table.table-resi th,
 table.table-resi td {
-  border: 1px solid #000;
+  border: 1.5px solid #373737;
   border-collapse: collapse;
 }
 table.table-product,
@@ -296,5 +300,11 @@ table.table-product th,
 table.table-product td {
   border: 0;
   border-collapse: collapse;
+}
+table.table-address th,
+table.table-address td {
+  width: 50%;
+  border: none;
+  vertical-align: top;
 }
 </style>

@@ -156,7 +156,7 @@ const subTotalDelivery = computed(() => {
 							</tr>
 						</tbody>
 					</VTable>
-					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-6">
+					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-4">
 						<div class="me-auto">
 							<p class="font-weight-medium mb-0">
 								Subtotal Harga Produk
@@ -197,29 +197,25 @@ const subTotalDelivery = computed(() => {
 									{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
 								</td>
 								<td class="text-center">
-									{{ orderData.total_weight }} gr
+									{{ toKilo(orderData.total_weight) }} KG
 								</td>
 								<td class="text-end">
 									{{ toCurrency(orderData.delivery.delivery_fee) }}
 								</td>
 							</tr>
+							<tr v-if="!isEmpty(orderData.delivery.insurance_fee)">
+								<td class="text-no-wrap">
+                  Insurance Fee
+								</td>
+								<td class="text-center">
+								</td>
+								<td class="text-end">
+                  {{ toCurrency(orderData.delivery.insurance_fee) }}
+								</td>
+							</tr>
 						</tbody>
 					</VTable>
-          <div v-if="!isEmpty(orderData.delivery.insurance_fee)"
-            class="d-flex justify-center py-2 px-6 mb-4">
-						<div class="me-auto">
-							<p class="font-weight-medium mb-0">
-								Insurance Fee
-							</p>
-						</div>
-
-						<div class="ms-auto text-end">
-							<p class="font-weight-medium mb-0">
-								{{ toCurrency(orderData.delivery.insurance_fee) }}
-							</p>
-						</div>
-					</div>
-					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-6">
+					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-4">
 						<div class="me-auto">
 							<p class="font-weight-medium mb-0">
 								Subtotal Ongkos Kirim
