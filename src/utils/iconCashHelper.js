@@ -85,13 +85,6 @@ export const resolveTransactionAmount = (type, amount) => {
 	}
 }
 
-export const toTitleCase = str => {
-  return str.replace(
-    /\w\S*/g,
-    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
-  );
-}
-
 export const createHash = async (text) => {
   const utf8 = new TextEncoder().encode(text);
   const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);

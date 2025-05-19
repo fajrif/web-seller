@@ -590,6 +590,7 @@ declare module 'vue' {
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveStock: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStock']>
+    readonly resolveTransactionAmount: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
@@ -618,7 +619,6 @@ declare module 'vue' {
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
-    readonly toTitleCase: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['toTitleCase']>
     readonly toTitleCase: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toTitleCase']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
