@@ -107,7 +107,20 @@ const trackOrderItem = () => {
                 <span class="text-body-1 font-weight-medium">
                   {{ orderData.buyer.phone }}
                   <a v-if="!isEmpty(orderData.buyer.phone)" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.buyer.phone}`">
-                    <i class="tabler-message v-icon notranslate v-theme--light v-icon--size-default" style="width:.8em;height:.8em;" aria-hidden="true"></i>
+                    <svg aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                      stroke="#00a2b9"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      >
+                      <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+                      <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
+                    </svg>
                     <VTooltip
                       activator="parent"
                       location="top"
@@ -213,7 +226,20 @@ const trackOrderItem = () => {
                   <strong>{{ orderData.delivery.receiver_name }}</strong>
                   ({{ orderData.delivery.receiver_phone }})
                   <a v-if="!isEmpty(orderData.delivery.receiver_phone)" target="_blank" :href="`https://api.whatsapp.com/send?phone=${orderData.delivery.receiver_phone}`">
-                    <i class="tabler-message v-icon notranslate v-theme--light v-icon--size-default" style="width:.8em;height:.8em;" aria-hidden="true"></i>
+                    <svg aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                      stroke="#00a2b9"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      >
+                      <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+                      <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
+                    </svg>
                     <VTooltip
                       activator="parent"
                       location="top"
@@ -241,6 +267,7 @@ const trackOrderItem = () => {
                     {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
                   </VChip>
                   <VChip
+                    v-if="orderData.delivery.shipping_type !== 'custom'"
                     :color="resolveDeliverySettingLabel(orderData.delivery.delivery_setting).color"
                     class="font-weight-medium mb-2"
                     size="small"
@@ -260,13 +287,17 @@ const trackOrderItem = () => {
                     </button>
                   </span>
                 </div>
-								<h6 class="text-h6">
-									Waktu Request Pickup
-								</h6>
-                <div v-if="!isEmpty(orderData.delivery.request_pickup_time)" class="d-flex flex-wrap gap-2">
-                  <span class="mb-2">{{ toLocaleDateTime(orderData.delivery.request_pickup_time, 'DD MMM YYYY HH:mm:ss') }}</span>
-                </div>
-								<span v-else>-</span>
+                <template
+                  v-if="!isEmpty(orderData.delivery.request_pickup_time)"
+                  >
+                  <h6 class="text-h6">
+                    Waktu Request Pickup
+                  </h6>
+                  <div v-if="!isEmpty(orderData.delivery.request_pickup_time)" class="d-flex flex-wrap gap-2">
+                    <span class="mb-2">{{ toLocaleDateTime(orderData.delivery.request_pickup_time, 'DD MMM YYYY HH:mm:ss') }}</span>
+                  </div>
+                  <span v-else>-</span>
+                </template>
 								<h6 class="text-h6">
 									No.Resi
 								</h6>

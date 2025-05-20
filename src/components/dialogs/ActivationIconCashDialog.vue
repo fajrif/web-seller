@@ -496,7 +496,7 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   :disabled="loading"
                   @click="onRequestOTP"
                   >
-                  Kirim Kode OTP
+                  Ya, Buat Baru
                 </VBtn>
               </div>
             </VCol>
@@ -512,9 +512,9 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   class="mx-auto my-4"
                   />
                 <div class="mx-10 mb-4">
-                  <h3 class="mb-1">Aktivasi ICON Cash</h3>
+                  <h3 class="mb-1">ICONCash Anda belum aktif</h3>
                   <p class="text-body-2 mb-0">
-                    Apakah anda ingin mengaktivasi ICON Cash anda?
+                    Aktifkan terlebih dahulu ICONCash Anda agar dapat mengakses halaman ini. Terimakasih
                   </p>
                 </div>
                 <div class="d-flex flex-column justify-center align-center gap-3">
@@ -525,14 +525,13 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                     :disabled="loading"
                     @click="onRequestOTP"
                     >
-                    Kirim Kode OTP
+                    Aktifkan
                   </VBtn>
                 </div>
               </div>
             </VCol>
           </VRow>
         </VCardText>
-
       </VCard>
     </VDialog>
   </div>

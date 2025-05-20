@@ -306,6 +306,7 @@ watch(dateRange, (newVal, oldVal) => {
                             {{ resolveShippingTypeText(slotProps.item.delivery.shipping_type) }}
                           </VChip>
                           <VChip
+                            v-if="slotProps.item.delivery.shipping_type !== 'custom'"
                             :color="resolveDeliverySettingLabel(slotProps.item.delivery.delivery_setting).color"
                             class="font-weight-medium mb-2"
                             size="small"

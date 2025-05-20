@@ -73,7 +73,7 @@ const onSubmit = () => {
             <VCol cols="12">
               <AppTextField
                 v-model="nomorResi"
-                :rules="[requiredValidator]"
+                :rules="[requiredValidator, minLengthValidator(nomorResi,5)]"
                 placeholder="Masukan nomor resi"
               />
             </VCol>

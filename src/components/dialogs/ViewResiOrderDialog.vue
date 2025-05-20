@@ -21,7 +21,6 @@ const emit = defineEmits([
 ])
 
 const orderData = ref()
-const hideTemplate = ref(true)
 const loading = ref(false)
 var _orderId = ''
 var qrcode = ''
@@ -29,7 +28,6 @@ var qrcode = ''
 const onReset = () => {
   emit('update:isDialogVisible', false)
   orderData.value = null
-  hideTemplate.value = true
   _orderId = ''
   qrcode = ''
 }
@@ -50,6 +48,8 @@ const downloadReceipt = () => {
     });
 }
 
+const showTemplate = computed(() => !isNullOrUndefined(orderData.value) && !isEmpty(_orderId))
+
 watch(() => props.isDialogVisible, async (visible) => {
   try {
     if (visible) {
@@ -59,11 +59,11 @@ watch(() => props.isDialogVisible, async (visible) => {
         _orderId = orderData.value.delivery.awb_number
         qrcode = useQRCode(_orderId)
       }
-      if(isNullOrUndefined(orderData.value))
-        hideTemplate.value = false
     }
   } catch (e) {
-    hideTemplate.value = false
+    orderData.value = null
+    _orderId = ''
+    qrcode = ''
     console.log(e)
   }
 })
@@ -89,201 +89,206 @@ watch(() => props.isDialogVisible, async (visible) => {
           </h4>
         </VCardTitle>
       </VCardItem>
-      <VCardText class="py-2">
-        <VRow>
-          <VCol cols="12" id="capture" style="background-color:#fff;">
-            <!-- Draw image resi pengiriman -->
-            <table
-              v-if="orderData"
-              class="table-resi w-100"
-              >
-              <tbody>
-                <tr>
-                  <td colspan="2">
-                    <div class="d-flex justify-space-between">
-                      <v-img
-                        style="max-width:80px"
-                        :width="80"
-                        contain
-                        :src="logoMarketplace"
-                        class="ma-4"
-                        ></v-img>
-                      <v-img
-                        style="max-width:100px"
-                        :width="100"
-                        contain
-                        :src="orderData.delivery.shipping_type === 'custom' ? shipSeller : orderData.delivery.image_logistic"
-                        class="ma-4"
-                        ></v-img>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <div class="d-flex justify-center pa-2">
-                      <div class="me-auto">
-                        <p class="text-body-1 text-black mb-1 fw-600">
-                          Nomor Invoice:
-                        </p>
-                        <p class="text-body-1 text-black mb-0 fw-600">
-                          Nomor Order:
-                        </p>
+      <template
+        v-if="showTemplate"
+        >
+        <VCardText class="py-2">
+          <VRow>
+            <VCol cols="12" id="capture" style="background-color:#fff;">
+              <!-- Draw image resi pengiriman -->
+              <table
+                class="table-resi w-100"
+                >
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <div class="d-flex justify-space-between">
+                        <v-img
+                          style="max-width:80px"
+                          :width="80"
+                          contain
+                          :src="logoMarketplace"
+                          class="ma-4"
+                          ></v-img>
+                        <v-img
+                          style="max-width:100px"
+                          :width="100"
+                          contain
+                          :src="orderData.delivery.shipping_type === 'custom' ? shipSeller : orderData.delivery.image_logistic"
+                          class="ma-4"
+                          ></v-img>
                       </div>
-                      <div class="ms-auto text-end">
-                        <p class="text-body-1 text-black mb-1 fw-600">
-                          {{ orderData.trx_no }}
-                        </p>
-                        <p class="text-body-1 text-black mb-0 fw-600">
-                          {{ orderData.no_reference }}
-                        </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <div class="d-flex justify-center pa-2">
+                        <div class="me-auto">
+                          <p class="text-body-1 text-black mb-1 fw-600">
+                            Nomor Invoice:
+                          </p>
+                          <p class="text-body-1 text-black mb-0 fw-600">
+                            Nomor Order:
+                          </p>
+                        </div>
+                        <div class="ms-auto text-end">
+                          <p class="text-body-1 text-black mb-1 fw-600">
+                            {{ orderData.trx_no }}
+                          </p>
+                          <p class="text-body-1 text-black mb-0 fw-600">
+                            {{ orderData.no_reference }}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <div class="text-center my-0">
-                      <vue-barcode :value="_orderId"></vue-barcode>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
-                      {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
-                      Non COD
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td rowspan="2" style="width:150px;">
-                    <img :src="qrcode" alt="QR Code" width="150" height="150" />
-                  </td>
-                  <td>
-                    <p class="text-body-1 text-center text-black font-weight-medium my-2">
-                      Asuransi: {{ toCurrency(orderData.delivery.insurance_fee) }}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="text-body-1 text-center text-black font-weight-medium my-2">
-                      Berat: {{ toKilo(orderData.total_weight) }} KG
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <table class="table-address">
-                      <tr>
-                        <td>
-                          <div class="ma-2">
-                            <p class="text-body-2 font-weight-bold text-black mb-1">
-                              Penerima:
-                            </p>
-                            <p class="text-body-2 font-weight-medium mb-1">
-                              {{ orderData.delivery.receiver_name }}
-                            </p>
-                            <p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-2 font-weight-regular mb-1">
-                            </p>
-                            <p class="text-body-2 font-weight-regular mb-0">
-                              {{ orderData.delivery.receiver_phone }}
-                            </p>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="ma-2">
-                            <p class="text-body-2 font-weight-bold text-black mb-1">
-                              Pengirim:
-                            </p>
-                            <p class="text-body-2 font-weight-medium mb-1">
-                              {{ orderData.merchant.name }}
-                            </p>
-                            <p v-html="resolveCompleteAddress(orderData.merchant)" class="text-body-2 font-weight-regular mb-1">
-                            </p>
-                            <p class="text-body-2 font-weight-regular mb-0">
-                              {{ orderData.merchant.phone_office }}
-                            </p>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <table class="table-product w-100 my-2">
-                      <thead>
-                        <tr>
-                          <th class="text-start">
-                            <span class="text-body-2 text-black font-weight-bold d-block ms-2 mb-1">
-                              Produk:
-                            </span>
-                          </th>
-                          <th class="text-end">
-                            <span class="text-body-2 text-black font-weight-bold d-block me-2 mb-1">
-                              Jumlah
-                            </span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <template
-                          v-for="item in orderData.detail"
-                          :key="item.id"
-                          >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <div class="text-center my-0">
+                        <vue-barcode :value="_orderId"></vue-barcode>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
+                        {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <p class="text-center my-2 text-body-1 text-black font-weight-medium text-uppercase">
+                        Non COD
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td rowspan="2" style="width:150px;">
+                      <img :src="qrcode" alt="QR Code" width="150" height="150" />
+                    </td>
+                    <td>
+                      <p class="text-body-1 text-center text-black font-weight-medium my-2">
+                        Asuransi: {{ toCurrency(orderData.delivery.insurance_fee) }}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p class="text-body-1 text-center text-black font-weight-medium my-2">
+                        Berat: {{ toKilo(orderData.total_weight) }} KG
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <table class="table-address">
+                        <tbody>
                           <tr>
                             <td>
-                              <div class="ms-2 my-0">
-                                <small class="d-block mb-0">
-                                  {{ item.product.name }}
-                                </small>
-                                <small class="d-block mb-1">
-                                  <strong class="font-weight-bold text-black">Catatan:</strong> {{ isEmpty(item.notes) ? '-' : item.notes }}
-                                </small>
+                              <div class="ma-2">
+                                <p class="text-body-2 font-weight-bold text-black mb-1">
+                                  Penerima:
+                                </p>
+                                <p class="text-body-2 font-weight-medium mb-1">
+                                  {{ orderData.delivery.receiver_name }}
+                                </p>
+                                <p v-html="resolveCompleteAddress(orderData.delivery)" class="text-body-2 font-weight-regular mb-1">
+                                </p>
+                                <p class="text-body-2 font-weight-regular mb-0">
+                                  {{ orderData.delivery.receiver_phone }}
+                                </p>
                               </div>
                             </td>
                             <td>
-                              <span class="d-block text-end text-body-2 me-2">
-                                {{ item.quantity }}
-                              </span>
+                              <div class="ma-2">
+                                <p class="text-body-2 font-weight-bold text-black mb-1">
+                                  Pengirim:
+                                </p>
+                                <p class="text-body-2 font-weight-medium mb-1">
+                                  {{ orderData.merchant.name }}
+                                </p>
+                                <p v-html="resolveCompleteAddress(orderData.merchant)" class="text-body-2 font-weight-regular mb-1">
+                                </p>
+                                <p class="text-body-2 font-weight-regular mb-0">
+                                  {{ orderData.merchant.phone_office }}
+                                </p>
+                              </div>
                             </td>
                           </tr>
-                        </template>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- End Draw image resi pengiriman -->
-            <div v-else>
-              <p v-show="!hideTemplate" class="text-body-1 font-weight-regular">
-                Resi pengiriman tidak ditemukan...
-              </p>
-            </div>
-          </VCol>
-        </VRow>
-      </VCardText>
-      <VCardText>
-        <VBtn
-          color="primary"
-          variant="tonal"
-          class="w-100"
-          :disabled="isNullOrUndefined(orderData) || isEmpty(_orderId)"
-          :loading="loading"
-					prepend-icon="tabler-download"
-          @click="downloadReceipt"
-        >
-          Unduh Resi
-        </VBtn>
-      </VCardText>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <table class="table-product w-100 my-2">
+                        <thead>
+                          <tr>
+                            <th class="text-start">
+                              <span class="text-body-2 text-black font-weight-bold d-block ms-2 mb-1">
+                                Produk:
+                              </span>
+                            </th>
+                            <th class="text-end">
+                              <span class="text-body-2 text-black font-weight-bold d-block me-2 mb-1">
+                                Jumlah
+                              </span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <template
+                            v-for="item in orderData.detail"
+                            :key="item.id"
+                            >
+                            <tr>
+                              <td>
+                                <div class="ms-2 my-0">
+                                  <small class="d-block mb-0">
+                                    {{ item.product.name }}
+                                  </small>
+                                  <small class="d-block mb-1">
+                                    <strong class="font-weight-bold text-black">Catatan:</strong> {{ isEmpty(item.notes) ? '-' : item.notes }}
+                                  </small>
+                                </div>
+                              </td>
+                              <td>
+                                <span class="d-block text-end text-body-2 me-2">
+                                  {{ item.quantity }}
+                                </span>
+                              </td>
+                            </tr>
+                          </template>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- End Draw image resi pengiriman -->
+            </VCol>
+          </VRow>
+        </VCardText>
+        <VCardText>
+          <VBtn
+            color="primary"
+            class="w-100"
+            :loading="loading"
+            prepend-icon="tabler-download"
+            @click="downloadReceipt"
+            >
+            Unduh Resi
+          </VBtn>
+        </VCardText>
+      </template>
+      <template v-else>
+        <VCardText class="py-2">
+          <p class="text-body-1 font-weight-regular">
+            Maaf No. Resi pengiriman tidak dapat ditemukan...
+          </p>
+        </VCardText>
+      </template>
     </VCard>
   </VDialog>
 </template>
