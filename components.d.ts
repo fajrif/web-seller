@@ -32,7 +32,6 @@ declare module 'vue' {
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
-    ChangeIconCashDialog: typeof import('./src/components/ChangeIconCashDialog.vue')['default']
     ChangeIconCashPinDialog: typeof import('./src/components/dialogs/ChangeIconCashPinDialog.vue')['default']
     ConfirmationWithdrawDialog: typeof import('./src/components/dialogs/ConfirmationWithdrawDialog.vue')['default']
     CustomCheckboxes: typeof import('./src/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
@@ -84,7 +83,6 @@ declare module 'vue' {
     UpdateStatusDialog: typeof import('./src/components/dialogs/UpdateStatusDialog.vue')['default']
     UpdateStockDialog: typeof import('./src/components/dialogs/UpdateStockDialog.vue')['default']
     UploadCropStencilImageDialog: typeof import('./src/components/dialogs/UploadCropStencilImageDialog.vue')['default']
-    ViewHistoryTransaksi: typeof import('./src/components/dialogs/ViewHistoryTransaksi.vue')['default']
     ViewHistoryTransaksiDialog: typeof import('./src/components/dialogs/ViewHistoryTransaksiDialog.vue')['default']
     ViewResiOrderDialog: typeof import('./src/components/dialogs/ViewResiOrderDialog.vue')['default']
   }
