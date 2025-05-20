@@ -95,3 +95,38 @@ export const createHash = async (text) => {
   return hashHex;
 }
 
+export const checkNumber = (evt) => {
+  evt = (evt) ? evt : window.event;
+  var charCode = (evt.which) ? evt.which : evt.keyCode;
+  if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+    evt.preventDefault();;
+  } else {
+    return true;
+  }
+}
+
+export const translateErrorMessage = (requestType, response) => {
+  var message = response.message;
+
+  if(parseInt(response.status_code) === 401){
+    message = "Gagal koneksi ICON Cash. token tidak valid"
+  }
+
+  switch(requestType) {
+    case 'change-pin':
+      if(parseInt(response.status_code) === 5003){
+        message = "Maaf, akun anda telah terblokir. Silahkan hubungi Customer Support WhatsApp (0811-8942-589)"
+      } else if(parseInt(response.status_code) === 5001){
+        message = "PIN Lama tidak sesuai, silahkan coba lagi"
+      } else if(parseInt(response.status_code) === 5002){
+        message = "PIN Lama tidak sesuai, anda masih memiliki satu kesempatan"
+      }
+      break;
+    case 'forgot-pin':
+      message = "Reset PIN tidak berhasil. Silahkan hubungi Customer Support WhatsApp (0811-8942-589)"
+      break;
+  }
+  return message;
+}
+
+

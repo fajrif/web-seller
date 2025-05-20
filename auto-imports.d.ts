@@ -19,6 +19,7 @@ declare global {
   const avatarText: typeof import('./src/@core/utils/formatters.js')['avatarText']
   const betweenValidator: typeof import('./src/@core/utils/validators.js')['betweenValidator']
   const calculateDiscount: typeof import('./src/utils/productHelper.js')['calculateDiscount']
+  const checkNumber: typeof import('./src/utils/iconCashHelper.js')['checkNumber']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -208,6 +209,7 @@ declare global {
   const toRefs: typeof import('vue')['toRefs']
   const toTitleCase: typeof import('./src/utils/orderHelper.js')['toTitleCase']
   const toValue: typeof import('vue')['toValue']
+  const translateErrorMessage: typeof import('./src/utils/iconCashHelper.js')['translateErrorMessage']
   const triggerRef: typeof import('vue')['triggerRef']
   const truncateText: typeof import('./src/utils/productHelper.js')['truncateText']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
@@ -447,6 +449,7 @@ declare module 'vue' {
     readonly avatarText: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['avatarText']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['betweenValidator']>
     readonly calculateDiscount: UnwrapRef<typeof import('./src/utils/productHelper.js')['calculateDiscount']>
+    readonly checkNumber: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['checkNumber']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -621,6 +624,7 @@ declare module 'vue' {
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toTitleCase: UnwrapRef<typeof import('./src/utils/orderHelper.js')['toTitleCase']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
+    readonly translateErrorMessage: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['translateErrorMessage']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly truncateText: UnwrapRef<typeof import('./src/utils/productHelper.js')['truncateText']>
     readonly tryOnBeforeMount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeMount']>

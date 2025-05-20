@@ -430,6 +430,8 @@
     "toKilo": true,
     "orderIsCompleted": true,
     "resolveShippingTypeLabel": true,
-    "resolveDeliverySettingLabel": true
+    "resolveDeliverySettingLabel": true,
+    "checkNumber": true,
+    "translateErrorMessage": true
   }
 }

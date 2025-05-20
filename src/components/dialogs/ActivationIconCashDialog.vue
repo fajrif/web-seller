@@ -101,7 +101,7 @@ const onRequestOTP = async () => {
       if(res.code === 5006) {
         if(res.message.includes('have a valid OTP')){
           clearStateVariables('otp')
-          errorMessageOtp.value = res.message
+          errorMessageOtp.value = "Anda masih memiliki Kode OTP, Silahkan periksa SMS inbox Anda"
         } else {
           throw res.message
         }
@@ -135,7 +135,11 @@ const onValidateOTP = async () => {
        if(res.status_code == 200) {
          clearStateVariables('pin')
        } else {
-         throw res.message
+          if(res.message.includes('No Active OTP')){
+            throw "Tidak ada Kode OTP aktif untuk nomor telepon anda"
+          } else {
+            throw "Kode OTP tidak sesuai"
+          }
        }
     }
   } catch (error) {
@@ -444,9 +448,10 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   v-model="pin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="number"
+                  type="password"
                   length="6"
                   class="pa-0 mb-4"
+                  @keypress="checkNumber($event)"
                   @update:model-value="clearPinValue"
                   />
               </div>
@@ -458,9 +463,10 @@ watch(() => props.openForgotPin, (newVal, oldVal) => {
                   v-model="confirmPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="number"
+                  type="password"
                   length="6"
                   class="pa-0 mb-4"
+                  @keypress="checkNumber($event)"
                   />
               </div>
               <VBtn

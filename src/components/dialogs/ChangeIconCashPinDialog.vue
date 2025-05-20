@@ -48,13 +48,13 @@ const submitChangePin = async (old_pin, new_pin, confirm_new_pin) => {
       onReset()
       emit('formSubmitted')
     } else {
-      throw res.message
+      throw res
     }
 
   } catch (err) {
     loading.value = false
     isPinError.value = true
-    errorMessage.value = err
+    errorMessage.value = translateErrorMessage('change-pin', err)
   }
 }
 
@@ -139,9 +139,10 @@ const onSubmit = () => {
                   v-model="oldPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="number"
+                  type="password"
                   length="6"
                   class="pa-0 mb-2"
+                  @keypress="checkNumber($event)"
                   />
               </div>
               <div>
@@ -152,9 +153,10 @@ const onSubmit = () => {
                   v-model="newPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="number"
+                  type="password"
                   length="6"
                   class="pa-0 mb-2"
+                  @keypress="checkNumber($event)"
                   />
               </div>
               <div>
@@ -165,9 +167,10 @@ const onSubmit = () => {
                   v-model="confirmPin"
                   :disabled="loading"
                   :error="isPinError"
-                  type="number"
+                  type="password"
                   length="6"
                   class="pa-0 mb-4"
+                  @keypress="checkNumber($event)"
                   />
               </div>
               <VBtn
