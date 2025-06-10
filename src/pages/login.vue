@@ -81,6 +81,9 @@ const onSubmit = () => {
 		}
   })
 }
+
+localStorage.removeItem('pln-web-seller-merchant')
+localStorage.removeItem('file-upload-products')
 </script>
 
 <template>

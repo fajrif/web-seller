@@ -432,6 +432,8 @@
     "resolveShippingTypeLabel": true,
     "resolveDeliverySettingLabel": true,
     "checkNumber": true,
-    "translateErrorMessage": true
+    "translateErrorMessage": true,
+    "decryptData": true,
+    "encryptData": true
   }
 }

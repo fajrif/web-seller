@@ -401,25 +401,27 @@ export const useUserDataStore = defineStore('userData', () => {
   }
 
   function clear() {
-		localStorage.removeItem('user-data')
-		localStorage.removeItem('file-upload-products')
 		getActivePinia()._s.forEach(store => {
 			if(store.$id == "fileUploadProducts") {
 				 store.clear()
-			}
-			id.value = null
-			name.value = null
-			photo_url.value = null
-			status.value = null
-			phone.value = null
-			loginIconCash.value = false
+      }
 		});
+    id.value = null
+    name.value = null
+    photo_url.value = null
+    status.value = null
+    phone.value = null
+    loginIconCash.value = false
   }
 
   return { id, name, photo_url, status, phone, loginIconCash, setLoginIconCash, setUserData, clear }
 }, {
   persist: {
     storage: localStorage,
-		key: 'user-data',
+		key: 'pln-web-seller-merchant',
+    serializer: {
+      deserialize: decryptData,
+      serialize: encryptData
+    }
   },
 })

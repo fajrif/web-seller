@@ -24,7 +24,7 @@ const clearCookies = async () => {
   // Remove "accessToken" from cookie
   useCookie('accessToken').value = null
 
-  // Remove "userData" from sessionStorage
+  // Remove "userData" from localStorage
 	userData.clear()
 
   // Redirect to login page
