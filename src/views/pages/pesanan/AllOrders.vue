@@ -298,6 +298,15 @@ watch(dateRange, (newVal, oldVal) => {
 													>
 													<span class="text-body-2 font-weight-bold mb-2">Kurir:</span>
                           <VChip
+                            v-if="!isEmpty(slotProps.item.delivery.delivery_method) && slotProps.item.delivery.shipping_type !== 'custom'"
+                            color="success"
+                            class="font-weight-medium mb-2"
+                            size="small"
+                            style="width:fit-content"
+                            >
+                            {{ slotProps.item.delivery.delivery_method.toUpperCase() }}
+                          </VChip>
+                          <VChip
                             color="success"
                             class="font-weight-medium mb-2"
                             size="small"

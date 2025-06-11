@@ -193,7 +193,14 @@ const subTotalDelivery = computed(() => {
 						</thead>
 						<tbody class="text-base">
 							<tr>
-								<td class="text-no-wrap">
+                <td
+                  v-if="!isEmpty(orderData.delivery.delivery_method) && orderData.delivery.shipping_type !== 'custom'"
+                  class="text-no-wrap">
+									{{ orderData.delivery.delivery_method.toUpperCase() }} - {{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
+								</td>
+                <td
+                  v-else
+                  class="text-no-wrap">
 									{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
 								</td>
 								<td class="text-center">

@@ -259,6 +259,15 @@ const trackOrderItem = () => {
 								</h6>
                 <div class="d-flex flex-wrap gap-2">
                   <VChip
+                    v-if="!isEmpty(orderData.delivery.delivery_method) && orderData.delivery.shipping_type !== 'custom'"
+                    color="success"
+                    class="font-weight-medium mb-2"
+                    size="small"
+                    style="width:fit-content"
+                    >
+                    {{ orderData.delivery.delivery_method.toUpperCase() }}
+                  </VChip>
+                  <VChip
                     color="success"
                     class="font-weight-medium mb-2"
                     size="small"
