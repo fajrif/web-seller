@@ -57,7 +57,7 @@ const login = async () => {
 
     useCookie('userAbilityRules').value = userAbilityRules
     ability.update(userAbilityRules)
-    useCookie('accessToken').value = accessToken
+    useCookie('accessToken').value = encryptData(accessToken)
 
     await nextTick(() => {
 			updateUserDataStore(() => {

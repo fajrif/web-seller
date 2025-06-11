@@ -12,14 +12,14 @@ export const useApiCore = createFetch({
   options: {
     refetch: true,
     async beforeFetch({ options }) {
-      const accessToken = useCookie('accessToken').value
+      let accessToken = useCookie('accessToken').value
       if (accessToken) {
+        accessToken = decryptData(accessToken)
         options.headers = {
           ...options.headers,
           Authorization: `Bearer ${accessToken}`,
         }
       }
-
       return { options }
     },
 		onFetchError(ctx) {

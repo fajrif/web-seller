@@ -108,7 +108,11 @@ const onRequestOTP = async () => {
       } else if(res.code === 5000) {
         clearStateVariables('pin-register')
       } else {
-        throw res.message
+        if(res.status_code === 5005) {
+          throw "Anda telah memasukkan OTP lebih dari 3 kali, Silahkan tunggu selama 60 menit"
+        } else {
+          throw res.message
+        }
       }
     }
   } catch (error) {

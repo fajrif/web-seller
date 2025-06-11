@@ -133,8 +133,9 @@ const subTotalDelivery = computed(() => {
 						</thead>
 						<tbody class="text-base">
 							<tr
-								v-for="item in orderData.detail"
+								v-for="(item, index) in orderData.detail"
 								:key="item.id"
+                :class="{ 'border-bottom-1px': index < (orderData.detail.length - 1) }"
 								>
 								<td class="text-wrap" style="max-width:300px">
 									<span class="d-block text-primary my-2">
@@ -154,45 +155,44 @@ const subTotalDelivery = computed(() => {
 									{{ toCurrency(item.total_amount) }}
 								</td>
 							</tr>
-						</tbody>
-					</VTable>
-					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-4">
-						<div class="me-auto">
-							<p class="font-weight-medium mb-0">
-								Subtotal Harga Produk
-							</p>
-						</div>
-
-						<div class="ms-auto text-end">
-							<p class="font-weight-medium mb-0">
-								{{ toCurrency(subTotalProduct) }}
-							</p>
-						</div>
-					</div>
-
-					<!-- 👉 kurir Table -->
-					<VTable class="invoice-preview-table text-high-emphasis overflow-hidden mb-2">
-						<thead>
-							<tr>
-								<th scope="col">
+							<tr class="bg-lightblue py-2">
+								<td class="text-wrap" style="max-width:300px">
+                  <p class="font-weight-medium mb-0">
+                    Subtotal Harga Produk
+                  </p>
+								</td>
+								<td colspan="4" class="text-end">
+                  <p class="font-weight-medium mb-0">
+                    {{ toCurrency(subTotalProduct) }}
+                  </p>
+								</td>
+							</tr>
+							<tr class="header">
+								<td>
 									Layanan Kurir
-								</th>
-								<th
-									scope="col"
+								</td>
+								<td
+									class="text-center"
+									>
+								</td>
+								<td
 									class="text-center"
 									>
 									Berat
-								</th>
-								<th
-									scope="col"
+								</td>
+								<td
+									class="text-center"
+									>
+								</td>
+								<td
 									class="text-end"
 									>
 									Subtotal
-								</th>
+								</td>
 							</tr>
-						</thead>
-						<tbody class="text-base">
-							<tr>
+              <tr
+                :class="{ 'border-bottom-1px': !isEmpty(orderData.delivery.insurance_fee) }"
+                >
                 <td
                   v-if="!isEmpty(orderData.delivery.delivery_method) && orderData.delivery.shipping_type !== 'custom'"
                   class="text-no-wrap">
@@ -204,7 +204,11 @@ const subTotalDelivery = computed(() => {
 									{{ resolveShippingTypeText(orderData.delivery.shipping_type) }}
 								</td>
 								<td class="text-center">
+								</td>
+								<td class="text-center">
 									{{ toKilo(orderData.total_weight) }} KG
+								</td>
+								<td class="text-center">
 								</td>
 								<td class="text-end">
 									{{ toCurrency(orderData.delivery.delivery_fee) }}
@@ -214,41 +218,36 @@ const subTotalDelivery = computed(() => {
 								<td class="text-no-wrap">
                   Insurance Fee
 								</td>
-								<td class="text-center">
-								</td>
-								<td class="text-end">
+								<td colspan="4" class="text-end">
                   {{ toCurrency(orderData.delivery.insurance_fee) }}
+								</td>
+							</tr>
+							<tr class="bg-lightblue py-2">
+								<td class="text-wrap" style="max-width:300px">
+                  <p class="font-weight-medium mb-0">
+                    Subtotal Ongkos Kirim
+                  </p>
+								</td>
+								<td colspan="4" class="text-end">
+                  <p class="font-weight-medium mb-0">
+                    {{ toCurrency(subTotalDelivery) }}
+                  </p>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-wrap" style="max-width:300px">
+                  <p class="font-weight-medium mb-0">
+                    Total Bayar
+                  </p>
+								</td>
+								<td colspan="4" class="text-end">
+                  <p class="font-weight-medium mb-0">
+                    {{ toCurrency(orderData.payment.payment_amount) }}
+                  </p>
 								</td>
 							</tr>
 						</tbody>
 					</VTable>
-					<div class="d-flex justify-center bg-lightblue py-2 px-6 mb-4">
-						<div class="me-auto">
-							<p class="font-weight-medium mb-0">
-								Subtotal Ongkos Kirim
-							</p>
-						</div>
-
-						<div class="ms-auto text-end">
-							<p class="font-weight-medium mb-0">
-								{{ toCurrency(subTotalDelivery) }}
-							</p>
-						</div>
-					</div>
-
-					<div class="d-flex justify-center py-2 px-6 mb-6">
-						<div class="me-auto">
-							<p class="font-weight-medium mb-0">
-								Total Bayar
-							</p>
-						</div>
-
-						<div class="ms-auto text-end">
-							<p class="font-weight-medium mb-0">
-								{{ toCurrency(orderData.payment.payment_amount) }}
-							</p>
-						</div>
-					</div>
 
 				</VCard>
 			</VCol>
@@ -280,6 +279,12 @@ const subTotalDelivery = computed(() => {
 .v-table table thead tr th:last-child {
 	padding-inline-end: 24px !important;
 }
+
+.v-table.invoice-preview-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
+.v-table.invoice-preview-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
+  border: none;
+}
+
 .mark-background {
   position: relative !important;
   background-size: contain !important;
@@ -295,5 +300,11 @@ const subTotalDelivery = computed(() => {
 }
 .font-weight-medium {
 	color: #4b4b4b;
+}
+.v-table.invoice-preview-table .v-table__wrapper > table > tbody > tr.header > td {
+  border-bottom: thin solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+}
+.v-table.invoice-preview-table .v-table__wrapper > table > tbody > tr.border-bottom-1px > td {
+  border-bottom: thin solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
 }
 </style>
