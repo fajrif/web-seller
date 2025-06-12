@@ -23,6 +23,16 @@ const emit = defineEmits([
 const refForm = ref()
 const nomorResi = ref()
 
+const isSubmitDisabled = computed(() => {
+  if (!isEmpty(nomorResi.value)) {
+    if (nomorResi.value.length >= 5) {
+      return true
+    }
+  } else {
+    return false
+  }
+});
+
 const onReset = () => {
   emit('update:isDialogVisible', false)
 	nomorResi.value = ''
@@ -81,6 +91,7 @@ const onSubmit = () => {
         </VCardText>
         <VCardText>
           <VBtn
+            :disabled="!isSubmitDisabled"
             type="submit"
             class="w-100"
           >
