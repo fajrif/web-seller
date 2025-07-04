@@ -34,6 +34,7 @@ const	productHeight = ref()
 const	productWidth = ref()
 const	productLength = ref()
 const	productFeatured = ref(false)
+const	productWeb = ref(false)
 const	productPhotoUrl = ref([])
 
 const { data: categoriesData, execute: fetchCategories } = await useApiCore(createUrl('/seller/query/category/all'))
@@ -86,6 +87,7 @@ const savingProduct = () => {
 		width: parseInt(productWidth.value).toString(),
 		length: parseInt(productLength.value).toString(),
 		is_featured_product: productFeatured.value,
+		is_web_product: productWeb.value,
 		url: productPhotoUrl.value,
 	})
 	/* eslint-enable */
@@ -242,15 +244,23 @@ useEventListener(window, "beforeunload", (event) => {
                 <VCol
                   cols="12"
                   md="6"
-									class="d-flex align-center"
+									class="d-flex flex-column justify-center align-start"
                 >
-									<div class="d-flex flex-raw align-center justify-start mt-20">
+									<div class="d-flex flex-raw align-center justify-start my-2">
 										<span class="fw-700 me-4">Produk Unggulan</span>
 										<VSwitch
 											v-model="productFeatured"
 											:loading="loading"
 											density="compact"
 											@update:model-value="onChangeFeatured"
+											/>
+									</div>
+									<div class="d-flex flex-raw align-center justify-start">
+										<span class="fw-700 me-4">Tampil di Web</span>
+										<VSwitch
+											v-model="productWeb"
+											:loading="loading"
+											density="compact"
 											/>
 									</div>
                 </VCol>

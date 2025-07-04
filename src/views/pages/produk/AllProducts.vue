@@ -198,9 +198,13 @@ const deleteItem = (id, name) => {
 
 					<!-- Judul -->
 					<template #item.name="{ item }">
-						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }" class="d-block my-2" style="width:200px">
+						<RouterLink :to="{ name: 'produk-view-id', params: { id: item.id } }" class="d-block my-1" style="width:200px">
 							{{ item.name }}
 						</RouterLink>
+            <i
+              v-if="item.is_web_product === true"
+              class="text-body-2 text-warning"
+              >Tampil di Web</i>
 					</template>
 
 					<!-- Harga -->
