@@ -178,13 +178,13 @@ register()
               <div>
                 <VList class="card-list text-medium-emphasis">
                   <VListItem>
-                    <VListItemTitle>Kategori: <strong>{{ productData?.category_id }}</strong></VListItemTitle>
+                    <VListItemTitle>Kategori: <strong>{{ productData?.category.value }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
                     <VListItemTitle>Kondisi: <strong>{{ productData?.condition }}</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
-                    <VListItemTitle>Berat: <strong>{{ productData?.weight }}</strong></VListItemTitle>
+                    <VListItemTitle>Berat: <strong>{{ productData?.weight }} Gr</strong></VListItemTitle>
                   </VListItem>
                   <VListItem>
                     <VListItemTitle>Stock: <strong>{{ productData?.product_stock[0].amount }}</strong></VListItemTitle>

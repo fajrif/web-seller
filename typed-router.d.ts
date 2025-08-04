@@ -46,6 +46,9 @@ declare module 'vue-router/auto-routes' {
     'promo': RouteRecordInfo<'promo', '/promo', Record<never, never>, Record<never, never>>,
     'promo-products': RouteRecordInfo<'promo-products', '/promo/products', Record<never, never>, Record<never, never>>,
     'reset-password': RouteRecordInfo<'reset-password', '/reset-password', Record<never, never>, Record<never, never>>,
+    'tiktokshop-pesanan': RouteRecordInfo<'tiktokshop-pesanan', '/tiktokshop/pesanan', Record<never, never>, Record<never, never>>,
+    'tiktokshop-produk': RouteRecordInfo<'tiktokshop-produk', '/tiktokshop/produk', Record<never, never>, Record<never, never>>,
+    'tiktokshop-tambah-produk': RouteRecordInfo<'tiktokshop-tambah-produk', '/tiktokshop/tambah-produk', Record<never, never>, Record<never, never>>,
     'verification': RouteRecordInfo<'verification', '/verification', Record<never, never>, Record<never, never>>,
   }
 }

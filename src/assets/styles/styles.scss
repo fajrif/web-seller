@@ -196,3 +196,45 @@ body .v-tabs.v-tabs-pill .v-tab--selected.text-primary {
   height: 1.2rem !important;
   padding: 4px 4px !important;
 }
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.connection-status.connected {
+  background: #e8f5e8;
+  color: #2d5a2d;
+}
+
+.connection-status.disconnected {
+  background: #ffeaea;
+  color: #c53030;
+}
+
+.connect-btn {
+  background: #fe2c55;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  min-width: 180px;
+}
+
+.connect-btn:hover:not(:disabled) {
+  background: #e02347;
+}
+
+.connect-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

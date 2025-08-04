@@ -434,6 +434,11 @@
     "checkNumber": true,
     "translateErrorMessage": true,
     "decryptData": true,
-    "encryptData": true
+    "encryptData": true,
+    "buildCategoryTree": true,
+    "sanitizeEmptyChildrens": true,
+    "flattenOptions": true,
+    "productSyncHeaders": true,
+    "resolveSyncStatus": true
   }
 }

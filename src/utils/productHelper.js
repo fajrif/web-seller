@@ -39,6 +39,63 @@ export const productHeaders = [
   },
 ]
 
+export const productSyncHeaders = [
+  {
+    id: 1,
+    title: 'Produk',
+    key: 'image',
+    sortable: false,
+  },
+  {
+    id: 2,
+    title: 'Nama',
+    key: 'name',
+    sortable: false,
+  },
+  {
+    id: 3,
+    title: 'Harga',
+    key: 'price',
+    sortable: false,
+  },
+  {
+    id: 4,
+    title: 'TikTok Produk ID',
+    key: 'tiktok_product_id',
+    sortable: false,
+  },
+  {
+    id: 5,
+    title: 'TikTok Kategori',
+    key: 'tiktok_category_id',
+    sortable: false,
+  },
+  {
+    id: 6,
+    title: 'Stock',
+    key: 'stock',
+    sortable: false,
+  },
+  {
+    id: 7,
+    title: 'Status',
+    key: 'sync_status',
+    sortable: false,
+  },
+  {
+    id: 8,
+    title: 'Last Sync',
+    key: 'last_sync_at',
+    sortable: false,
+  },
+  {
+    id: 9,
+    title: '',
+    key: 'actions',
+    sortable: false,
+  },
+]
+
 export const headersFileUpload = [
   {
     key: 'status',
@@ -178,6 +235,20 @@ export const resolveStatus = statusId => {
     }
 }
 
+export const resolveSyncStatus = syncStatus => {
+  if (syncStatus == 'synced') {
+    return {
+      text: syncStatus,
+      color: 'success',
+    }
+  } else {
+    return {
+      text: syncStatus,
+      color: 'error',
+    }
+  }
+}
+
 export const resolveStock = item => {
 	var stock = 0
 	if(item[0])
@@ -248,12 +319,63 @@ export const sanitizeNullChilds = (array) => {
 	return result;
 }
 
+export const sanitizeEmptyChildrens = (array) => {
+	var result = array.filter((obj) => {
+		if(!isEmpty(obj.children)) {
+			return sanitizeEmptyChildrens(obj.children);
+		} else {
+			return delete obj.children;
+		}
+	});
+	return result;
+}
+
 export const normalizerCategories = (node) => {
 	return {
 		id: node.id,
 		label: node.value,
 		children: node.child,
 	}
+}
+export const buildCategoryTree = (data) => {
+  const map = {}
+  const tree = []
+
+  // Step 1: Create a map of all nodes
+  data.forEach(item => {
+    map[item.id] = {
+      id: item.id,
+      label: item.local_name,
+      children: []
+    }
+  })
+
+  // Step 2: Link children to their parents
+  data.forEach(item => {
+    if (item.parent_id !== "0") {
+      const parent = map[item.parent_id]
+      if (parent) {
+        parent.children.push(map[item.id])
+      }
+    } else {
+      // Step 3: Add top-level nodes to the tree
+      tree.push(map[item.id])
+    }
+  })
+
+  return tree
+}
+
+export const flattenOptions = (options) => {
+  const map = new Map()
+  function recurse(arr) {
+    arr.forEach(item => {
+      map.set(item.id, item)
+      if (item.children) recurse(item.children)
+    })
+  }
+  recurse(options)
+  return map
 }
 
 export const truncateText = (txt, length=100) => {

@@ -18,6 +18,7 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const avatarText: typeof import('./src/@core/utils/formatters.js')['avatarText']
   const betweenValidator: typeof import('./src/@core/utils/validators.js')['betweenValidator']
+  const buildCategoryTree: typeof import('./src/utils/productHelper.js')['buildCategoryTree']
   const calculateDiscount: typeof import('./src/utils/productHelper.js')['calculateDiscount']
   const checkNumber: typeof import('./src/utils/iconCashHelper.js')['checkNumber']
   const computed: typeof import('vue')['computed']
@@ -62,6 +63,7 @@ declare global {
   const emailValidator: typeof import('./src/@core/utils/validators.js')['emailValidator']
   const encryptData: typeof import('./src/@core/utils/crypto.js')['encryptData']
   const extendRef: typeof import('@vueuse/core')['extendRef']
+  const flattenOptions: typeof import('./src/utils/productHelper.js')['flattenOptions']
   const formatDate: typeof import('./src/@core/utils/formatters.js')['formatDate']
   const formatDateToMonthShort: typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']
   const formattedDate: typeof import('./src/utils/notificationHelper.js')['formattedDate']
@@ -143,6 +145,7 @@ declare global {
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const prefixWithPlus: typeof import('./src/@core/utils/formatters.js')['prefixWithPlus']
   const productHeaders: typeof import('./src/utils/productHelper.js')['productHeaders']
+  const productSyncHeaders: typeof import('./src/utils/productHelper.js')['productSyncHeaders']
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
   const reactify: typeof import('@vueuse/core')['reactify']
@@ -177,6 +180,7 @@ declare global {
   const resolveStatus: typeof import('./src/utils/productHelper.js')['resolveStatus']
   const resolveStatusOrder: typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']
   const resolveStock: typeof import('./src/utils/productHelper.js')['resolveStock']
+  const resolveSyncStatus: typeof import('./src/utils/productHelper.js')['resolveSyncStatus']
   const resolveTransactionAmount: typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const resolveVuetifyTheme: typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']
@@ -184,6 +188,7 @@ declare global {
   const sampleBanks: typeof import('./src/utils/iconCashHelper.js')['sampleBanks']
   const sampleDataOrders: typeof import('./src/utils/orderHelper.js')['sampleDataOrders']
   const sampleTransactions: typeof import('./src/utils/iconCashHelper.js')['sampleTransactions']
+  const sanitizeEmptyChildrens: typeof import('./src/utils/productHelper.js')['sanitizeEmptyChildrens']
   const sanitizeNullChilds: typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
@@ -450,6 +455,7 @@ declare module 'vue' {
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly avatarText: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['avatarText']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['betweenValidator']>
+    readonly buildCategoryTree: UnwrapRef<typeof import('./src/utils/productHelper.js')['buildCategoryTree']>
     readonly calculateDiscount: UnwrapRef<typeof import('./src/utils/productHelper.js')['calculateDiscount']>
     readonly checkNumber: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['checkNumber']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
@@ -489,6 +495,7 @@ declare module 'vue' {
     readonly emailValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['emailValidator']>
     readonly encryptData: UnwrapRef<typeof import('./src/@core/utils/crypto.js')['encryptData']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly flattenOptions: UnwrapRef<typeof import('./src/utils/productHelper.js')['flattenOptions']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly formattedDate: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['formattedDate']>
@@ -564,6 +571,7 @@ declare module 'vue' {
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly prefixWithPlus: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['prefixWithPlus']>
     readonly productHeaders: UnwrapRef<typeof import('./src/utils/productHelper.js')['productHeaders']>
+    readonly productSyncHeaders: UnwrapRef<typeof import('./src/utils/productHelper.js')['productSyncHeaders']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
     readonly reactify: UnwrapRef<typeof import('@vueuse/core')['reactify']>
@@ -597,10 +605,12 @@ declare module 'vue' {
     readonly resolveStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStatus']>
     readonly resolveStatusOrder: UnwrapRef<typeof import('./src/utils/orderHelper.js')['resolveStatusOrder']>
     readonly resolveStock: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveStock']>
+    readonly resolveSyncStatus: UnwrapRef<typeof import('./src/utils/productHelper.js')['resolveSyncStatus']>
     readonly resolveTransactionAmount: UnwrapRef<typeof import('./src/utils/iconCashHelper.js')['resolveTransactionAmount']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./src/@core/utils/vuetify.js')['resolveVuetifyTheme']>
     readonly rgbaToHex: UnwrapRef<typeof import('./src/@core/utils/colorConverter.js')['rgbaToHex']>
+    readonly sanitizeEmptyChildrens: UnwrapRef<typeof import('./src/utils/productHelper.js')['sanitizeEmptyChildrens']>
     readonly sanitizeNullChilds: UnwrapRef<typeof import('./src/utils/productHelper.js')['sanitizeNullChilds']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
