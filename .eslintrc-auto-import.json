@@ -439,6 +439,8 @@
     "sanitizeEmptyChildrens": true,
     "flattenOptions": true,
     "productSyncHeaders": true,
-    "resolveSyncStatus": true
+    "resolveSyncStatus": true,
+    "tikTokProductHeaders": true,
+    "formatUnix": true
   }
 }

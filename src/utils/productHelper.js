@@ -96,6 +96,57 @@ export const productSyncHeaders = [
   },
 ]
 
+export const tikTokProductHeaders = [
+  {
+    id: 1,
+    title: 'Produk',
+    key: 'name',
+    sortable: false,
+  },
+  {
+    id: 2,
+    title: 'SKU',
+    key: 'sku',
+    sortable: false,
+  },
+  {
+    id: 3,
+    title: 'Harga',
+    key: 'price',
+    sortable: false,
+  },
+  {
+    id: 4,
+    title: 'TikTok Produk ID',
+    key: 'tiktok_product_id',
+    sortable: false,
+  },
+  {
+    id: 5,
+    title: 'Stock',
+    key: 'stock',
+    sortable: false,
+  },
+  {
+    id: 6,
+    title: 'Status',
+    key: 'sync_status',
+    sortable: false,
+  },
+  {
+    id: 7,
+    title: 'Last Update',
+    key: 'last_update',
+    sortable: false,
+  },
+  {
+    id: 8,
+    title: '',
+    key: 'actions',
+    sortable: false,
+  },
+]
+
 export const headersFileUpload = [
   {
     key: 'status',
@@ -283,6 +334,12 @@ export const sortOptions = [
     value: 'higher_price',
   },
 ]
+
+export const formatUnix = (timestamp) => {
+  // or toISOString(), or custom format
+  const date = new Date(timestamp * 1000)
+  return date.toLocaleString()
+}
 
 export const toCurrency = price => {
 	var _price = price

@@ -66,6 +66,7 @@ declare global {
   const flattenOptions: typeof import('./src/utils/productHelper.js')['flattenOptions']
   const formatDate: typeof import('./src/@core/utils/formatters.js')['formatDate']
   const formatDateToMonthShort: typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']
+  const formatUnix: typeof import('./src/utils/productHelper.js')['formatUnix']
   const formattedDate: typeof import('./src/utils/notificationHelper.js')['formattedDate']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
@@ -204,6 +205,7 @@ declare global {
   const templateRef: typeof import('@vueuse/core')['templateRef']
   const throttledRef: typeof import('@vueuse/core')['throttledRef']
   const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
+  const tikTokProductHeaders: typeof import('./src/utils/productHelper.js')['tikTokProductHeaders']
   const timeOptions: typeof import('./src/utils/merchantHelper.js')['timeOptions']
   const timeOptionsJemput: typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']
   const titleize: typeof import('./src/utils/merchantHelper.js')['titleize']
@@ -498,6 +500,7 @@ declare module 'vue' {
     readonly flattenOptions: UnwrapRef<typeof import('./src/utils/productHelper.js')['flattenOptions']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
+    readonly formatUnix: UnwrapRef<typeof import('./src/utils/productHelper.js')['formatUnix']>
     readonly formattedDate: UnwrapRef<typeof import('./src/utils/notificationHelper.js')['formattedDate']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
@@ -626,6 +629,7 @@ declare module 'vue' {
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
+    readonly tikTokProductHeaders: UnwrapRef<typeof import('./src/utils/productHelper.js')['tikTokProductHeaders']>
     readonly timeOptions: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['timeOptions']>
     readonly timeOptionsJemput: UnwrapRef<typeof import('./src/utils/orderHelper.js')['timeOptionsJemput']>
     readonly titleize: UnwrapRef<typeof import('./src/utils/merchantHelper.js')['titleize']>

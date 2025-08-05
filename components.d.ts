@@ -77,6 +77,8 @@ declare module 'vue' {
     SwiperDialog: typeof import('./src/components/dialogs/SwiperDialog.vue')['default']
     TablePagination: typeof import('./src/@core/components/TablePagination.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
+    TikTokDeleteProductDialog: typeof import('./src/components/dialogs/TikTokDeleteProductDialog.vue')['default']
+    TikTokUpdateStockDialog: typeof import('./src/components/dialogs/TikTokUpdateStockDialog.vue')['default']
     TiptapEditor: typeof import('./src/@core/components/TiptapEditor.vue')['default']
     TrackingOrderDialog: typeof import('./src/components/dialogs/TrackingOrderDialog.vue')['default']
     UpdateHargaDialog: typeof import('./src/components/dialogs/UpdateHargaDialog.vue')['default']
